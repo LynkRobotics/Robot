@@ -21,8 +21,20 @@ This is the repository where our robot code will be held year after year.
 #### Shooter
 
 #### Intake
+- LYNK v2 BTB Intake
+    - Motors: 
+        - Kraken X60
+            - CANBus: Rio
 
 #### Climber
+- Thrifty Telescoping Climb Kit
+    - Geared
+        - REV MaxPlanetary: TBD:TBD 
+    - Motors:
+        - Left Side: Kraken X60
+            - CANBus: Rio
+        - Right Side: Kraken X60
+            - CANBus: Rio
 
 #### LEDs (Potentially)
 

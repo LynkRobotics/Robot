@@ -8,8 +8,15 @@ This is the repository where our robot code will be held year after year.
 - AprilTag Detection
 - Shooting
     - Shooting Notes from Multiple Positions
+        - Score from wing to speaker
     - Quickly Shooting
-- Multi-Piece Auto Routines
+    - Shoot on the move (maybe)
+- Auto Routines
+    - Leave the starting zone
+    - Multi-Note Auto
+        - 3 Note Auto
+    - Many Auto Routines
+- Climb
 
 ### Control Stack 
 #### Swerve

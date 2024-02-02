@@ -2,6 +2,15 @@
 This is the repository where our robot code will be held year after year.
 
 ## 2024 Season
+### Robot Abilities
+- Swerve
+- Ground Intake
+- AprilTag Detection
+- Shooting
+    - Shooting Notes from Multiple Positions
+    - Quickly Shooting
+- Multi-Piece Auto Routines
+
 ### Control Stack 
 #### Swerve
 - SDS MK4i Modules
@@ -19,6 +28,7 @@ This is the repository where our robot code will be held year after year.
     
 
 #### Shooter
+- TBD
 
 #### Intake
 - LYNK v2 BTB Intake
@@ -36,7 +46,11 @@ This is the repository where our robot code will be held year after year.
         - Right Side: Kraken X60
             - CANBus: Rio
 
+#### Vision
+- Limelight 3
+
 #### LEDs (Potentially)
+- TBD
 
 ### Software Stack
 - [PathPlanner](https://github.com/mjansen4857/pathplanner)

@@ -38,9 +38,10 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
+                // TODO Remove temp limitation
+                () -> -driver.getRawAxis(translationAxis) * 0.3, 
+                () -> -driver.getRawAxis(strafeAxis)* 0.3, 
+                () -> -driver.getRawAxis(rotationAxis)* 0.3, 
                 () -> false
             )
         );

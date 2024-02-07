@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
@@ -27,8 +27,8 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton intakingButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton ejectingButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -46,6 +46,7 @@ public class RobotContainer {
                 () -> false
             )
         );
+        s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::stop, () -> {}, s_Intake));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -59,8 +60,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        intakeButton.whileTrue(new InstantCommand(() -> s_Intake.intake())).whileFalse(new InstantCommand(() -> s_Intake.stop()));
+        intakingButton.whileTrue(new IntakeCommand(s_Intake));
+        ejectingButton.whileTrue(new EjectCommand(s_Intake));
     }
 
     /**

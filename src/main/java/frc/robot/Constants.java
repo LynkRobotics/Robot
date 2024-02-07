@@ -131,6 +131,10 @@ public final class Constants {
 
     public class Intake {
         public static final int intakeMotorID = 3;
+        
+        public static final double intakingSpeed = 1.0;
+        public static final double ejectingSpeed = -1.0;
+        public static final double stoppingSpeed = 0.0;
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

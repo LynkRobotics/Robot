@@ -60,7 +60,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        intakeButton.whileTrue(new InstantCommand(() -> s_Intake.intake())).whileFalse(new InstantCommand(() -> s_Intake.eject()));
+        intakeButton.whileTrue(new InstantCommand(() -> s_Intake.intake())).whileFalse(new InstantCommand(() -> s_Intake.stop()));
     }
 
     /**

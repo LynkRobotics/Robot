@@ -132,6 +132,8 @@ public final class Constants {
     public class Intake {
         public static final int intakeMotorID = 3;
         
+        public static final String intakeMotorCanBus = "rio";
+
         public static final double intakingSpeed = 1.0;
         public static final double ejectingSpeed = -1.0;
         public static final double stoppingSpeed = 0.0;
@@ -140,6 +142,9 @@ public final class Constants {
     public class Shooter {
         public static final int leftShooterMotorID = 0; //TODO: ID these motors
         public static final int rightShooterMotorID = 0;
+
+        public static final String shooterMotorCanBus = "rio";
+
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

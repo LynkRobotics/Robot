@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private final DutyCycleOut intakeSpeedDutyCycleOut;
   
   public IntakeSubsystem() {
-    intakeMotor = new TalonFX(Constants.Intake.intakeMotorID);
+    intakeMotor = new TalonFX(Constants.Intake.intakeMotorID, Constants.Intake.intakeMotorCanBus);
     intakeSpeedDutyCycleOut = new DutyCycleOut(0);
 
     applyConfigs();

@@ -137,6 +137,11 @@ public final class Constants {
         public static final double stoppingSpeed = 0.0;
     }
 
+    public class Shooter {
+        public static final int leftShooterMotorID = 0; //TODO: ID these motors
+        public static final int rightShooterMotorID = 0;
+    }
+
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;

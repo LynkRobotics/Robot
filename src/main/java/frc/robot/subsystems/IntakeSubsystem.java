@@ -50,6 +50,8 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.stoppingSpeed));
   }
 
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

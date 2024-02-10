@@ -23,12 +23,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
-    topNumber.setDefault(0);
-    bottomNumber.setDefault(0);
+    // topNumber.setDefault(0);
+    // bottomNumber.setDefault(0);
   }
   public void shoot(){
-    top.set(-topNumber.get());
-    bottom.set(-bottomNumber.get());
+    top.set(-0.50);
+    bottom.set(-0.50);
   }
 
   public static ShooterConfiguration[] shootingTable = {
@@ -45,8 +45,8 @@ public class ShooterSubsystem extends SubsystemBase {
   };
 
   public void idle(){
-    top.set(-.1);
-    bottom.set(-.1);
+    top.set(-.0);
+    bottom.set(-.0);
   }
 
   public void stop(){
@@ -57,6 +57,6 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    SmartDashboard.putNumber("topVal", topNumber.get());
   }
 }

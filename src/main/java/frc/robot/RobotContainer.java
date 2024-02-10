@@ -1,7 +1,11 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -20,6 +24,11 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+
+    private static DigitalInput indexSensor = new DigitalInput(0);
+
+    
+    BooleanSupplier indexSupplier = () -> !indexSensor.get(); 
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -63,9 +72,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        intakingButton.whileTrue(new IntakeCommand(s_Intake));
-        indexingButton.whileTrue(new IndexCommand(s_Index));
-        shooterButton.whileTrue(new ShootCommand(s_Shooter));
+        intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(indexSupplier));
+        // indexingButton.whileTrue(new IndexCommand(s_Index));
+        shooterButton.whileTrue(new ShootCommand(s_Shooter)
+        .alongWith(Commands.run(s_Index::feed, s_Index)));
         
     }
 

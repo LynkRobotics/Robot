@@ -59,7 +59,7 @@ public class RobotContainer {
             )
         );
         
-
+        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         // Configure the button bindings
         configureButtonBindings();
     }

@@ -42,7 +42,7 @@ public class IndexSubsystem extends SubsystemBase {
   }
   
   public void index() {
-    indexMotor.set(-0.80);
+    indexMotor.set(-1.00);
   }
 
   public void feed(){

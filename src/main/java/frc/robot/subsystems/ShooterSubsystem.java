@@ -27,15 +27,15 @@ public class ShooterSubsystem extends SubsystemBase {
     // bottomNumber.setDefault(0);
   }
   public void shoot(){
-    top.set(-0.20); 
-    bottom.set(-0.32); 
+    top.set(-1.00); //59
+    bottom.set(-1.00); //29
   }
 
   public static ShooterConfiguration[] shootingTableNormal = {
     new ShooterConfiguration(0, 0.30, 0.60), //Subwoofer Shot
     new ShooterConfiguration(1, 0.50, 0.40), //Mid Line
     new ShooterConfiguration(2, 0.20, 0.30), //AMP
-    new ShooterConfiguration(3, 0, 0),
+    new ShooterConfiguration(3, 0, 0), //49, 29
     new ShooterConfiguration(4, 0, 0),
     new ShooterConfiguration(5, 0, 0),
     new ShooterConfiguration(6, 0, 0),

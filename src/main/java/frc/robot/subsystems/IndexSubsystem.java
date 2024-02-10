@@ -46,7 +46,7 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public void feed(){
-    Timer.delay(0.75);
+    Timer.delay(5);
     indexMotor.set(-1.0);
     
   }

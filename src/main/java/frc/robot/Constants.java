@@ -141,7 +141,7 @@ public final class Constants {
         
         public static final String intakeMotorCanBus = "rio";
 
-        public static final double intakingSpeed = .15;
+        public static final double intakingSpeed = .30;
         public static final double ejectingSpeed = -.5;
         public static final double stoppingSpeed = 0.0;
     }

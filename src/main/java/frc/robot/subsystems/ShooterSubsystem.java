@@ -47,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public static ShooterConfiguration[] shootingTable45 = {
     new ShooterConfiguration(0, 0.20, 0.80), //Subwoofer Shot
     new ShooterConfiguration(1, 0.00, 0.00), //Mid Line
-    new ShooterConfiguration(2, 0.00, 0.00), //AMP
+    new ShooterConfiguration(2, 0.20, 0.32), //AMP
     new ShooterConfiguration(3, 0.60, 0.35), //Long shot
     new ShooterConfiguration(4, 0, 0),
     new ShooterConfiguration(5, 0, 0),

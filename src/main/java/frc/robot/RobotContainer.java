@@ -28,11 +28,14 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton intakingButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton ejectingButton = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton indexingButton = new JoystickButton(driver, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
+    private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
+    private final IndexSubsystem s_Index = new IndexSubsystem();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -46,7 +49,7 @@ public class RobotContainer {
                 () -> false
             )
         );
-        s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::stop, () -> {}, s_Intake));
+        //s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::stop, () -> {}, s_Intake));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -61,7 +64,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         intakingButton.whileTrue(new IntakeCommand(s_Intake));
-        ejectingButton.whileTrue(new EjectCommand(s_Intake));
+        indexingButton.whileTrue(new IndexCommand(s_Index));
+        shooterButton.whileTrue(new ShootCommand(s_Shooter));
+        
     }
 
     /**

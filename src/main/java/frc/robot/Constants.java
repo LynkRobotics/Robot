@@ -17,7 +17,7 @@ public final class Constants {
 
     public static final class Swerve {
         public static final int pigeonID = 1;
-        public static final String swerveCanBus = "CANivore";
+        public static final String swerveCanBus = "lynk";
 
         public static final COTSTalonFXSwerveConstants chosenModule =  
         COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
@@ -139,17 +139,23 @@ public final class Constants {
         
         public static final String intakeMotorCanBus = "rio";
 
-        public static final double intakingSpeed = 1.0;
-        public static final double ejectingSpeed = -1.0;
+        public static final double intakingSpeed = .15;
+        public static final double ejectingSpeed = -.5;
         public static final double stoppingSpeed = 0.0;
     }
 
     public class Shooter {
-        public static final int leftShooterMotorID = 0; //TODO: ID these motors
-        public static final int rightShooterMotorID = 0;
+        public static final int topShooterID = 4; 
+        public static final int bottomShooterID = 17;
 
         public static final String shooterMotorCanBus = "rio";
 
+    }
+
+    public class Index {
+        public static final int indexMotorID = 13;
+
+        public static final String indexMotorCanBus = "rio";
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

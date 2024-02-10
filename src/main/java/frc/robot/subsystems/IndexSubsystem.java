@@ -9,25 +9,27 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShooterSubsystem extends SubsystemBase {
-  /** Creates a new ShooterSubsystem. */
-  public static TalonFX top;
-  public static TalonFX bottom;
+public class IndexSubsystem extends SubsystemBase {
+  /** Creates a new IndexSubsystem. */
+  public static TalonFX indexMotor;
 
-  public ShooterSubsystem() {
-    top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
-    bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
+  public IndexSubsystem() {
+    indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
+
   }
-  public void shoot(){
-    top.set(-.15);
-    bottom.set(-.35); //was 37
-    
+  
+  public void index() {
+    indexMotor.set(-1.00);
   }
 
   public void stop(){
-    top.set(0);
-    bottom.set(0);
+    indexMotor.set(0);
   }
+
+  public void eject(){
+    indexMotor.set(1);
+  }
+
 
   @Override
   public void periodic() {

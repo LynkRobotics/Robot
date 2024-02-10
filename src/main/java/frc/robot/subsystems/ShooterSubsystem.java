@@ -45,8 +45,8 @@ public class ShooterSubsystem extends SubsystemBase {
   };
 
   public void idle(){
-    top.set(-.0);
-    bottom.set(-.0);
+    top.set(-.15);
+    bottom.set(-.15);
   }
 
   public void stop(){

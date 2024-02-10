@@ -49,7 +49,7 @@ public class RobotContainer {
                 () -> false
             )
         );
-        //s_Intake.setDefaultCommand(Commands.startEnd(s_Intake::stop, () -> {}, s_Intake));
+        
 
         // Configure the button bindings
         configureButtonBindings();

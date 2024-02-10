@@ -6,10 +6,16 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.ShooterConfiguration;
+import frc.lib.util.TunableNumber;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
+
+  private TunableNumber topNumber = new TunableNumber("top motor/top");
+  private TunableNumber bottomNumber = new TunableNumber("bottom motor/top");
   /** Creates a new ShooterSubsystem. */
   public static TalonFX top;
   public static TalonFX bottom;
@@ -17,11 +23,30 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
+    topNumber.setDefault(0);
+    bottomNumber.setDefault(0);
   }
   public void shoot(){
-    top.set(-.15);
-    bottom.set(-.35); //was 37
-    
+    top.set(-topNumber.get());
+    bottom.set(-bottomNumber.get());
+  }
+
+  public static ShooterConfiguration[] shootingTable = {
+    new ShooterConfiguration(0, 0, 0),
+    new ShooterConfiguration(1, 0, 0), //1ft away
+    new ShooterConfiguration(2, 0, 0), //2ft away
+    new ShooterConfiguration(3, 0, 0),
+    new ShooterConfiguration(4, 0, 0),
+    new ShooterConfiguration(5, 0, 0),
+    new ShooterConfiguration(6, 0, 0),
+    new ShooterConfiguration(7, 0, 0),
+    new ShooterConfiguration(8, 0, 0),
+    new ShooterConfiguration(9, 0, 0)
+  };
+
+  public void idle(){
+    top.set(-.1);
+    bottom.set(-.1);
   }
 
   public void stop(){
@@ -32,5 +57,6 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 }

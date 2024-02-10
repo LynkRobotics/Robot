@@ -28,7 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void shoot(){
     top.set(-0.20); 
-    bottom.set(-0.56); 
+    bottom.set(-0.32); 
   }
 
   public static ShooterConfiguration[] shootingTableNormal = {

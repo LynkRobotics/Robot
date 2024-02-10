@@ -6,7 +6,10 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
@@ -21,6 +24,21 @@ public class IndexSubsystem extends SubsystemBase {
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
     // indexSesnor = new DigitalInput(0);
+    applyConfigs();
+  }
+
+  public void applyConfigs(){
+    /* Configure the Intake Motor */
+    var m_indexConfiguration = new TalonFXConfiguration();
+    /* Set Intake motor to Brake */
+    m_indexConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    /* Set the motor direction */
+    // m_indexConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    /* Config the peak outputs */
+    // m_indexConfiguration.Voltage.PeakForwardVoltage = 12.0;
+    // m_indexConfiguration.Voltage.PeakReverseVoltage = -12.0;
+    /* Apply Intake Motor Configs */
+    indexMotor.getConfigurator().apply(m_indexConfiguration);
   }
   
   public void index() {

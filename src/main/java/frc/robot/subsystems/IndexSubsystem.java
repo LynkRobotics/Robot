@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -18,11 +19,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IndexSubsystem extends SubsystemBase {
-  public static TalonFX indexMotor;
-  public static DigitalInput indexSesnor;
-  
+  private final TalonFX indexMotor;
+  private final DutyCycleOut indexSpeedDutyCycleOut;
+
+  private final DigitalInput indexSesnor;
+
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
+    indexSpeedDutyCycleOut = new DutyCycleOut(0);
     indexSesnor = new DigitalInput(Constants.Index.indexSensorID);
     applyConfigs();
   }
@@ -47,20 +51,24 @@ public class IndexSubsystem extends SubsystemBase {
   
   public void index() {
     indexMotor.set(Constants.Index.indexSpeed);
+    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.indexSpeed));
   }
 
   public void feed(){
     Timer.delay(Constants.Index.waitToShootTime);
     indexMotor.set(Constants.Index.feedSpeed);
+    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
     
   }
 
   public void stop(){
     indexMotor.set(Constants.Index.stopSpeed);
+    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.stopSpeed));
   }
 
   public void eject(){
     indexMotor.set(Constants.Index.ejectSpeed);
+    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.ejectSpeed));
   }
 
   @Override

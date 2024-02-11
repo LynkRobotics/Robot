@@ -71,5 +71,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("topVal", topNumber.get());
+    SmartDashboard.putNumber("bottomVal", bottomNumber.get());
   }
 }

@@ -51,6 +51,7 @@ public class RobotContainer {
         );
         
         s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
+        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -65,8 +66,7 @@ public class RobotContainer {
         /* Driver Buttons */
         intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
         // indexingButton.whileTrue(new IndexCommand(s_Index));
-        shooterButton.whileTrue(new ShootCommand(s_Shooter)
-        .alongWith(Commands.run(s_Index::feed, s_Index)));
+        shooterButton.whileTrue(new ShootCommand(s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
         
     }
 

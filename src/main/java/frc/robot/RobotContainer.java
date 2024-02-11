@@ -1,11 +1,7 @@
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -25,10 +21,6 @@ public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
 
-    private static DigitalInput indexSensor = new DigitalInput(0);
-
-    
-    BooleanSupplier indexSupplier = () -> !indexSensor.get(); 
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -38,7 +30,6 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton intakingButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton indexingButton = new JoystickButton(driver, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -72,7 +63,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(indexSupplier));
+        intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
         // indexingButton.whileTrue(new IndexCommand(s_Index));
         shooterButton.whileTrue(new ShootCommand(s_Shooter)
         .alongWith(Commands.run(s_Index::feed, s_Index)));

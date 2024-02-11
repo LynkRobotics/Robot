@@ -18,13 +18,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IndexSubsystem extends SubsystemBase {
-  /** Creates a new IndexSubsystem. */
   public static TalonFX indexMotor;
-  // public static DigitalInput indexSesnor;
+  public static DigitalInput indexSesnor;
+  
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
-    // indexSesnor = new DigitalInput(0);
+    indexSesnor = new DigitalInput(Constants.Index.indexSensorID);
     applyConfigs();
+  }
+
+  public BooleanSupplier getIndexSensor(){
+    return () -> !indexSesnor.get();
   }
 
   public void applyConfigs(){
@@ -33,34 +37,31 @@ public class IndexSubsystem extends SubsystemBase {
     /* Set Intake motor to Brake */
     m_indexConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     /* Set the motor direction */
-    // m_indexConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    // m_indexConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
     /* Config the peak outputs */
-    // m_indexConfiguration.Voltage.PeakForwardVoltage = 12.0;
-    // m_indexConfiguration.Voltage.PeakReverseVoltage = -12.0;
+    m_indexConfiguration.Voltage.PeakForwardVoltage = Constants.Index.peakForwardVoltage;
+    m_indexConfiguration.Voltage.PeakReverseVoltage = Constants.Index.peakReverseVoltage;
     /* Apply Intake Motor Configs */
     indexMotor.getConfigurator().apply(m_indexConfiguration);
   }
   
   public void index() {
-    indexMotor.set(-0.80);
+    indexMotor.set(Constants.Index.indexSpeed);
   }
 
   public void feed(){
-    Timer.delay(5);
-    indexMotor.set(-1.0);
+    Timer.delay(Constants.Index.waitToShootTime);
+    indexMotor.set(Constants.Index.feedSpeed);
     
   }
 
   public void stop(){
-    indexMotor.set(0);
+    indexMotor.set(Constants.Index.stopSpeed);
   }
 
   public void eject(){
-    indexMotor.set(1);
+    indexMotor.set(Constants.Index.ejectSpeed);
   }
-
-  
-
 
   @Override
   public void periodic() {

@@ -70,17 +70,15 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
-        // shooterButton.whileTrue(new ShootCommand(s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
+        intakingButton.whileTrue(Commands.run(s_Intake::intake, s_Intake).alongWith(Commands.run(s_Index::index, s_Index)).until(s_Index.getIndexSensor()));
 
+        shooterButton.whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
 
+        ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP));
         
+        subwooferButton.whileTrue(new ShootCommand(s_Shooter, Speed.SUBWOOFER));
 
-        ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP)
-        .alongWith(Commands.run(s_Shooter::shoot, s_Shooter))
-        .alongWith(new IndexCommand(s_Index))
-        .until(s_Index.getIndexSensor()));
-        
+        midLineButton.whileTrue(new ShootCommand(s_Shooter, Speed.MIDLINE));
     }
 
     /**

@@ -41,6 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
     AMP,
     SUBWOOFER,
     MIDLINE,
+    PODIUM,
   };
 
   private Deque<Speed> targetSpeed = new ArrayDeque<Speed>();
@@ -49,7 +50,8 @@ public class ShooterSubsystem extends SubsystemBase {
     Map.entry(Speed.IDLE, new ShooterSpeed(0.15, 0.15)),
     Map.entry(Speed.AMP, new ShooterSpeed(0.20, 0.30)),
     Map.entry(Speed.SUBWOOFER, new ShooterSpeed(0.30, 0.60)),
-    Map.entry(Speed.MIDLINE, new ShooterSpeed(0.50, 0.40))
+    Map.entry(Speed.MIDLINE, new ShooterSpeed(0.50, 0.40)),
+    Map.entry(Speed.PODIUM, new ShooterSpeed(0, 0)) //TODO: Podium Shooter Speeds
   ));
 
   public ShooterSubsystem() {

@@ -38,8 +38,8 @@ public class ShooterSubsystem extends SubsystemBase {
     /* Set the Shooters motor direction */
     m_ShooterMotorsConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
     /* Config the peak outputs */
-    m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Index.peakForwardVoltage;
-    m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Index.peakReverseVoltage;
+    m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Shooter.peakForwardVoltage;
+    m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Shooter.peakReverseVoltage;
     /* Apply Shooters Motor Configs */
     top.getConfigurator().apply(m_ShooterMotorsConfiguration);
     bottom.getConfigurator().apply(m_ShooterMotorsConfiguration);

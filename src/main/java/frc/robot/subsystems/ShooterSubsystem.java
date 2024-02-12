@@ -30,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double topMotorSpeed;
     double bottomMotorSpeed;
 
-    public ShooterSpeed(double top, double bottom){
+    public ShooterSpeed(double top, double bottom) {
       topMotorSpeed = top;
       bottomMotorSpeed = bottom;
     }
@@ -47,11 +47,11 @@ public class ShooterSubsystem extends SubsystemBase {
   private Deque<Speed> targetSpeed = new ArrayDeque<Speed>();
 
   private final EnumMap<Speed, ShooterSpeed> shooterSpeeds = new EnumMap<>(Map.ofEntries(
-    Map.entry(Speed.IDLE, new ShooterSpeed(0.15, 0.15)),
-    Map.entry(Speed.AMP, new ShooterSpeed(0.20, 0.30)),
-    Map.entry(Speed.SUBWOOFER, new ShooterSpeed(0.30, 0.60)),
-    Map.entry(Speed.MIDLINE, new ShooterSpeed(0.50, 0.40)),
-    Map.entry(Speed.PODIUM, new ShooterSpeed(0, 0)) //TODO: Podium Shooter Speeds
+      Map.entry(Speed.IDLE, new ShooterSpeed(0.15, 0.15)),
+      Map.entry(Speed.AMP, new ShooterSpeed(0.20, 0.30)),
+      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(0.30, 0.60)),
+      Map.entry(Speed.MIDLINE, new ShooterSpeed(0.50, 0.40)),
+      Map.entry(Speed.PODIUM, new ShooterSpeed(0, 0)) // TODO: Podium Shooter Speeds
   ));
 
   public ShooterSubsystem() {
@@ -61,13 +61,13 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomNumber.setDefault(0);
   }
 
-  public void applyConfigs(){
+  public void applyConfigs() {
     /* Configure the Shooter Motors */
     var m_ShooterMotorsConfiguration = new TalonFXConfiguration();
     /* Set Shooter motors to Brake */
     m_ShooterMotorsConfiguration.MotorOutput.NeutralMode = Constants.Shooter.motorNeutralValue;
     /* Set the Shooters motor direction */
-    m_ShooterMotorsConfiguration.MotorOutput.Inverted = Constants.Shooter.motorOutputInverted; //TODO: test this Monday
+    m_ShooterMotorsConfiguration.MotorOutput.Inverted = Constants.Shooter.motorOutputInverted; // TODO: test this Monday
     /* Config the peak outputs */
     m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Shooter.peakForwardVoltage;
     m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Shooter.peakReverseVoltage;
@@ -75,28 +75,27 @@ public class ShooterSubsystem extends SubsystemBase {
     top.getConfigurator().apply(m_ShooterMotorsConfiguration);
     bottom.getConfigurator().apply(m_ShooterMotorsConfiguration);
   }
-  
-  public void setTargetSpeeds(Speed speed){
+
+  public void setTargetSpeeds(Speed speed) {
     targetSpeed.clear();
     targetSpeed.add(speed);
   }
 
-
-  public void shoot(){
+  public void shoot() {
     Speed nextSpeedType = targetSpeed.peek();
     ShooterSpeed nextSpeed;
     nextSpeed = shooterSpeeds.get(nextSpeedType);
 
-    top.set(nextSpeed.topMotorSpeed); //59
-    bottom.set(nextSpeed.bottomMotorSpeed); //29
+    top.set(nextSpeed.topMotorSpeed); // 59
+    bottom.set(nextSpeed.bottomMotorSpeed); // 29
   }
 
-  public void idle(){
+  public void idle() {
     top.set(Constants.Shooter.idleSpeed);
     bottom.set(Constants.Shooter.idleSpeed);
   }
 
-  public void stop(){
+  public void stop() {
     top.set(Constants.Shooter.stopSpeed);
     bottom.set(Constants.Shooter.stopSpeed);
   }

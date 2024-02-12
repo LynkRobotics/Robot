@@ -13,15 +13,17 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.ShooterSubsystem.Speed;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -43,39 +45,45 @@ public class RobotContainer {
     private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
     private final IndexSubsystem s_Index = new IndexSubsystem();
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                // TODO Remove temp limitation
-                () -> -driver.getRawAxis(translationAxis) * 0.3, 
-                () -> -driver.getRawAxis(strafeAxis)* 0.3, 
-                () -> -driver.getRawAxis(rotationAxis)* 0.3, 
-                () -> false
-            )
-        );
-        
-        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
-        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
+                new TeleopSwerve(
+                        s_Swerve,
+                        // TODO Remove temp limitation
+                        () -> -driver.getRawAxis(translationAxis) * 0.3,
+                        () -> -driver.getRawAxis(strafeAxis) * 0.3,
+                        () -> -driver.getRawAxis(rotationAxis) * 0.3,
+                        () -> false));
+
+        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {
+        }, s_Shooter));
+        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {
+        }, s_Index));
         // Configure the button bindings
         configureButtonBindings();
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        intakingButton.whileTrue(Commands.run(s_Intake::intake, s_Intake).alongWith(Commands.run(s_Index::index, s_Index)).until(s_Index.getIndexSensor()));
+        intakingButton.whileTrue(Commands.run(s_Intake::intake, s_Intake)
+                .alongWith(Commands.run(s_Index::index, s_Index)).until(s_Index.getIndexSensor()));
 
-        shooterButton.whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
+        shooterButton
+                .whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
 
         ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP));
-        
+
         subwooferButton.whileTrue(new ShootCommand(s_Shooter, Speed.SUBWOOFER));
 
         midLineButton.whileTrue(new ShootCommand(s_Shooter, Speed.MIDLINE));

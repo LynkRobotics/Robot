@@ -27,41 +27,40 @@ public class IndexSubsystem extends SubsystemBase {
     applyConfigs();
   }
 
-  public BooleanSupplier getIndexSensor(){
+  public BooleanSupplier getIndexSensor() {
     return () -> !indexSesnor.get();
   }
 
-  public void applyConfigs(){
+  public void applyConfigs() {
     /* Configure the Index Motor */
     var m_indexConfiguration = new TalonFXConfiguration();
     /* Set Index motor to Brake */
     m_indexConfiguration.MotorOutput.NeutralMode = Constants.Index.motorNeutralValue;
     /* Set the motor direction */
-    m_indexConfiguration.MotorOutput.Inverted = Constants.Index.motorOutputInverted; //TODO: test this Monday
+    m_indexConfiguration.MotorOutput.Inverted = Constants.Index.motorOutputInverted; // TODO: test this Monday
     /* Config the peak outputs */
     m_indexConfiguration.Voltage.PeakForwardVoltage = Constants.Index.peakForwardVoltage;
     m_indexConfiguration.Voltage.PeakReverseVoltage = Constants.Index.peakReverseVoltage;
     /* Apply Index Motor Configs */
     indexMotor.getConfigurator().apply(m_indexConfiguration);
   }
-  
+
   public void index() {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.indexSpeed));
   }
 
-  public void feed(){
+  public void feed() {
     Timer.delay(Constants.Index.waitToShootTime);
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
   }
 
-  public void stop(){
+  public void stop() {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.stopSpeed));
   }
 
-  public void eject(){
+  public void eject() {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.ejectSpeed));
   }
-
 
   @Override
   public void periodic() {

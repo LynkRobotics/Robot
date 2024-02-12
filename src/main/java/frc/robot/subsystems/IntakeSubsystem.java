@@ -13,7 +13,7 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   private final TalonFX intakeMotor;
   private final DutyCycleOut intakeSpeedDutyCycleOut;
-  
+
   public IntakeSubsystem() {
     intakeMotor = new TalonFX(Constants.Intake.intakeMotorID, Constants.Intake.intakeMotorCanBus);
     intakeSpeedDutyCycleOut = new DutyCycleOut(0);
@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
     applyConfigs();
   }
 
-  public void applyConfigs(){
+  public void applyConfigs() {
     /* Configure the Intake Motor */
     var m_intakeConfiguration = new TalonFXConfiguration();
     /* Set Intake motor to Brake */
@@ -35,19 +35,17 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.getConfigurator().apply(m_intakeConfiguration);
   }
 
-  public void intake(){
+  public void intake() {
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.intakingSpeed));
   }
 
-  public void eject(){
+  public void eject() {
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.ejectingSpeed));
   }
 
-  public void stop(){
+  public void stop() {
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.stoppingSpeed));
   }
-
-  
 
   @Override
   public void periodic() {

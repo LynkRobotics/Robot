@@ -4,11 +4,17 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.EnumMap;
+import java.util.Map;
+
+import javax.swing.text.Position;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.ShooterConfiguration;
 import frc.lib.util.TunableNumber;
 import frc.robot.Constants;
 
@@ -19,6 +25,32 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   public static TalonFX top;
   public static TalonFX bottom;
+
+  private class ShooterSpeed {
+    double topMotorSpeed;
+    double bottomMotorSpeed;
+
+    public ShooterSpeed(double top, double bottom){
+      topMotorSpeed = top;
+      bottomMotorSpeed = bottom;
+    }
+  }
+
+  public enum Speed {
+    IDLE,
+    AMP,
+    SUBWOOFER,
+    MIDLINE,
+  };
+
+  private Deque<Speed> targetSpeed = new ArrayDeque<Speed>();
+
+  private final EnumMap<Speed, ShooterSpeed> shooterSpeeds = new EnumMap<>(Map.ofEntries(
+    Map.entry(Speed.IDLE, new ShooterSpeed(0.15, 0.15)),
+    Map.entry(Speed.AMP, new ShooterSpeed(0.20, 0.30)),
+    Map.entry(Speed.SUBWOOFER, new ShooterSpeed(0.30, 0.60)),
+    Map.entry(Speed.MIDLINE, new ShooterSpeed(0.50, 0.40))
+  ));
 
   public ShooterSubsystem() {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
@@ -41,38 +73,23 @@ public class ShooterSubsystem extends SubsystemBase {
     top.getConfigurator().apply(m_ShooterMotorsConfiguration);
     bottom.getConfigurator().apply(m_ShooterMotorsConfiguration);
   }
+  
+  public void setTargetSpeeds(Speed speed){
+    targetSpeed.clear();
+    targetSpeed.add(speed);
+  }
+
+  
 
 
   public void shoot(){
-    top.set(1.00); //59
-    bottom.set(1.00); //29
+    Speed nextSpeedType = targetSpeed.peek();
+    ShooterSpeed nextSpeed;
+    nextSpeed = shooterSpeeds.get(nextSpeedType);
+    
+    top.set(nextSpeed.topMotorSpeed); //59
+    bottom.set(nextSpeed.bottomMotorSpeed); //29
   }
-
-  public static ShooterConfiguration[] shootingTableNormal = {
-    new ShooterConfiguration(0, 0.30, 0.60), //Subwoofer Shot
-    new ShooterConfiguration(1, 0.50, 0.40), //Mid Line
-    new ShooterConfiguration(2, 0.20, 0.30), //AMP
-    new ShooterConfiguration(3, 0, 0), //49, 29
-    new ShooterConfiguration(4, 0, 0),
-    new ShooterConfiguration(5, 0, 0),
-    new ShooterConfiguration(6, 0, 0),
-    new ShooterConfiguration(7, 0, 0),
-    new ShooterConfiguration(8, 0, 0),
-    new ShooterConfiguration(9, 0, 0)
-  };
-
-  public static ShooterConfiguration[] shootingTable45 = {
-    new ShooterConfiguration(0, 0.20, 0.80), //Subwoofer Shot
-    new ShooterConfiguration(1, 0.00, 0.00), //Mid Line
-    new ShooterConfiguration(2, 0.20, 0.32), //AMP
-    new ShooterConfiguration(3, 0.60, 0.35), //Long shot
-    new ShooterConfiguration(4, 0, 0),
-    new ShooterConfiguration(5, 0, 0),
-    new ShooterConfiguration(6, 0, 0),
-    new ShooterConfiguration(7, 0, 0),
-    new ShooterConfiguration(8, 0, 0),
-    new ShooterConfiguration(9, 0, 0)
-  };
 
   public void idle(){
     top.set(Constants.Shooter.idleSpeed);

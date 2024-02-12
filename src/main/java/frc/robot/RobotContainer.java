@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.ShooterSubsystem.Speed;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -70,8 +71,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
-        shooterButton.whileTrue(new ShootCommand(s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
-        ampButton.whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
+        // shooterButton.whileTrue(new ShootCommand(s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
+
+
+        
+
+        ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP).alongWith(Commands.run(s_Shooter::shoot, s_Shooter)).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
         
     }
 

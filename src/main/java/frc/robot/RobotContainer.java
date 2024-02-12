@@ -76,7 +76,10 @@ public class RobotContainer {
 
         
 
-        ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP).alongWith(Commands.run(s_Shooter::shoot, s_Shooter)).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
+        ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP)
+        .alongWith(Commands.run(s_Shooter::shoot, s_Shooter))
+        .alongWith(new IndexCommand(s_Index))
+        .until(s_Index.getIndexSensor()));
         
     }
 

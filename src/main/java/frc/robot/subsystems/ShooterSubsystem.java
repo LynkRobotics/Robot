@@ -79,14 +79,12 @@ public class ShooterSubsystem extends SubsystemBase {
     targetSpeed.add(speed);
   }
 
-  
-
 
   public void shoot(){
     Speed nextSpeedType = targetSpeed.peek();
     ShooterSpeed nextSpeed;
     nextSpeed = shooterSpeeds.get(nextSpeedType);
-    
+
     top.set(nextSpeed.topMotorSpeed); //59
     bottom.set(nextSpeed.bottomMotorSpeed); //29
   }

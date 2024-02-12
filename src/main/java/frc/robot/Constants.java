@@ -164,9 +164,9 @@ public final class Constants {
         /* CANBus */
         public static final String indexMotorCanBus = "rio";
         /* Motor Speed Values */
-        public static final double indexSpeed = -0.80;
-        public static final double feedSpeed = -1.00;
-        public static final double ejectSpeed = 1.00;
+        public static final double indexSpeed = 0.80;
+        public static final double feedSpeed = 1.00;
+        public static final double ejectSpeed = -1.00;
         public static final double stopSpeed = 0.00;
         /* Timer Values */
         public static final double waitToShootTime = 0.75;

@@ -28,12 +28,12 @@ public class IntakeSubsystem extends SubsystemBase {
     /* Configure the Intake Motor */
     var m_intakeConfiguration = new TalonFXConfiguration();
     /* Set Intake motor to Brake */
-    m_intakeConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    m_intakeConfiguration.MotorOutput.NeutralMode = Constants.Intake.motorNeutralValue;
     /* Set the motor direction */
-    m_intakeConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    m_intakeConfiguration.MotorOutput.Inverted = Constants.Intake.motorOutputInverted;
     /* Config the peak outputs */
-    m_intakeConfiguration.Voltage.PeakForwardVoltage = 12.0;
-    m_intakeConfiguration.Voltage.PeakReverseVoltage = -12.0;
+    m_intakeConfiguration.Voltage.PeakForwardVoltage = Constants.Intake.peakForwardVoltage;
+    m_intakeConfiguration.Voltage.PeakReverseVoltage = Constants.Intake.peakReverseVoltage;
     /* Apply Intake Motor Configs */
     intakeMotor.getConfigurator().apply(m_intakeConfiguration);
   }

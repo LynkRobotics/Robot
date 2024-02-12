@@ -145,6 +145,11 @@ public final class Constants {
         public static final double intakingSpeed = 0.30;
         public static final double ejectingSpeed = -0.50;
         public static final double stoppingSpeed = 0.00;
+        /* Motor Config Values */
+        public static final double peakForwardVoltage = 12.0;
+        public static final double peakReverseVoltage = -12.0;
+        public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
+        public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
     }
 
     public class Shooter {

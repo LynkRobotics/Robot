@@ -147,11 +147,14 @@ public final class Constants {
     }
 
     public class Shooter {
+        /* IDs */
         public static final int topShooterID = 4; 
         public static final int bottomShooterID = 17;
-
+        /* CANBus */
         public static final String shooterMotorCanBus = "rio";
-
+        /* Motor Speed Values */
+        public static final double idleSpeed = 0.15;
+        public static final double stopSpeed = 0.00;
     }
 
     public class Index {

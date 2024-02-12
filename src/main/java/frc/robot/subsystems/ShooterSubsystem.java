@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,12 +26,29 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
-    // topNumber.setDefault(0);
-    // bottomNumber.setDefault(0);
+    topNumber.setDefault(0);
+    bottomNumber.setDefault(0);
   }
+
+  public void applyConfigs(){
+    /* Configure the Shooter Motors */
+    var m_ShooterMotorsConfiguration = new TalonFXConfiguration();
+    /* Set Shooter motors to Brake */
+    m_ShooterMotorsConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    /* Set the Shooters motor direction */
+    m_ShooterMotorsConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
+    /* Config the peak outputs */
+    m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Index.peakForwardVoltage;
+    m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Index.peakReverseVoltage;
+    /* Apply Shooters Motor Configs */
+    top.getConfigurator().apply(m_ShooterMotorsConfiguration);
+    bottom.getConfigurator().apply(m_ShooterMotorsConfiguration);
+  }
+
+
   public void shoot(){
-    top.set(-1.00); //59
-    bottom.set(-1.00); //29
+    top.set(1.00); //59
+    bottom.set(1.00); //29
   }
 
   public static ShooterConfiguration[] shootingTableNormal = {
@@ -58,13 +78,13 @@ public class ShooterSubsystem extends SubsystemBase {
   };
 
   public void idle(){
-    top.set(-.15);
-    bottom.set(-.15);
+    top.set(Constants.Shooter.idleSpeed);
+    bottom.set(Constants.Shooter.idleSpeed);
   }
 
   public void stop(){
-    top.set(0);
-    bottom.set(0);
+    top.set(Constants.Shooter.stopSpeed);
+    bottom.set(Constants.Shooter.stopSpeed);
   }
 
   @Override

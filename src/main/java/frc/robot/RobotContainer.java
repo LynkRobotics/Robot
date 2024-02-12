@@ -65,7 +65,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
-        // indexingButton.whileTrue(new IndexCommand(s_Index));
         shooterButton.whileTrue(new ShootCommand(s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
         
     }

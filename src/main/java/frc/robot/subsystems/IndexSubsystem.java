@@ -36,40 +36,36 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public void applyConfigs(){
-    /* Configure the Intake Motor */
+    /* Configure the Index Motor */
     var m_indexConfiguration = new TalonFXConfiguration();
-    /* Set Intake motor to Brake */
+    /* Set Index motor to Brake */
     m_indexConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     /* Set the motor direction */
-    // m_indexConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
+    m_indexConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
     /* Config the peak outputs */
     m_indexConfiguration.Voltage.PeakForwardVoltage = Constants.Index.peakForwardVoltage;
     m_indexConfiguration.Voltage.PeakReverseVoltage = Constants.Index.peakReverseVoltage;
-    /* Apply Intake Motor Configs */
+    /* Apply Index Motor Configs */
     indexMotor.getConfigurator().apply(m_indexConfiguration);
   }
   
   public void index() {
-    indexMotor.set(Constants.Index.indexSpeed);
-    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.indexSpeed));
+    indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.indexSpeed));
   }
 
   public void feed(){
     Timer.delay(Constants.Index.waitToShootTime);
-    indexMotor.set(Constants.Index.feedSpeed);
-    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
-    
+    indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
   }
 
   public void stop(){
-    indexMotor.set(Constants.Index.stopSpeed);
-    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.stopSpeed));
+    indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.stopSpeed));
   }
 
   public void eject(){
-    indexMotor.set(Constants.Index.ejectSpeed);
-    // indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.ejectSpeed));
+    indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.ejectSpeed));
   }
+
 
   @Override
   public void periodic() {

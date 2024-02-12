@@ -179,6 +179,8 @@ public final class Constants {
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
         public static final double peakReverseVoltage = -12.0;
+        public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
+        public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

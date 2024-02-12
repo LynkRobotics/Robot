@@ -39,9 +39,9 @@ public class IndexSubsystem extends SubsystemBase {
     /* Configure the Index Motor */
     var m_indexConfiguration = new TalonFXConfiguration();
     /* Set Index motor to Brake */
-    m_indexConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    m_indexConfiguration.MotorOutput.NeutralMode = Constants.Index.motorNeutralValue;
     /* Set the motor direction */
-    m_indexConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
+    m_indexConfiguration.MotorOutput.Inverted = Constants.Index.motorOutputInverted; //TODO: test this Monday
     /* Config the peak outputs */
     m_indexConfiguration.Voltage.PeakForwardVoltage = Constants.Index.peakForwardVoltage;
     m_indexConfiguration.Voltage.PeakReverseVoltage = Constants.Index.peakReverseVoltage;

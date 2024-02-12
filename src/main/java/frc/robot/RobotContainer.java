@@ -31,6 +31,11 @@ public class RobotContainer {
     private final JoystickButton intakingButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
+    /* Different Position Test Buttons */
+    private final JoystickButton ampButton = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton subwooferButton = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton midLineButton = new JoystickButton(driver, XboxController.Button.kX.value);
+
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
@@ -66,6 +71,7 @@ public class RobotContainer {
         /* Driver Buttons */
         intakingButton.whileTrue(new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
         shooterButton.whileTrue(new ShootCommand(s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
+        ampButton.whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(Commands.run(s_Index::feed, s_Index)));
         
     }
 

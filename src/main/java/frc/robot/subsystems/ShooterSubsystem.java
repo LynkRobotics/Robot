@@ -34,9 +34,9 @@ public class ShooterSubsystem extends SubsystemBase {
     /* Configure the Shooter Motors */
     var m_ShooterMotorsConfiguration = new TalonFXConfiguration();
     /* Set Shooter motors to Brake */
-    m_ShooterMotorsConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    m_ShooterMotorsConfiguration.MotorOutput.NeutralMode = Constants.Shooter.motorNeutralValue;
     /* Set the Shooters motor direction */
-    m_ShooterMotorsConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO: test this Monday
+    m_ShooterMotorsConfiguration.MotorOutput.Inverted = Constants.Shooter.motorOutputInverted; //TODO: test this Monday
     /* Config the peak outputs */
     m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Shooter.peakForwardVoltage;
     m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Shooter.peakReverseVoltage;

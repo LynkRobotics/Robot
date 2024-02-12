@@ -137,13 +137,14 @@ public final class Constants {
     }
 
     public class Intake {
+        /* IDs */
         public static final int intakeMotorID = 3;
-        
+        /* CANBus */
         public static final String intakeMotorCanBus = "rio";
-
-        public static final double intakingSpeed = .30;
-        public static final double ejectingSpeed = -.5;
-        public static final double stoppingSpeed = 0.0;
+        /* Motor Speed Values */
+        public static final double intakingSpeed = 0.30;
+        public static final double ejectingSpeed = -0.50;
+        public static final double stoppingSpeed = 0.00;
     }
 
     public class Shooter {
@@ -158,6 +159,8 @@ public final class Constants {
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
         public static final double peakReverseVoltage = -12.0;
+        public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
+        public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
     }
 
     public class Index {

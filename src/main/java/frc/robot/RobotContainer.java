@@ -1,10 +1,18 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
@@ -45,6 +53,8 @@ public class RobotContainer {
     private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
     private final IndexSubsystem s_Index = new IndexSubsystem();
 
+    private final SendableChooser<Command> autoChooser;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -62,6 +72,16 @@ public class RobotContainer {
         }, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {
         }, s_Index));
+
+        // Default named commands for PathPlanner
+        NamedCommands.registerCommand("Startup delay", new PrintCommand("Begin startup delay").andThen(new WaitCommand(2.0)).andThen(new PrintCommand("End startup delay")));
+        NamedCommands.registerCommand("Shoot", new PrintCommand("COMMAND: Shoot").andThen(new WaitCommand(3.0)));
+        NamedCommands.registerCommand("Intake note", new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
+
+        // Build an autoChooser (defaults to none)
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -96,6 +116,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        //return new exampleAuto(s_Swerve);
+        //return new PathPlannerAuto("Straight score");
+        return autoChooser.getSelected();
     }
 }

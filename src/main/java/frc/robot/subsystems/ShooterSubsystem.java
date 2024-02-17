@@ -9,8 +9,6 @@ import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Map;
 
-import javax.swing.text.Position;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

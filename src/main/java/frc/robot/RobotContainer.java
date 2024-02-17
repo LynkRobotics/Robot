@@ -2,7 +2,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ShooterSubsystem.Speed;
@@ -65,8 +63,7 @@ public class RobotContainer {
                         // TODO Remove temp limitation
                         () -> -driver.getRawAxis(translationAxis) * 0.3,
                         () -> -driver.getRawAxis(strafeAxis) * 0.3,
-                        () -> -driver.getRawAxis(rotationAxis) * 0.3,
-                        () -> false));
+                        () -> -driver.getRawAxis(rotationAxis) * 0.3));
 
         s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {
         }, s_Shooter));
@@ -74,9 +71,11 @@ public class RobotContainer {
         }, s_Index));
 
         // Default named commands for PathPlanner
-        NamedCommands.registerCommand("Startup delay", new PrintCommand("Begin startup delay").andThen(new WaitCommand(2.0)).andThen(new PrintCommand("End startup delay")));
+        NamedCommands.registerCommand("Startup delay", new PrintCommand("Begin startup delay")
+                .andThen(new WaitCommand(2.0)).andThen(new PrintCommand("End startup delay")));
         NamedCommands.registerCommand("Shoot", new PrintCommand("COMMAND: Shoot").andThen(new WaitCommand(3.0)));
-        NamedCommands.registerCommand("Intake note", new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
+        NamedCommands.registerCommand("Intake note",
+                new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -116,8 +115,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        //return new exampleAuto(s_Swerve);
-        //return new PathPlannerAuto("Straight score");
+        // return new exampleAuto(s_Swerve);
+        // return new PathPlannerAuto("Straight score");
         return autoChooser.getSelected();
     }
 }

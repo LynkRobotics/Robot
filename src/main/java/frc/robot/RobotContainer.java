@@ -65,17 +65,18 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(strafeAxis) * 0.3,
                         () -> -driver.getRawAxis(rotationAxis) * 0.3));
 
-        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {
-        }, s_Shooter));
-        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {
-        }, s_Index));
+        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
+        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
 
         // Default named commands for PathPlanner
+        // TODO Delay from SmartDashboard
+        // TODO Replace prints with real commands
         NamedCommands.registerCommand("Startup delay", new PrintCommand("Begin startup delay")
                 .andThen(new WaitCommand(2.0)).andThen(new PrintCommand("End startup delay")));
         NamedCommands.registerCommand("Shoot", new PrintCommand("COMMAND: Shoot").andThen(new WaitCommand(3.0)));
-        NamedCommands.registerCommand("Intake note",
-                new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
+        //NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, Speed.MIDLINE).alongWith(new IndexCommand(s_Index)).raceWith(new WaitCommand(1.25)));      
+        //NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
+        NamedCommands.registerCommand("Intake note", new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();

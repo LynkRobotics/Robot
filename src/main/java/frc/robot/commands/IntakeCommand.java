@@ -20,7 +20,6 @@ public class IntakeCommand extends Command {
   @Override
   public void initialize() {
     intake.intake();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

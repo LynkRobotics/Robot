@@ -66,6 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_ShooterMotorsConfiguration.MotorOutput.NeutralMode = Constants.Shooter.motorNeutralValue;
     /* Set the Shooters motor direction */
     m_ShooterMotorsConfiguration.MotorOutput.Inverted = Constants.Shooter.motorOutputInverted; // TODO: test this Monday
+    // TODO Why is inversion not working?
     /* Config the peak outputs */
     m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Shooter.peakForwardVoltage;
     m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Shooter.peakReverseVoltage;

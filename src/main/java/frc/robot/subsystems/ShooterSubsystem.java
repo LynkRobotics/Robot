@@ -56,6 +56,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
+    applyConfigs();
     topNumber.setDefault(0);
     bottomNumber.setDefault(0);
   }

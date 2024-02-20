@@ -74,8 +74,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Startup delay", new PrintCommand("Begin startup delay")
                 .andThen(new WaitCommand(2.0)).andThen(new PrintCommand("End startup delay")));
         //NamedCommands.registerCommand("Shoot", new PrintCommand("COMMAND: Shoot").andThen(new WaitCommand(3.0)));
-        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, Speed.MIDLINE).alongWith(new IndexCommand(s_Index)).raceWith(new WaitCommand(1.25)));      
-        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index)).until(s_Index.getIndexSensor()));
+        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, Speed.MIDLINE).alongWith(new IndexCommand(s_Index, s_Shooter)).raceWith(new WaitCommand(1.25)));      
+        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index, s_Shooter)).until(s_Index.getIndexSensor()));
         //NamedCommands.registerCommand("Intake note", new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
 
         // Build an autoChooser (defaults to none)
@@ -100,7 +100,7 @@ public class RobotContainer {
                 .alongWith(Commands.run(s_Index::index, s_Index)).until(s_Index.getIndexSensor()));
 
         shooterButton
-                .whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(new IndexCommand(s_Index)));
+                .whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(new IndexCommand(s_Index, s_Shooter)));
 
         ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP));
 

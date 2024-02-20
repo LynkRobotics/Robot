@@ -4,33 +4,33 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class IndexCommand extends Command {
   /** Creates a new IndexCommand. */
   private final IndexSubsystem s_Index;
-  private final Timer timer = new Timer();
+  private final ShooterSubsystem s_Shooter;
   private boolean running = false;
 
-  public IndexCommand(IndexSubsystem s_Index) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public IndexCommand(IndexSubsystem s_Index, ShooterSubsystem s_Shooter) {
+    addRequirements(s_Index);
     this.s_Index = s_Index;
+    this.s_Shooter = s_Shooter;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.restart();
     running = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!running && timer.hasElapsed(Constants.Index.waitToShootTime)) {
+    if (!running && s_Shooter.isReady()) {
       s_Index.index();
       running = true;
     }

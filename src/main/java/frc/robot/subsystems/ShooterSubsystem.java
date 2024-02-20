@@ -4,25 +4,24 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Map;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.TunableNumber;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-
-  private TunableNumber topNumber = new TunableNumber("top motor/top");
-  private TunableNumber bottomNumber = new TunableNumber("bottom motor/top");
-  /** Creates a new ShooterSubsystem. */
-  public static TalonFX top;
-  public static TalonFX bottom;
+  private static TunableNumber topNumber = new TunableNumber("top motor/top");
+  private static TunableNumber bottomNumber = new TunableNumber("bottom motor/top");
+  private static TalonFX top;
+  private static TalonFX bottom;
+  private static final Timer timer = new Timer();
 
   private class ShooterSpeed {
     double topMotorSpeed;
@@ -35,6 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public enum Speed {
+    STOP,
     IDLE,
     AMP,
     SUBWOOFER,
@@ -42,14 +42,15 @@ public class ShooterSubsystem extends SubsystemBase {
     PODIUM,
   };
 
-  private Deque<Speed> targetSpeed = new ArrayDeque<Speed>();
+  private Speed targetSpeed = Speed.IDLE;
 
   private final EnumMap<Speed, ShooterSpeed> shooterSpeeds = new EnumMap<>(Map.ofEntries(
-      Map.entry(Speed.IDLE, new ShooterSpeed(0.15, 0.15)),
+      Map.entry(Speed.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
+      Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
       Map.entry(Speed.AMP, new ShooterSpeed(0.20, 0.30)),
       Map.entry(Speed.SUBWOOFER, new ShooterSpeed(0.30, 0.60)),
       Map.entry(Speed.MIDLINE, new ShooterSpeed(0.50, 0.40)),
-      Map.entry(Speed.PODIUM, new ShooterSpeed(0, 0)) // TODO: Podium Shooter Speeds
+      Map.entry(Speed.PODIUM, new ShooterSpeed(0.59, 0.29)) // TODO: Podium Shooter Speeds
   ));
 
   public ShooterSubsystem() {
@@ -75,28 +76,35 @@ public class ShooterSubsystem extends SubsystemBase {
     bottom.getConfigurator().apply(m_ShooterMotorsConfiguration);
   }
 
-  public void setTargetSpeeds(Speed speed) {
-    targetSpeed.clear();
-    targetSpeed.add(speed);
+  public void setTargetSpeed(Speed speed) {
+    targetSpeed = speed;
   }
 
   public void shoot() {
-    Speed nextSpeedType = targetSpeed.peek();
-    ShooterSpeed nextSpeed;
-    nextSpeed = shooterSpeeds.get(nextSpeedType);
+    setCurrentSpeed(targetSpeed);
+    timer.restart();
+  }
 
-    top.set(nextSpeed.topMotorSpeed); // 59
-    bottom.set(nextSpeed.bottomMotorSpeed); // 29
+  public void setCurrentSpeed(Speed speed) {
+    setCurrentSpeed(shooterSpeeds.get(speed));
+  }
+
+  public void setCurrentSpeed(ShooterSpeed speed) {
+    top.set(speed.topMotorSpeed);
+    bottom.set(speed.bottomMotorSpeed);
   }
 
   public void idle() {
-    top.set(Constants.Shooter.idleSpeed);
-    bottom.set(Constants.Shooter.idleSpeed);
+    setCurrentSpeed(Speed.IDLE);
   }
 
   public void stop() {
-    top.set(Constants.Shooter.stopSpeed);
-    bottom.set(Constants.Shooter.stopSpeed);
+    setCurrentSpeed(Speed.STOP);
+  }
+
+  public boolean isReady() {
+    // TODO Actually check current speeds instead
+    return timer.hasElapsed(Constants.Index.waitToShootTime);
   }
 
   @Override

@@ -10,25 +10,23 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IndexSubsystem extends SubsystemBase {
   private final TalonFX indexMotor;
   private final DutyCycleOut indexSpeedDutyCycleOut;
-
-  private final DigitalInput indexSesnor;
+  private final DigitalInput indexSensor;
 
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
     indexSpeedDutyCycleOut = new DutyCycleOut(0);
-    indexSesnor = new DigitalInput(Constants.Index.indexSensorID);
+    indexSensor = new DigitalInput(Constants.Index.indexSensorID);
     applyConfigs();
   }
 
   public BooleanSupplier getIndexSensor() {
-    return () -> !indexSesnor.get();
+    return () -> !indexSensor.get();
   }
 
   public void applyConfigs() {

@@ -50,7 +50,6 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public void feed() {
-    Timer.delay(Constants.Index.waitToShootTime);
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
   }
 

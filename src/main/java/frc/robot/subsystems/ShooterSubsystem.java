@@ -67,8 +67,7 @@ public class ShooterSubsystem extends SubsystemBase {
     /* Set Shooter motors to Brake */
     m_ShooterMotorsConfiguration.MotorOutput.NeutralMode = Constants.Shooter.motorNeutralValue;
     /* Set the Shooters motor direction */
-    m_ShooterMotorsConfiguration.MotorOutput.Inverted = Constants.Shooter.motorOutputInverted; // TODO: test this Monday
-    // TODO Why is inversion not working?
+    m_ShooterMotorsConfiguration.MotorOutput.Inverted = Constants.Shooter.motorOutputInverted;
     /* Config the peak outputs */
     m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Shooter.peakForwardVoltage;
     m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Shooter.peakReverseVoltage;
@@ -113,5 +112,9 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("topVal", topNumber.get());
     SmartDashboard.putNumber("bottomVal", bottomNumber.get());
+    SmartDashboard.putNumber("Top accel", top.getAcceleration().getValue());
+    SmartDashboard.putNumber("Bottom accel", bottom.getAcceleration().getValue());
+    SmartDashboard.putNumber("Top vel", top.getVelocity().getValue());
+    SmartDashboard.putNumber("Bottom vel", bottom.getVelocity().getValue());
   }
 }

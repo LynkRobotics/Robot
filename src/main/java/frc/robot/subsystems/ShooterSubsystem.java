@@ -13,20 +13,13 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.math.Conversions;
-import frc.lib.util.TunableNumber;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private static TunableNumber topNumber = new TunableNumber("top motor/top");
-  private static TunableNumber bottomNumber = new TunableNumber("bottom motor/top");
   private static TalonFX top;
   private static TalonFX bottom;
-  //private static final Timer timer = new Timer();
-  private final VelocityVoltage velocityControl = new VelocityVoltage(0).withEnableFOC(true);
   private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(0);
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final VelocityVoltage topControl = new VelocityVoltage(0).withEnableFOC(true);
@@ -40,6 +33,16 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSpeed(double top, double bottom) {
       topMotorSpeed = top;
       bottomMotorSpeed = bottom;
+    }
+  }
+
+  private class ShooterCalibration {
+    double distance;
+    ShooterSpeed speed;
+
+    public ShooterCalibration(double distance, ShooterSpeed speed) {
+      this.distance = distance;
+      this.speed = speed;
     }
   }
 
@@ -61,19 +64,24 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.AMP, new ShooterSpeed(1100, 1700)),
       Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1700, 3400)),
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
-      Map.entry(Speed.PODIUM, new ShooterSpeed(3350, 1600)), // TODO: Podium Shooter Speeds
+      Map.entry(Speed.PODIUM, new ShooterSpeed(3350, 1600)),
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed))
   ));
+
+  // TODO Calibrate shooter from various distances
+  private final ShooterCalibration[] shooterCalibration = {
+    new ShooterCalibration(3.0, new ShooterSpeed(3000, 3000)),
+    new ShooterCalibration(4.0, new ShooterSpeed(3000, 3000)),
+    new ShooterCalibration(5.0, new ShooterSpeed(3000, 3000)),
+  };
 
   public ShooterSubsystem() {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
     applyConfigs();
-    topNumber.setDefault(0);
-    bottomNumber.setDefault(0);
   }
 
-  public void applyConfigs() {
+  private void applyConfigs() {
     /* Configure the Shooter Motors */
     var m_ShooterMotorsConfiguration = new TalonFXConfiguration();
     /* Set Shooter motors to Brake */
@@ -84,58 +92,95 @@ public class ShooterSubsystem extends SubsystemBase {
     m_ShooterMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Shooter.peakForwardVoltage;
     m_ShooterMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Shooter.peakReverseVoltage;
 
-    m_ShooterMotorsConfiguration.Slot0.kP = 0.25; // Constants.Shooter.kP; // 12 // Voltage per 1 RPS of error
-    m_ShooterMotorsConfiguration.Slot0.kI = 0;
-    m_ShooterMotorsConfiguration.Slot0.kD = 0;
-    m_ShooterMotorsConfiguration.Slot0.kV = 1.0 / (490 / 60.0); // Constants.Shooter.kV; // 0.2 // Anticipated voltage per 1 RPS
-    m_ShooterMotorsConfiguration.Slot0.kA = 0;
-    m_ShooterMotorsConfiguration.Slot0.kS = 0.21; // Constants.Shooter.kS; // 14 // Voltage to overcome static friction
-    m_ShooterMotorsConfiguration.Slot0.kG = 0;
+    // PID & FF configuration
+    m_ShooterMotorsConfiguration.Slot0.kP = Constants.Shooter.kP;
+    m_ShooterMotorsConfiguration.Slot0.kI = Constants.Shooter.kI;
+    m_ShooterMotorsConfiguration.Slot0.kD = Constants.Shooter.kD;
+    m_ShooterMotorsConfiguration.Slot0.kS = Constants.Shooter.kS;
+    m_ShooterMotorsConfiguration.Slot0.kV = 1.0 / toRPS(Constants.Shooter.RPMsPerVolt);
+    m_ShooterMotorsConfiguration.Slot0.kA = 0.0;
+    m_ShooterMotorsConfiguration.Slot0.kG = 0.0;
 
     /* Apply Shooters Motor Configs */
     top.getConfigurator().apply(m_ShooterMotorsConfiguration);
     bottom.getConfigurator().apply(m_ShooterMotorsConfiguration);
   }
 
+  private double toRPM(double rps) {
+    return rps * 60.0;
+  }
+
+  private double toRPS(double rpm) {
+    return rpm / 60.0;
+  }
+
   public void setTargetSpeed(Speed speed) {
     targetSpeed = speed;
+  }
+
+  private ShooterSpeed speedFromDistance(double distance) {
+    ShooterCalibration priorEntry = null;
+    ShooterSpeed speed = null;
+
+    for (ShooterCalibration calibration : shooterCalibration) {
+      if (distance <= calibration.distance) {
+        if (priorEntry == null) {
+          speed = calibration.speed;
+        } else {
+          // Linear interpolation between calibration entries
+          double fraction = (distance - priorEntry.distance) / (calibration.distance - priorEntry.distance);
+
+          speed = new ShooterSpeed(
+            fraction * calibration.speed.topMotorSpeed + (1 - fraction) * priorEntry.speed.topMotorSpeed,
+            fraction * calibration.speed.bottomMotorSpeed + (1 - fraction) * priorEntry.speed.bottomMotorSpeed
+          );
+        }
+
+        break;
+      }
+      priorEntry = calibration;
+    }
+
+    if (speed == null) {
+      // Distance is greater than the last calibration
+      speed = priorEntry.speed;
+    }
+
+    return speed;
   }
 
   public void shoot() {
     setCurrentSpeed(targetSpeed);
   }
 
-  public void setCurrentSpeed(Speed speed) {
-    setCurrentSpeed(shooterSpeeds.get(speed));
+  private void setCurrentSpeed(Speed speed) {
+    ShooterSpeed shooterSpeed;
+
+    if (speed == null) {
+      // TODO Get distance from vision subsystem
+      shooterSpeed = speedFromDistance(4.0);
+    } else {
+      shooterSpeed = shooterSpeeds.get(speed);
+    }
+    setCurrentSpeed(shooterSpeed);
   }
 
-  public void setVelocity(TalonFX motor, double rpm) {    
-    motor.setControl(velocityControl.withVelocity(rpm / 60.0));
-  }
+  /*private void setVelocityTorque(TalonFX motor, double rpm) {
+    motor.setControl(velocityTorqueCurrentFOC.withVelocity(toRPS(rpm)));
+  }*/
 
-  public void setVelocityTorque(TalonFX motor, double rpm) {
-    motor.setControl(velocityTorqueCurrentFOC.withVelocity(rpm / 60.0));
-  }
-
-  public void setCurrentSpeed(ShooterSpeed speed) {
-    //setVelocity(top, speed.topMotorSpeed);
-    //setVelocity(bottom, speed.bottomMotorSpeed);
-    top.setControl(topControl.withVelocity(speed.topMotorSpeed / 60.0));
-    bottom.setControl(bottomControl.withVelocity(speed.bottomMotorSpeed / 60.0));
-  }
-
-  public void setMotorVoltage(TalonFX motor, double voltage) {
-    motor.setControl(voltageOut.withOutput(voltage));
+  private void setCurrentSpeed(ShooterSpeed speed) {
+    top.setControl(topControl.withVelocity(toRPS(speed.topMotorSpeed)));
+    bottom.setControl(bottomControl.withVelocity(toRPS(speed.bottomMotorSpeed)));
   }
 
   public void setVoltage(double voltage) {
-    setMotorVoltage(top, voltage);
-    setMotorVoltage(bottom, voltage);
+    top.setControl(voltageOut.withOutput(voltage));
+    bottom.setControl(voltageOut.withOutput(voltage));
   }
 
   public void setRPM(double rpm) {
-    setVelocity(top, rpm);
-    setVelocity(bottom, rpm);
+    setCurrentSpeed(new ShooterSpeed(rpm, rpm));
   }
 
   public void idle() {
@@ -147,15 +192,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isReady() {
-    return (Math.abs(top.getVelocity().getValueAsDouble() * 60 - shooterSpeeds.get(targetSpeed).topMotorSpeed) < Constants.Shooter.maxError &&
-      Math.abs(bottom.getVelocity().getValueAsDouble() * 60 - shooterSpeeds.get(targetSpeed).bottomMotorSpeed) < Constants.Shooter.maxError);
+    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - shooterSpeeds.get(targetSpeed).topMotorSpeed) < Constants.Shooter.maxError &&
+      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - shooterSpeeds.get(targetSpeed).bottomMotorSpeed) < Constants.Shooter.maxError);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double topVel = top.getVelocity().getValueAsDouble() * 60;
-    double bottomVel = bottom.getVelocity().getValueAsDouble() * 60;
+    double topVel = toRPM(top.getVelocity().getValueAsDouble());
+    double bottomVel = toRPM(bottom.getVelocity().getValueAsDouble());
     double topTarget = shooterSpeeds.get(targetSpeed).topMotorSpeed;
     double bottomTarget = shooterSpeeds.get(targetSpeed).bottomMotorSpeed;
     SmartDashboard.putNumber("Top RPM", topVel);
@@ -165,5 +210,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Top RPM err", topVel - topTarget);
     SmartDashboard.putNumber("Bottom RPM err", bottomVel - bottomTarget);
     SmartDashboard.putBoolean("Shooter ready", isReady());
+    SmartDashboard.putString("Next shot", targetSpeed == null ? "Vision" : targetSpeed.toString());
   }
 }

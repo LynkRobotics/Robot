@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.*;
@@ -37,13 +35,14 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton intakingButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
     /* Different Position Test Buttons */
     private final JoystickButton ampButton = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton subwooferButton = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton midLineButton = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton visionButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -65,18 +64,16 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(strafeAxis) * 0.3,
                         () -> -driver.getRawAxis(rotationAxis) * 0.5));
 
+        // TODO Restore default idle
         //s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
 
         // Default named commands for PathPlanner
         // TODO Delay from SmartDashboard
-        // TODO Replace prints with real commands
-        NamedCommands.registerCommand("Startup delay", new PrintCommand("Begin startup delay")
-                .andThen(new WaitCommand(2.0)).andThen(new PrintCommand("End startup delay")));
-        //NamedCommands.registerCommand("Shoot", new PrintCommand("COMMAND: Shoot").andThen(new WaitCommand(3.0)));
-        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, Speed.MIDLINE).alongWith(new IndexCommand(s_Index, s_Shooter)).raceWith(new WaitCommand(1.25)));      
-        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake).alongWith(new IndexCommand(s_Index, s_Shooter)).until(s_Index.getIndexSensor()));
-        //NamedCommands.registerCommand("Intake note", new PrintCommand("COMMAND: Intake note").andThen(new WaitCommand(1.0)));
+        NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
+                .andThen(Commands.waitSeconds(2.0)).andThen(Commands.print("End startup delay")));
+        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index).raceWith(Commands.waitSeconds(1.00)));      
+        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -106,17 +103,14 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        intakingButton.whileTrue(new IntakeCommand(s_Intake)
-                .alongWith(Commands.run(s_Index::index, s_Index)).until(s_Index.getIndexSensor()));
+        intakeButton.whileTrue(new IntakeCommand(s_Intake, s_Index));
+        shooterButton.whileTrue(new ShootCommand(s_Shooter, s_Index));
 
-        shooterButton
-                .whileTrue(new ShootCommand(s_Shooter, null).alongWith(new IndexCommand(s_Index, s_Shooter)));
-
-        ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP));
-
-        subwooferButton.whileTrue(new ShootCommand(s_Shooter, Speed.SUBWOOFER));
-
-        midLineButton.whileTrue(new ShootCommand(s_Shooter, Speed.MIDLINE));
+        /* Buttons to set the next shot */
+        ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.AMP); }));
+        subwooferButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.SUBWOOFER); }));
+        midLineButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.MIDLINE); }));
+        visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(null); }));
     }
 
     /**
@@ -125,9 +119,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        // return new exampleAuto(s_Swerve);
-        // return new PathPlannerAuto("Straight score");
         return autoChooser.getSelected();
     }
 }

@@ -6,39 +6,35 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IndexSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class IndexCommand extends Command {
-  /** Creates a new IndexCommand. */
-  private final IndexSubsystem s_Index;
-  private final ShooterSubsystem s_Shooter;
-  private boolean running = false;
+public class OuttakeCommand extends Command {
+  /** Creates a new IntakeCommand. */
+  private final IntakeSubsystem intake;
+  private final IndexSubsystem index;
 
-  public IndexCommand(IndexSubsystem s_Index, ShooterSubsystem s_Shooter) {
-    addRequirements(s_Index);
-    this.s_Index = s_Index;
-    this.s_Shooter = s_Shooter;
+  public OuttakeCommand(IntakeSubsystem intake, IndexSubsystem index) {
+    addRequirements(intake, index);
+    this.intake = intake;
+    this.index = index;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    running = false;
+    intake.eject();
+    index.eject();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if (!running && s_Shooter.isReady()) {
-      s_Index.index();
-      running = true;
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    s_Index.stop();
+    intake.stop();
+    index.stop();
   }
 
   // Returns true when the command should end.

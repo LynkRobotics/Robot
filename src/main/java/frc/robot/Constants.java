@@ -168,6 +168,11 @@ public final class Constants {
         public static final double peakReverseVoltage = -12.0;
         public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
+        public static final double kP = 0.25; // Voltage per 1 RPS of error
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        public static final double kS = 0.21;  // Voltage to overcome static friction
+        public static final double RPMsPerVolt = 490;
     }
 
     public class Index {

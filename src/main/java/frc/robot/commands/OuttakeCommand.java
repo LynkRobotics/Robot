@@ -9,7 +9,6 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class OuttakeCommand extends Command {
-  /** Creates a new IntakeCommand. */
   private final IntakeSubsystem intake;
   private final IndexSubsystem index;
 

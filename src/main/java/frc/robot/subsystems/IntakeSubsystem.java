@@ -8,8 +8,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,13 +20,6 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeSpeedDutyCycleOut = new DutyCycleOut(0);
 
     applyConfigs();
-  }
-
-  public Command intakeCmd() {
-    return Commands.startEnd(this::intake, this::stop, this);
-  }
-  public Command ejectCmd() {
-    return Commands.startEnd(this::eject, this::stop, this);
   }
 
   public void applyConfigs() {

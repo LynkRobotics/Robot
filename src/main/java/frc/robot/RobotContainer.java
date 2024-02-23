@@ -71,7 +71,7 @@ public class RobotContainer {
         // Default named commands for PathPlanner
         // TODO Delay from SmartDashboard
         NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
-                .andThen(Commands.waitSeconds(2.0)).andThen(Commands.print("End startup delay")));
+            .andThen(Commands.waitSeconds(2.0)).andThen(Commands.print("End startup delay")));
         NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index).raceWith(Commands.waitSeconds(1.00)));      
         NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index));
 

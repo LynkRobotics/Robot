@@ -8,7 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+//import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,11 +20,10 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   private static TalonFX top;
   private static TalonFX bottom;
-  private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(0);
+  //private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(0);
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final VelocityVoltage topControl = new VelocityVoltage(0).withEnableFOC(true);
   private final VelocityVoltage bottomControl = new VelocityVoltage(0).withEnableFOC(true);
-
 
   private class ShooterSpeed {
     double topMotorSpeed;

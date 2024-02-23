@@ -65,7 +65,7 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(strafeAxis) * 0.3,
                         () -> -driver.getRawAxis(rotationAxis) * 0.5));
 
-        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
+        //s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
 
         // Default named commands for PathPlanner
@@ -81,6 +81,16 @@ public class RobotContainer {
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        // During calibration allow for direct control
+        //SmartDashboard.putNumber("Shooter voltage direct", 0.0);
+        //SmartDashboard.putData("Set shooter voltage", s_Shooter.runOnce(() -> { s_Shooter.setVoltage(SmartDashboard.getNumber("Shooter voltage direct", 0)); }));
+        //SmartDashboard.putData("Stop shooter", s_Shooter.runOnce(() -> { s_Shooter.setVoltage(0); }));
+
+        // Allow for direct RPM setting
+        SmartDashboard.putNumber("Shooter RPM direct", 3000.0);
+        SmartDashboard.putData("Set shooter RPM", s_Shooter.runOnce(() -> { s_Shooter.setRPM(SmartDashboard.getNumber("Shooter RPM direct", 0.0)); }));
+        SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -100,7 +110,7 @@ public class RobotContainer {
                 .alongWith(Commands.run(s_Index::index, s_Index)).until(s_Index.getIndexSensor()));
 
         shooterButton
-                .whileTrue(Commands.run(s_Shooter::shoot, s_Shooter).alongWith(new IndexCommand(s_Index, s_Shooter)));
+                .whileTrue(new ShootCommand(s_Shooter, null).alongWith(new IndexCommand(s_Index, s_Shooter)));
 
         ampButton.whileTrue(new ShootCommand(s_Shooter, Speed.AMP));
 

@@ -37,6 +37,7 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton shooterButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton ejectButton = new JoystickButton(driver, XboxController.Button.kStart.value);
 
     /* Different Position Test Buttons */
     private final JoystickButton ampButton = new JoystickButton(driver, XboxController.Button.kA.value);
@@ -112,6 +113,8 @@ public class RobotContainer {
         midLineButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.MIDLINE); }));
         // visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(null); }));
         visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.PODIUM); }));
+
+        ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));
 
     }
 

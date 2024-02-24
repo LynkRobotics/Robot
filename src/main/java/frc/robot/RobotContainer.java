@@ -110,7 +110,9 @@ public class RobotContainer {
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.AMP); }));
         subwooferButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.SUBWOOFER); }));
         midLineButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.MIDLINE); }));
-        visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(null); }));
+        // visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(null); }));
+        visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.PODIUM); }));
+
     }
 
     /**

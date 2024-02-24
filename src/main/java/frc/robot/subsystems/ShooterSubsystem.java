@@ -61,9 +61,9 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
       Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
       Map.entry(Speed.AMP, new ShooterSpeed(1100, 1700)),
-      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1700, 3400)),
+      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1400, 2500)), //TOP: 1700, 1500 BOTTOM: 3400(NO), 3700(NO), 3900(NO)
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
-      Map.entry(Speed.PODIUM, new ShooterSpeed(3350, 1600)),
+      Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)), //3350, 1600 | 
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed))
   ));
 

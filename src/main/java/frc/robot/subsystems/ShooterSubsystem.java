@@ -164,6 +164,10 @@ public class ShooterSubsystem extends SubsystemBase {
     setCurrentSpeed(shooterSpeed);
   }
 
+  public void shoot(double topRPM, double bottomRPM) {
+    setCurrentSpeed(new ShooterSpeed(topRPM, bottomRPM));
+  }
+
   /*private void setVelocityTorque(TalonFX motor, double rpm) {
     motor.setControl(velocityTorqueCurrentFOC.withVelocity(toRPS(rpm)));
   }*/

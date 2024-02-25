@@ -11,6 +11,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class EjectCommand extends Command {
   private final IntakeSubsystem intake;
   private final IndexSubsystem index;
+
   public EjectCommand(IntakeSubsystem intake, IndexSubsystem index) {
     addRequirements(intake, index);
     this.intake = intake;

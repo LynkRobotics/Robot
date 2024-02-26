@@ -74,7 +74,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
             .andThen(Commands.waitSeconds(2.0)).andThen(Commands.print("End startup delay")));
         NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index).raceWith(Commands.waitSeconds(1.00)));      
-        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index));
+        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -106,7 +106,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        intakeButton.whileTrue(new IntakeCommand(s_Intake, s_Index));
+        intakeButton.whileTrue(new IntakeCommand(s_Intake, s_Index, driver));
         // TODO Restore normal shoot command operation: shooterButton.whileTrue(new ShootCommand(s_Shooter, s_Index));
         shooterButton.whileTrue(new ShootCommand(s_Shooter, s_Index,
             () -> SmartDashboard.getNumber("Shooter top RPM", 0.0), () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)));

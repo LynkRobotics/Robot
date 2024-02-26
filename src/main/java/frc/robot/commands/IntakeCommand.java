@@ -4,18 +4,24 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeCommand extends Command {
   private final IntakeSubsystem intake;
   private final IndexSubsystem index;
+  private final Joystick controller;
 
-  public IntakeCommand(IntakeSubsystem intake, IndexSubsystem index) {
+  public IntakeCommand(IntakeSubsystem intake, IndexSubsystem index, Joystick controller) {
     addRequirements(intake, index);
     this.intake = intake;
     this.index = index;
+    this.controller = controller;
   }
 
   // Called when the command is initially scheduled.
@@ -34,6 +40,12 @@ public class IntakeCommand extends Command {
   public void end(boolean interrupted) {
     intake.stop();
     index.stop();
+
+    if (!interrupted) {
+      CommandScheduler.getInstance().schedule(
+        Commands.startEnd(() -> controller.setRumble(RumbleType.kLeftRumble, 0.5), () -> controller.setRumble(RumbleType.kLeftRumble, 0.0))
+          .raceWith(Commands.waitSeconds(0.5)));
+    }
   }
 
   // Returns true when the command should end.

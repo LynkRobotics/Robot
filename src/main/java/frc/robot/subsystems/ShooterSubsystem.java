@@ -69,8 +69,6 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed))
   ));
 
-  // TODO Options to live "bump" the shooter numbers
-
   private final ShooterCalibration[] shooterCalibration = {
     new ShooterCalibration(40.5/12.0, new ShooterSpeed(1400, 2900)),
     new ShooterCalibration(4.0, new ShooterSpeed(1400, 2700)),
@@ -87,6 +85,9 @@ public class ShooterSubsystem extends SubsystemBase {
     top = new TalonFX(Constants.Shooter.topShooterID, Constants.Shooter.shooterMotorCanBus);
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
     applyConfigs();
+
+    SmartDashboard.putNumber("Shooter top RPM adjustment", 0.0);
+    SmartDashboard.putNumber("Shooter bottom RPM adjustment", 0.0);
   }
 
   private void applyConfigs() {
@@ -182,8 +183,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }*/
 
   private void setCurrentSpeed(ShooterSpeed speed) {
-    topCurrentTarget = speed.topMotorSpeed;
-    bottomCurrentTarget = speed.bottomMotorSpeed;
+    topCurrentTarget = speed.topMotorSpeed + SmartDashboard.getNumber("Shooter top RPM adjustment", 0.0);
+    bottomCurrentTarget = speed.bottomMotorSpeed + SmartDashboard.getNumber("Shooter bottom RPM adjustment", 0.0);
     top.setControl(topControl.withVelocity(toRPS(topCurrentTarget)));
     bottom.setControl(bottomControl.withVelocity(toRPS(bottomCurrentTarget)));
   }

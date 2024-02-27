@@ -43,8 +43,10 @@ public class IntakeCommand extends Command {
 
     if (!interrupted) {
       CommandScheduler.getInstance().schedule(
-        Commands.startEnd(() -> controller.setRumble(RumbleType.kLeftRumble, 0.5), () -> controller.setRumble(RumbleType.kLeftRumble, 0.0))
-          .raceWith(Commands.waitSeconds(0.5)));
+        Commands.startEnd(
+          () -> { controller.setRumble(RumbleType.kLeftRumble, 1.0); controller.setRumble(RumbleType.kRightRumble, 1.0); },
+          () -> { controller.setRumble(RumbleType.kLeftRumble, 0.0); controller.setRumble(RumbleType.kRightRumble, 0.0); })
+        .raceWith(Commands.waitSeconds(0.5)));
     }
   }
 

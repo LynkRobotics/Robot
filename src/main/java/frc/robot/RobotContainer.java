@@ -86,8 +86,7 @@ public class RobotContainer {
         //SmartDashboard.putData("Stop shooter", s_Shooter.runOnce(() -> { s_Shooter.setVoltage(0); }));
 
         // Allow for direct RPM setting
-        //SmartDashboard.putNumber("Shooter RPM direct", 3000.0);
-        //SmartDashboard.putData("Set shooter RPM", s_Shooter.runOnce(() -> { s_Shooter.setRPM(SmartDashboard.getNumber("Shooter RPM direct", 0.0)); }));
+        SmartDashboard.putBoolean("Direct set RPM", false);
         SmartDashboard.putNumber("Shooter top RPM", 1000.0);
         SmartDashboard.putNumber("Shooter bottom RPM", 1000.0);
         SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
@@ -107,9 +106,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         intakeButton.whileTrue(new IntakeCommand(s_Intake, s_Index, driver));
-        // TODO Restore normal shoot command operation: shooterButton.whileTrue(new ShootCommand(s_Shooter, s_Index));
-        shooterButton.whileTrue(new ShootCommand(s_Shooter, s_Index,
-            () -> SmartDashboard.getNumber("Shooter top RPM", 0.0), () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)));
+        shooterButton.whileTrue(
+            Commands.either(new ShootCommand(s_Shooter, s_Index,
+                () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
+                () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
+            new ShootCommand(s_Shooter, s_Index),
+            () -> SmartDashboard.getBoolean("Direct set RPM", false)));
 
         /* Buttons to set the next shot */
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.AMP); }));

@@ -47,7 +47,9 @@ public class ShootCommand extends Command {
       index.feed();
       feeding = true;
     }
-    shooter.shoot();
+    if (topSupplier == null || bottomSupplier == null) {
+      shooter.shoot();
+    }
   }
 
   // Called once the command ends or is interrupted.

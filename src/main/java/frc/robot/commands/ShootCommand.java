@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -12,6 +14,8 @@ public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
   private final IndexSubsystem index;
   private boolean feeding = false;
+  DoubleSupplier topSupplier = null;
+  DoubleSupplier bottomSupplier = null;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -19,10 +23,20 @@ public class ShootCommand extends Command {
     this.index = index;
   }
 
+  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, DoubleSupplier topSupplier, DoubleSupplier bottomSupplier) {
+    this(shooter, index);
+    this.topSupplier = topSupplier;
+    this.bottomSupplier = bottomSupplier;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.shoot();
+    if (topSupplier != null && bottomSupplier != null) {
+      shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
+    } else {
+      shooter.shoot();
+    }
     feeding = false;
   }
 
@@ -33,7 +47,9 @@ public class ShootCommand extends Command {
       index.feed();
       feeding = true;
     }
-    shooter.shoot();
+    if (topSupplier == null || bottomSupplier == null) {
+      shooter.shoot();
+    }
   }
 
   // Called once the command ends or is interrupted.

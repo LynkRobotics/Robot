@@ -24,6 +24,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final VelocityVoltage topControl = new VelocityVoltage(0).withEnableFOC(true);
   private final VelocityVoltage bottomControl = new VelocityVoltage(0).withEnableFOC(true);
+  private double topCurrentTarget = 0.0;
+  private double bottomCurrentTarget = 0.0;
 
   private class ShooterSpeed {
     double topMotorSpeed;
@@ -61,17 +63,24 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
       Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
       Map.entry(Speed.AMP, new ShooterSpeed(1100, 1700)),
-      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1400, 2500)), //TOP: 1700, 1500 BOTTOM: 3400(NO), 3700(NO), 3900(NO)
+      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1400, 2900)), //TOP: 1700, 1500 BOTTOM: 3400(NO), 3700(NO), 3900(NO)
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)), //3350, 1600 | 
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed))
   ));
 
-  // TODO Calibrate shooter from various distances
+  // TODO Options to live "bump" the shooter numbers
+
   private final ShooterCalibration[] shooterCalibration = {
-    new ShooterCalibration(3.0, new ShooterSpeed(3000, 3000)),
-    new ShooterCalibration(4.0, new ShooterSpeed(3000, 3000)),
-    new ShooterCalibration(5.0, new ShooterSpeed(3000, 3000)),
+    new ShooterCalibration(40.5/12.0, new ShooterSpeed(1400, 2900)),
+    new ShooterCalibration(4.0, new ShooterSpeed(1400, 2700)),
+    new ShooterCalibration(5.0, new ShooterSpeed(2200, 2200)),
+    new ShooterCalibration(6.0, new ShooterSpeed(2700, 2200)),
+    new ShooterCalibration(7.0, new ShooterSpeed(3000, 1900)),
+    new ShooterCalibration(8.0, new ShooterSpeed(2900, 1700)),
+    new ShooterCalibration(9.0, new ShooterSpeed(2800, 1550)),
+    new ShooterCalibration(10.0, new ShooterSpeed(2800, 1450)),
+    new ShooterCalibration(11.0, new ShooterSpeed(2700, 1400)),
   };
 
   public ShooterSubsystem() {
@@ -164,13 +173,19 @@ public class ShooterSubsystem extends SubsystemBase {
     setCurrentSpeed(shooterSpeed);
   }
 
+  public void shoot(double topRPM, double bottomRPM) {
+    setCurrentSpeed(new ShooterSpeed(topRPM, bottomRPM));
+  }
+
   /*private void setVelocityTorque(TalonFX motor, double rpm) {
     motor.setControl(velocityTorqueCurrentFOC.withVelocity(toRPS(rpm)));
   }*/
 
   private void setCurrentSpeed(ShooterSpeed speed) {
-    top.setControl(topControl.withVelocity(toRPS(speed.topMotorSpeed)));
-    bottom.setControl(bottomControl.withVelocity(toRPS(speed.bottomMotorSpeed)));
+    topCurrentTarget = speed.topMotorSpeed;
+    bottomCurrentTarget = speed.bottomMotorSpeed;
+    top.setControl(topControl.withVelocity(toRPS(topCurrentTarget)));
+    bottom.setControl(bottomControl.withVelocity(toRPS(bottomCurrentTarget)));
   }
 
   public void setVoltage(double voltage) {
@@ -191,8 +206,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isReady() {
-    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - shooterSpeeds.get(targetSpeed).topMotorSpeed) < Constants.Shooter.maxError &&
-      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - shooterSpeeds.get(targetSpeed).bottomMotorSpeed) < Constants.Shooter.maxError);
+    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < Constants.Shooter.maxError &&
+      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < Constants.Shooter.maxError);
   }
 
   @Override
@@ -200,14 +215,12 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     double topVel = toRPM(top.getVelocity().getValueAsDouble());
     double bottomVel = toRPM(bottom.getVelocity().getValueAsDouble());
-    double topTarget = shooterSpeeds.get(targetSpeed).topMotorSpeed;
-    double bottomTarget = shooterSpeeds.get(targetSpeed).bottomMotorSpeed;
     SmartDashboard.putNumber("Top RPM", topVel);
     SmartDashboard.putNumber("Bottom RPM", bottomVel);
-    SmartDashboard.putNumber("Top RPM tgt", topTarget);
-    SmartDashboard.putNumber("Bottom RPM tgt", bottomTarget);
-    SmartDashboard.putNumber("Top RPM err", topVel - topTarget);
-    SmartDashboard.putNumber("Bottom RPM err", bottomVel - bottomTarget);
+    SmartDashboard.putNumber("Top RPM tgt", topCurrentTarget);
+    SmartDashboard.putNumber("Bottom RPM tgt", bottomCurrentTarget);
+    SmartDashboard.putNumber("Top RPM err", topVel - topCurrentTarget);
+    SmartDashboard.putNumber("Bottom RPM err", bottomVel - bottomCurrentTarget);
     SmartDashboard.putBoolean("Shooter ready", isReady());
     SmartDashboard.putString("Next shot", targetSpeed == null ? "Vision" : targetSpeed.toString());
   }

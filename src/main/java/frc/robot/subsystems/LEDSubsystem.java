@@ -17,12 +17,14 @@ public class LEDSubsystem extends SubsystemBase {
     m_candle.configLEDType(LEDStripType.GRB);
     m_candle.configV5Enabled(true);
     m_candle.configLOSBehavior(true);
-    m_candle.setLEDs(191, 87, 0);
+    m_candle.setLEDs(191, 87, 0, 255, 0, 68);
   }
 
  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_candle.setLEDs(191, 87, 0, 255, 0, 68);
+
   }
 }

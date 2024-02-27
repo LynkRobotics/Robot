@@ -22,16 +22,16 @@ public class LEDSubsystem extends SubsystemBase {
       B = b;
     }
   }
-  
+
   public LEDSubsystem() {
     m_candle.configBrightnessScalar(0.50);
     m_candle.configLEDType(LEDStripType.GRB);
     m_candle.configV5Enabled(true);
     m_candle.configLOSBehavior(true);
   }
-
   
   public void setRainbow(){
+    m_candle.clearAnimation(0);
     m_candle.animate(new RainbowAnimation(0.50, 0.5, 68, false, 8));
   }
 

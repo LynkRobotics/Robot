@@ -50,6 +50,7 @@ public class RobotContainer {
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
     private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
     private final IndexSubsystem s_Index = new IndexSubsystem();
+    private final VisionSubsystem s_Vision = new VisionSubsystem();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -117,8 +118,8 @@ public class RobotContainer {
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.AMP); }));
         subwooferButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.SUBWOOFER); }));
         midLineButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.MIDLINE); }));
-        // visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(null); }));
-        visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.PODIUM); }));
+        visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(null); }));
+        // visionButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.PODIUM); }));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));
     }

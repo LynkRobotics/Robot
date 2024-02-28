@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -127,7 +128,8 @@ public class ShooterSubsystem extends SubsystemBase {
     targetSpeed = speed;
   }
 
-  private ShooterSpeed speedFromDistance(double distance) {
+  private ShooterSpeed speedFromDistance(double meters) {
+    double distance = Units.metersToFeet(meters);
     ShooterCalibration priorEntry = null;
     ShooterSpeed speed = null;
 
@@ -166,8 +168,9 @@ public class ShooterSubsystem extends SubsystemBase {
     ShooterSpeed shooterSpeed;
 
     if (speed == null) {
-      // TODO Get distance from vision subsystem
-      shooterSpeed = speedFromDistance(4.0);
+      // TODO Abort shoot command if we don't have a target
+      shooterSpeed = speedFromDistance(VisionSubsystem.getInstance().distanceToSpeaker());
+      //System.out.printf("Shoot @ %0.2f ft: %d, %d\n", VisionSubsystem.getInstance().distanceToSpeaker(), )
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
     }

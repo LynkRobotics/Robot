@@ -10,6 +10,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -48,6 +49,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+    SmartDashboard.putBoolean("vision/Update dashboard", false);
   }
 
   public static VisionSubsystem getInstance() {
@@ -58,9 +61,21 @@ public class VisionSubsystem extends SubsystemBase {
     return haveTarget;
   }
 
+  public Rotation2d angleError() {
+    if (!haveTarget) {
+      return new Rotation2d(0.0);
+    }
+
+    // TODO Verify operation for Red alliance
+    return lastPose.getTranslation().minus(speakerLocation()).getAngle();
+  }
+
+  private Translation2d speakerLocation() {
+    return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Vision.blueSpeakerLocation : Constants.Vision.redSpeakerLocation);
+  }
+
   public double distanceToSpeaker() {
-    Translation2d speakerLocation = DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Vision.blueSpeakerLocation : Constants.Vision.redSpeakerLocation;
-    double distance = lastPose.getTranslation().getDistance(speakerLocation); // distance from center of robot to speaker
+    double distance = lastPose.getTranslation().getDistance(speakerLocation()); // distance from center of robot to speaker
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
     distance *= 0.98; // fudge factor that somehow seems to help
     return distance;
@@ -72,18 +87,24 @@ public class VisionSubsystem extends SubsystemBase {
     EstimatedRobotPose visionEst = photonEstimator.update().orElse(null);
     double latestTimestamp = result.getTimestampSeconds();
     boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
+    boolean updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
 
     if (visionEst != null) {
         Pose3d estPose3d = visionEst.estimatedPose;
         lastPose = estPose3d.toPose2d();
         field.setRobotPose(lastPose);
-        SmartDashboard.putData("vision/Field", field);
+        if (updateDashboard) {
+          SmartDashboard.putData("vision/Field", field);
+        }
     }
 
-    SmartDashboard.putString("vision/Result", result.toString());
-    SmartDashboard.putBoolean("vision/New result", newResult);
-    SmartDashboard.putBoolean("vision/Have target(s)", result.hasTargets());
-    SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
+    if (updateDashboard) {
+      SmartDashboard.putString("vision/Result", result.toString());
+      SmartDashboard.putBoolean("vision/New result", newResult);
+      SmartDashboard.putBoolean("vision/Have target(s)", result.hasTargets());
+      SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
+      SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
+    }
 
     if (newResult) {
       lastEstTimestamp = latestTimestamp;

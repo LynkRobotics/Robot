@@ -29,6 +29,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double topCurrentTarget = 0.0;
   private double bottomCurrentTarget = 0.0;
   SendableChooser<Speed> defaultShotChooser = new SendableChooser<>();
+  private boolean visionShootingActive = false;
 
   private class ShooterSpeed {
     double topMotorSpeed;
@@ -136,6 +137,10 @@ public class ShooterSubsystem extends SubsystemBase {
     nextShot = speed;
   }
 
+  public boolean isVisionShootingActive() {
+    return visionShootingActive;
+  }
+
   private ShooterSpeed speedFromDistance(double meters) {
     double distance = Units.metersToFeet(meters);
     ShooterCalibration priorEntry = null;
@@ -184,8 +189,10 @@ public class ShooterSubsystem extends SubsystemBase {
       shooterSpeed = speedFromDistance(VisionSubsystem.getInstance().distanceToSpeaker());
       // TODO Alert if shooter speed is null (too far)
       System.out.printf("Shoot @ %0.2f ft: %d, %d\n", VisionSubsystem.getInstance().distanceToSpeaker(), shooterSpeed.topMotorSpeed, shooterSpeed.bottomMotorSpeed);
+      visionShootingActive = true;
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
+      visionShootingActive = false;
     }
 
     setCurrentSpeed(shooterSpeed);

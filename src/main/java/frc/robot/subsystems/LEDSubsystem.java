@@ -24,14 +24,45 @@ public class LEDSubsystem extends SubsystemBase {
     }
   }
 
+  public enum BaseState {
+    DISABLED,
+    EMPTY,
+    NOTE
+  }
+
+  public enum ActiveState {
+    CUBE,
+    CONE
+  }
+
+  public static final class Colors {
+    public static final Color off = new LED.Color(0, 0, 0);
+    public static final Color red = new LED.Color(255, 0, 0);
+    public static final Color green = new LED.Color(0, 255, 0);
+    public static final Color blue = new LED.Color(0, 0, 255);
+    public static final Color cyan = new LED.Color(0, 255, 255);
+    public static final Color magenta = new LED.Color(255, 0, 255);
+    public static final Color yellow = new LED.Color(255, 255, 0);
+    public static final Color white = new LED.Color(255, 255, 255);
+    public static final Color lynk = new LED.Color(162, 255, 0);
+    public static final Color disabled = new LED.Color(200, 0, 0);
+    public static final Color cube = new LED.Color(186, 0, 255);
+    public static final Color cone = new LED.Color(255, 128, 0);
+  }
+
   public LEDSubsystem() {
     m_Index = new IndexSubsystem();
     m_candle.configBrightnessScalar(0.50);
     m_candle.configLEDType(LEDStripType.GRB);
     m_candle.configV5Enabled(true);
     m_candle.configLOSBehavior(true);
+    setColor(Colors.lynk);
   }
   
+  public void setColor(Color color) {
+    m_candle.setLEDs(color.R, color.G, color.B);
+  }
+
   public void setRainbow(){
     m_candle.clearAnimation(0);
     m_candle.animate(new RainbowAnimation(0.50, 0.5, 68, false, 8));

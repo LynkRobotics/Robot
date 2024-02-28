@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.*;
@@ -66,14 +67,14 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(strafeAxis) * 0.3,
                         () -> -driver.getRawAxis(rotationAxis) * 0.5));
 
-        // TODO Restore default idle
-        //s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
+        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
 
         // Default named commands for PathPlanner
-        // TODO Delay from SmartDashboard
+        SmartDashboard.putNumber("auto/Startup delay", 0.0);
         NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
-            .andThen(Commands.waitSeconds(2.0)).andThen(Commands.print("End startup delay")));
+            .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), null))
+            .andThen(Commands.print("End startup delay")));
         NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index).raceWith(Commands.waitSeconds(1.00)));      
         NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
 
@@ -115,6 +116,7 @@ public class RobotContainer {
             () -> SmartDashboard.getBoolean("Direct set RPM", false)));
 
         /* Buttons to set the next shot */
+        // TODO Set up buttons for Blacksburg
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.AMP); }));
         subwooferButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.SUBWOOFER); }));
         midLineButton.onTrue(Commands.runOnce(() -> { s_Shooter.setTargetSpeed(Speed.MIDLINE); }));

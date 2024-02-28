@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
@@ -16,6 +17,8 @@ public class ShootCommand extends Command {
   private boolean feeding = false;
   DoubleSupplier topSupplier = null;
   DoubleSupplier bottomSupplier = null;
+  private final VisionSubsystem vision = VisionSubsystem.getInstance();
+  private boolean cancelled = false;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -32,17 +35,29 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    cancelled = false;
+    feeding = false;
+
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      shooter.shoot();
+      //if (shooter.usingVision()) {
+      //  cancelled = !vision.haveTarget();
+      //}
+      if (cancelled) {
+        cancel();
+      } else {
+        shooter.shoot();
+      }
     }
-    feeding = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (cancelled) {
+      return;
+    }
     if (!feeding && shooter.isReady()) {
       index.feed();
       feeding = true;
@@ -63,6 +78,6 @@ public class ShootCommand extends Command {
   @Override
   public boolean isFinished() {
     // TODO Consider ending command when shooter is done (especially for Auto)
-    return false;
+    return cancelled;
   }
 }

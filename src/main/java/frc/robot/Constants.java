@@ -195,6 +195,13 @@ public final class Constants {
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
     }
 
+    public static final class Vision {
+        public static final String cameraName = "Arducam_OV2311_USB_Camera";
+        public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
+        public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
+        public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
+    }
+
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;

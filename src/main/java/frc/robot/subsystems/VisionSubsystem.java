@@ -25,8 +25,6 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-import com.fasterxml.jackson.databind.introspect.ConcreteBeanPropertyBase;
-
 public class VisionSubsystem extends SubsystemBase {
   private static VisionSubsystem instance;
   private final PhotonCamera camera;

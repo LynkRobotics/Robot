@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,6 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final VelocityVoltage bottomControl = new VelocityVoltage(0).withEnableFOC(true);
   private double topCurrentTarget = 0.0;
   private double bottomCurrentTarget = 0.0;
+  SendableChooser<Speed> defaultShotChooser = new SendableChooser<>();
 
   private class ShooterSpeed {
     double topMotorSpeed;
@@ -55,10 +57,11 @@ public class ShooterSubsystem extends SubsystemBase {
     SUBWOOFER,
     MIDLINE,
     PODIUM,
-    FULL
+    FULL,
+    VISION
   };
 
-  private Speed targetSpeed = Speed.IDLE;
+  private Speed nextShot = null;
 
   private final EnumMap<Speed, ShooterSpeed> shooterSpeeds = new EnumMap<>(Map.ofEntries(
       Map.entry(Speed.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
@@ -89,6 +92,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Shooter top RPM adjustment", 0.0);
     SmartDashboard.putNumber("Shooter bottom RPM adjustment", 0.0);
+
+    for (Speed speed : Speed.values()) {
+      defaultShotChooser.addOption(speed.toString(), speed);
+    }
+    SmartDashboard.putData("shooter/Default shot", defaultShotChooser);
   }
 
   private void applyConfigs() {
@@ -124,8 +132,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return rpm / 60.0;
   }
 
-  public void setTargetSpeed(Speed speed) {
-    targetSpeed = speed;
+  public void setNextShot(Speed speed) {
+    nextShot = speed;
   }
 
   private ShooterSpeed speedFromDistance(double meters) {
@@ -136,6 +144,7 @@ public class ShooterSubsystem extends SubsystemBase {
     for (ShooterCalibration calibration : shooterCalibration) {
       if (distance <= calibration.distance) {
         if (priorEntry == null) {
+          // Anything closer that minimum calibration distance gets the same speed as minimum distance
           speed = calibration.speed;
         } else {
           // Linear interpolation between calibration entries
@@ -152,27 +161,33 @@ public class ShooterSubsystem extends SubsystemBase {
       priorEntry = calibration;
     }
 
-    if (speed == null) {
-      // Distance is greater than the last calibration
-      speed = priorEntry.speed;
-    }
-
+    // NOTE: Might be null if the calibration distance has been exceeded
     return speed;
   }
 
   public void shoot() {
-    setCurrentSpeed(targetSpeed);
+    setCurrentSpeed(nextShot);
+  }
+
+  private Speed defaultSpeed() {
+    return defaultShotChooser.getSelected();
   }
 
   private void setCurrentSpeed(Speed speed) {
     ShooterSpeed shooterSpeed;
 
     if (speed == null) {
+      speed = defaultSpeed();
+    }
+
+    if (speed == Speed.VISION) {
       shooterSpeed = speedFromDistance(VisionSubsystem.getInstance().distanceToSpeaker());
+      // TODO Alert if shooter speed is null (too far)
       System.out.printf("Shoot @ %0.2f ft: %d, %d\n", VisionSubsystem.getInstance().distanceToSpeaker(), shooterSpeed.topMotorSpeed, shooterSpeed.bottomMotorSpeed);
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
     }
+
     setCurrentSpeed(shooterSpeed);
   }
 
@@ -213,6 +228,10 @@ public class ShooterSubsystem extends SubsystemBase {
       Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < Constants.Shooter.maxError);
   }
 
+  public boolean usingVision() {
+    return nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -224,7 +243,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Bottom RPM tgt", bottomCurrentTarget);
     SmartDashboard.putNumber("Top RPM err", topVel - topCurrentTarget);
     SmartDashboard.putNumber("Bottom RPM err", bottomVel - bottomCurrentTarget);
-    SmartDashboard.putBoolean("Shooter ready", isReady());
-    SmartDashboard.putString("Next shot", targetSpeed == null ? "Vision" : targetSpeed.toString());
+    SmartDashboard.putBoolean("shooter/ready", isReady());
+    SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
   }
 }

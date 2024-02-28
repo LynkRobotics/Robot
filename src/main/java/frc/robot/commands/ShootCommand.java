@@ -41,9 +41,9 @@ public class ShootCommand extends Command {
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      //if (shooter.usingVision()) {
-      //  cancelled = !vision.haveTarget();
-      //}
+      if (shooter.usingVision()) {
+        cancelled = !vision.haveTarget();
+      }
       if (cancelled) {
         cancel();
       } else {
@@ -70,8 +70,14 @@ public class ShootCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.idle();
+    // Stop feeding
     index.stop();
+
+    // Restore idle speed
+    shooter.idle();
+
+    // Restore default shot
+    shooter.setNextShot(null);
   }
 
   // Returns true when the command should end.

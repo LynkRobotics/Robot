@@ -7,15 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class IntakeCommand extends Command {
   private final IntakeSubsystem intake;
   private final IndexSubsystem index;
+  private final LEDSubsystem led;
 
-  public IntakeCommand(IntakeSubsystem intake, IndexSubsystem index) {
-    addRequirements(intake, index);
+  public IntakeCommand(IntakeSubsystem intake, IndexSubsystem index, LEDSubsystem led) {
+    addRequirements(intake, index, led);
     this.intake = intake;
     this.index = index;
+    this.led = led;
   }
 
   // Called when the command is initially scheduled.
@@ -23,6 +26,7 @@ public class IntakeCommand extends Command {
   public void initialize() {
     intake.intake();
     index.index();
+    // led.detectIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

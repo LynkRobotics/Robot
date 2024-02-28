@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
+  private IndexSubsystem m_Index;
   private CANdle m_candle = new CANdle(0, "rio");
 
   public static class Color {
@@ -24,6 +25,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public LEDSubsystem() {
+    m_Index = new IndexSubsystem();
     m_candle.configBrightnessScalar(0.50);
     m_candle.configLEDType(LEDStripType.GRB);
     m_candle.configV5Enabled(true);
@@ -35,8 +37,17 @@ public class LEDSubsystem extends SubsystemBase {
     m_candle.animate(new RainbowAnimation(0.50, 0.5, 68, false, 8));
   }
 
+  public void detectIntake(){
+    if (m_Index.getIndexSensor().getAsBoolean()) {
+      setRainbow();
+    } else {
+      m_candle.setLEDs(255, 0, 0, 255, 0, 31);
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_candle.setLEDs(255, 0, 0, 255, 0, 31);
   }
 }

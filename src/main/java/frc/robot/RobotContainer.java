@@ -79,7 +79,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
             .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()))
             .andThen(Commands.print("End startup delay")));
-        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index).raceWith(Commands.waitSeconds(1.00)));      
+        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index)
+            .raceWith(new AimCommand(s_Swerve, s_Vision))
+            .raceWith(Commands.waitSeconds(1.50)));
         NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
 
         // Build an autoChooser (defaults to none)

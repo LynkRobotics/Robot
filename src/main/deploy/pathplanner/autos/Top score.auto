@@ -24,15 +24,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top subwoofer and out"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top subwoofer and out"
+                }
+              }
+            ]
           }
         },
         {

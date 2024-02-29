@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.LEDSubsystem.BaseState;
 import frc.robot.subsystems.LEDSubsystem.TempState;
 
 public class IntakeCommand extends Command {

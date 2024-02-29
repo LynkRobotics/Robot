@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
@@ -45,7 +46,7 @@ public class ShootCommand extends Command {
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (shooter.usingVision()) {
+      if (!DriverStation.isAutonomous() && shooter.usingVision()) {
         cancelled = !vision.haveTarget();
       }
       if (cancelled) {

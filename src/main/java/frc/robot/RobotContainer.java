@@ -67,9 +67,9 @@ public class RobotContainer {
                         s_Swerve,
                         s_Shooter,
                         s_Vision,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis)));
+                        () -> -driver.getRawAxis(translationAxis) * Constants.driveStickSensitivity,
+                        () -> -driver.getRawAxis(strafeAxis) * Constants.driveStickSensitivity,
+                        () -> -driver.getRawAxis(rotationAxis) * Constants.turnStickSensitivity));
 
         s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));

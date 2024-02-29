@@ -51,7 +51,7 @@ public class VisionSubsystem extends SubsystemBase {
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     SmartDashboard.putData("vision/Field", field);
-    SmartDashboard.putBoolean("vision/Update dashboard", false);
+    SmartDashboard.putBoolean("vision/Update dashboard", true);
   }
 
   public static VisionSubsystem getInstance() {

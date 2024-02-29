@@ -82,9 +82,9 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 4.5 * 0.3; // TODO: Remove limiter //TODO: This must be tuned to specific robot
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 10.0 * 0.5; //TODO: Remove limiter//TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
@@ -162,7 +162,7 @@ public final class Constants {
         public static final double idleSpeed = 800;
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
-        public static final double maxError = 80.0;
+        public static final double maxRPMError = 60.0;
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
         public static final double peakReverseVoltage = -12.0;
@@ -193,6 +193,14 @@ public final class Constants {
         public static final double peakReverseVoltage = -12.0;
         public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
+    }
+
+    public static final class Vision {
+        public static final String cameraName = "Arducam_OV2311_USB_Camera";
+        public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
+        public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
+        public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
+        public static final double maxAngleError = 0.5; // degrees
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

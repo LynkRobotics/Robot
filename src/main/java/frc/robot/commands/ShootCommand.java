@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -45,6 +46,7 @@ public class ShootCommand extends Command {
         cancelled = !vision.haveTarget();
       }
       if (cancelled) {
+        // TODO Flash LEDs to indicate failure
         cancel();
       } else {
         shooter.shoot();
@@ -58,7 +60,7 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (!feeding && shooter.isReady()) {
+    if (!feeding && shooter.isReady() && (!shooter.usingVision() || (Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError))) {
       index.feed();
       feeding = true;
     }

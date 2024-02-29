@@ -50,6 +50,7 @@ public class VisionSubsystem extends SubsystemBase {
     photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
+    SmartDashboard.putData("vision/Field", field);
     SmartDashboard.putBoolean("vision/Update dashboard", false);
   }
 
@@ -61,13 +62,25 @@ public class VisionSubsystem extends SubsystemBase {
     return haveTarget;
   }
 
+  private Translation2d speakerOffset() {
+    //return lastPose.getTranslation().minus(speakerLocation());
+    return speakerLocation().minus(lastPose.getTranslation());
+  }
+
+  private Rotation2d angleToSpeaker() {
+    return speakerOffset().getAngle();
+  }
+
   public Rotation2d angleError() {
     if (!haveTarget) {
       return new Rotation2d(0.0);
     }
 
     // TODO Verify operation for Red alliance
-    return lastPose.getTranslation().minus(speakerLocation()).getAngle();
+    Rotation2d speakerAngle = angleToSpeaker();
+    Rotation2d robotAngle = lastPose.getRotation();
+
+    return speakerAngle.minus(robotAngle);
   }
 
   private Translation2d speakerLocation() {
@@ -77,7 +90,7 @@ public class VisionSubsystem extends SubsystemBase {
   public double distanceToSpeaker() {
     double distance = lastPose.getTranslation().getDistance(speakerLocation()); // distance from center of robot to speaker
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-    distance *= 0.98; // fudge factor that somehow seems to help
+    distance *= 0.97; // fudge factor that somehow seems to help
     return distance;
   }
 
@@ -93,9 +106,6 @@ public class VisionSubsystem extends SubsystemBase {
         Pose3d estPose3d = visionEst.estimatedPose;
         lastPose = estPose3d.toPose2d();
         field.setRobotPose(lastPose);
-        if (updateDashboard) {
-          SmartDashboard.putData("vision/Field", field);
-        }
     }
 
     if (updateDashboard) {
@@ -103,6 +113,9 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("vision/New result", newResult);
       SmartDashboard.putBoolean("vision/Have target(s)", result.hasTargets());
       SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
+      SmartDashboard.putString("vision/Last pose", lastPose.toString());
+      SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
+      SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
     }
 

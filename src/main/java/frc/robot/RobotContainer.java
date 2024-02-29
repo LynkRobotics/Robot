@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Set;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -42,9 +44,9 @@ public class RobotContainer {
 
     /* Different Position Test Buttons */
     private final JoystickButton ampButton = new JoystickButton(driver, XboxController.Button.kA.value);
-    //private final JoystickButton subwooferButton = new JoystickButton(driver, XboxController.Button.kB.value);
-    //private final JoystickButton midLineButton = new JoystickButton(driver, XboxController.Button.kX.value);
-    //private final JoystickButton visionButton = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton defaultShotButton = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton getNoteButton = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton trapButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -74,14 +76,14 @@ public class RobotContainer {
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
         NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
-            .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), null))
+            .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()))
             .andThen(Commands.print("End startup delay")));
         NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index).raceWith(Commands.waitSeconds(1.00)));      
         NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("auto/Auto Chooser", autoChooser);
 
         // During calibration allow for direct control
         //SmartDashboard.putNumber("Shooter voltage direct", 0.0);
@@ -118,6 +120,9 @@ public class RobotContainer {
 
         /* Buttons to set the next shot */
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }));
+        defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }));
+        getNoteButton.onTrue(Commands.print("Getting notes not yet implemented"));
+        trapButton.onTrue(Commands.print("Trap shooting not yet implemented"));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));
     }

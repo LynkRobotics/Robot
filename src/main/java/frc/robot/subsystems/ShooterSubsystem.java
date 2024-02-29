@@ -94,8 +94,11 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Shooter top RPM adjustment", 0.0);
     SmartDashboard.putNumber("Shooter bottom RPM adjustment", 0.0);
 
+    defaultShotChooser.setDefaultOption("== VISION ==", Speed.VISION);
     for (Speed speed : Speed.values()) {
-      defaultShotChooser.addOption(speed.toString(), speed);
+      if (speed != Speed.VISION) {
+        defaultShotChooser.addOption(speed.toString(), speed);
+      }
     }
     SmartDashboard.putData("shooter/Default shot", defaultShotChooser);
   }
@@ -188,7 +191,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if (speed == Speed.VISION) {
       shooterSpeed = speedFromDistance(VisionSubsystem.getInstance().distanceToSpeaker());
       // TODO Alert if shooter speed is null (too far)
-      System.out.printf("Shoot @ %0.2f ft: %d, %d\n", VisionSubsystem.getInstance().distanceToSpeaker(), shooterSpeed.topMotorSpeed, shooterSpeed.bottomMotorSpeed);
+      //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       visionShootingActive = true;
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
@@ -231,8 +234,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isReady() {
-    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < Constants.Shooter.maxError &&
-      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < Constants.Shooter.maxError);
+    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < Constants.Shooter.maxRPMError &&
+      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < Constants.Shooter.maxRPMError);
   }
 
   public boolean usingVision() {

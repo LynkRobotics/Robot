@@ -47,13 +47,13 @@ public class TeleopSwerve extends Command {
             // TODO Turn into a PID, etc.
             double magnitude = Math.abs(angleError);
             if (magnitude > 10.0) {
-                rotationVal = 0.25 * Math.signum(angleError);
-            } else if (magnitude > 3.5) {
-                rotationVal = 0.15 * Math.signum(angleError);
-            } else if (magnitude > 1.0) {
                 rotationVal = 0.10 * Math.signum(angleError);
-            } else if (magnitude > 0.3) {
+            } else if (magnitude > 7.0) {
                 rotationVal = 0.05 * Math.signum(angleError);
+            } else if (magnitude > 3.0) {
+                rotationVal = 0.03 * Math.signum(angleError);
+            } else if (magnitude > 0.3) {
+                rotationVal = 0.02 * Math.signum(angleError);
             } else {
                 rotationVal = 0.0;
             }

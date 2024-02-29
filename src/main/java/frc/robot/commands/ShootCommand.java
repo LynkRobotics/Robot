@@ -9,8 +9,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.LEDSubsystem.TempState;
 
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
@@ -36,6 +38,7 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
     feeding = false;
 
@@ -80,6 +83,8 @@ public class ShootCommand extends Command {
 
     // Restore default shot
     shooter.setNextShot(null);
+
+    LEDSubsystem.clearTempState();
   }
 
   // Returns true when the command should end.

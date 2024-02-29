@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.BaseState;
+import frc.robot.subsystems.LEDSubsystem.TempState;
 
 public class IntakeCommand extends Command {
   private final IntakeSubsystem intake;
@@ -29,6 +32,7 @@ public class IntakeCommand extends Command {
   public void initialize() {
     intake.intake();
     index.index();
+    LEDSubsystem.setTempState(TempState.INTAKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +44,8 @@ public class IntakeCommand extends Command {
   public void end(boolean interrupted) {
     intake.stop();
     index.stop();
+
+    LEDSubsystem.clearTempState();
 
     if (!interrupted) {
       CommandScheduler.getInstance().schedule(

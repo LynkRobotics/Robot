@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.LEDSubsystem.BaseState;
 
 public class IndexSubsystem extends SubsystemBase {
   private final TalonFX indexMotor;
   private final DutyCycleOut indexSpeedDutyCycleOut;
   private final DigitalInput indexSensor;
+  private boolean haveNote = false;
 
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
@@ -62,6 +64,12 @@ public class IndexSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Have note", indexSensor.get());
+    boolean currentVal = indexSensor.get();
+
+    if (currentVal != haveNote) {
+      haveNote = currentVal;
+      LEDSubsystem.setBaseState(haveNote ? BaseState.NOTE : BaseState.EMPTY);
+    }
+    SmartDashboard.putBoolean("Have note", haveNote);
   }
 }

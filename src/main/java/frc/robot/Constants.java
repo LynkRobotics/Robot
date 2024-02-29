@@ -81,7 +81,7 @@ public final class Constants {
          * doesnt oscilate around a target velocity. */
         public static final double driveKI = 0.0; //Leave driveKI at 0.0
         public static final double driveKD = 0.0; //Leave driveKD at 0.0
-        public static final double driveKF = 0.0;
+        public static final double driveKF = 0.0; //Leave driveKF at 0.0 
 
         /* Drive Motor Characterization Values From SYSID */
         public static final double driveKS = 0.32; //TODO: This must be tuned to specific robot

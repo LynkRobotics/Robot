@@ -100,9 +100,8 @@ public final class Constants {
          * Kraken FOC (L3.5): ft/s = 18.9 | m/s = 5.76072
          */
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
-
-        public static final double maxAngularVelocity1 = 
+        // public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 
                                 maxSpeed / 
                                 Units.inchesToMeters(
                                     Math.hypot(
@@ -110,7 +109,7 @@ public final class Constants {
                                         Units.metersToInches(trackWidth) / 2.0)); //TODO: refactor later
 
         /* Neutral Modes */
-        public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
+        public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Brake;
         public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
 
         /* Module Specific Constants */

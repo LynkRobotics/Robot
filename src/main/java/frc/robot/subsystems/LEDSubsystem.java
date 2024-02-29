@@ -8,16 +8,22 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
   private CANdle m_candle = new CANdle(0, "rio");
-  private static BaseState baseState = null;
+  private static BaseState baseState = BaseState.DISABLED;
   private static TempState tempState = null;
   private static BaseState lastBaseState = null;
   private static TempState lastTempState = null;
+  private static double tempStateExpiry = 0.0;
+  private static Timer tempStateTimer = new Timer();
+  private static double blinkInterval = 0.25;
+  private static Timer blinkTimer = new Timer();
+  private static boolean blinkOff = false;
 
   public static class Color {
     private final int R, G, B;
@@ -33,7 +39,7 @@ public class LEDSubsystem extends SubsystemBase {
     READY,
     EMPTY,
     NOTE,
-    SHOOTABLE
+    SHOOTABLE // TODO Set SHOOTABLE state without conflicting with NOTE
   }
 
   public enum TempState {
@@ -85,58 +91,91 @@ public class LEDSubsystem extends SubsystemBase {
     m_candle.animate(new RainbowAnimation(0.50, 0.5, 68, false, 8));
   }
 
-  /*public void detectIntake(){
-    if (m_Index.getIndexSensor().getAsBoolean()) {
-      setRainbow();
+  private Color tempStateColor(TempState state) {
+    if (state == TempState.INTAKING) {
+      return Colors.yellow;
+    } else if (state == TempState.SHOOTING) {
+      return Colors.green;
+    } else if (state == TempState.ERROR) {
+      return Colors.red;
     } else {
-      m_candle.setLEDs(255, 0, 0, 255, 0, 31);
+      System.out.println("tempStateColor: Unknown state: " + state);
+      return Colors.off;
     }
-  }*/
+  }
+
+  private Color baseStateColor(BaseState state) {
+    if (state == BaseState.DISABLED) {
+      return Colors.disabled;
+    } else if (state == BaseState.READY) {
+      return Colors.lynk;
+    } else if (state == BaseState.EMPTY) {
+      return Colors.white;
+    } else if (state == BaseState.NOTE) {
+      return Colors.yellow;
+    } else if (state == BaseState.SHOOTABLE) {
+      return Colors.green;
+    } else {
+      System.out.println("baseStateColor: Unknown state: " + state);
+      return Colors.off;
+    }
+  }
 
   @Override
   public void periodic() {
     SmartDashboard.putString("LED/Base state", baseState == null ? "NULL" : baseState.toString());
     SmartDashboard.putString("LED/Temp state", tempState == null ? "NULL" : tempState.toString());
 
-    if (tempState != null && tempState == lastTempState) {
-      // Temporary state is still active
-      // TODO Support blinking
-      System.out.println("LED::periodic: Temp State unchanged");
-      return;
-    }
+    // If the temporary state is active...
     if (tempState != null) {
-      System.out.println("LED::periodic: Temp State NEW");
-      // TODO Set color based on temporary state
-      if (tempState == TempState.ERROR) {
-        setColor(Colors.red); // TODO Blink
-      } else if (tempState == TempState.INTAKING) {
-        setColor(Colors.yellow); // TODO Blink
-      } else if (tempState == TempState.SHOOTING) {
-        setColor(Colors.green); // TODO Blink
+      if (tempState == lastTempState) {
+        // Temporary state unchanged
+        if (tempStateExpiry > 0.0 && tempStateTimer.hasElapsed(tempStateExpiry)) {
+          // Temporary state has expired, and base state should be shown
+          tempState = null;
+        } else {
+          // Temporary state is active, but might need to be blinked
+          if (blinkTimer.hasElapsed(blinkInterval)) {
+            blinkOff = !blinkOff;
+            if (blinkOff) {
+              setColor(Colors.off);
+            } else {
+              setColor(tempStateColor(tempState));
+            }
+            blinkTimer.restart();
+          }
+        }
+      } else {
+        // Start new temporary state
+        setColor(tempStateColor(tempState));
+        blinkOff = false;
+        blinkTimer.restart();
+        if (tempState == TempState.ERROR) {
+          blinkInterval = 0.10;
+          tempStateExpiry = 0.80;
+          tempStateTimer.restart();
+        } else {
+          blinkInterval = 0.20;
+          tempStateExpiry = 0.0;
+        }
       }
-      lastTempState = tempState;
-      return;
     }
-    if (baseState == null) {
-      // Temporary startup condition
-      System.out.println("LED::periodic: Base State NULL");
-      return;
-    }
-    if (baseState != lastBaseState || lastTempState != null) {
-      System.out.println("LED::periodic: Base State new (or dropped temp state)");
-      if (baseState == BaseState.DISABLED) {
-        setColor(Colors.disabled);
-      } else if (baseState == BaseState.READY) {
-        setColor(Colors.lynk);
-      } else if (baseState == BaseState.EMPTY) {
-        setColor(Colors.white);
-      } else if (baseState == BaseState.NOTE) {
-        setColor(Colors.yellow);
-      } else if (baseState == BaseState.SHOOTABLE) {
-        setColor(Colors.green);
+
+    // Check for a changed base state, or a dropped temporary state
+    if (tempState == null) {
+      // Check for possible temporary startup condition, and skip it
+      if (baseState == null) {
+        System.out.println("LEDSubsystem::periodic: Base State NULL");
+      } else {
+        if (baseState != lastBaseState || lastTempState != null) {
+          setColor(baseStateColor(baseState));
+          lastBaseState = baseState;
+        }
       }
-      lastBaseState = baseState;
     }
+
+    // Update the last states processed for reference in the next iteration
     lastTempState = tempState;
+    lastBaseState = baseState;
   }
 }

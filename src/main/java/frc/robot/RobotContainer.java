@@ -83,6 +83,9 @@ public class RobotContainer {
             .raceWith(new AimCommand(s_Swerve, s_Vision))
             .raceWith(Commands.waitSeconds(2.50))
             .andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)));
+        NamedCommands.registerCommand("Shoot without aiming", new ShootCommand(s_Shooter, s_Index, false)
+            .raceWith(Commands.waitSeconds(1.50))
+            .andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)));
         NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
 
         // Build an autoChooser (defaults to none)

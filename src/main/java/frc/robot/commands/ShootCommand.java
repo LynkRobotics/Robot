@@ -26,6 +26,7 @@ public class ShootCommand extends Command {
   private boolean cancelled = false;
   private boolean gone = false;
   private Timer postShotTimer = new Timer();
+  private boolean autoAim = true;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -33,10 +34,16 @@ public class ShootCommand extends Command {
     this.index = index;
   }
 
+  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, boolean autoAim) {
+    this(shooter, index);
+    this.autoAim = autoAim;
+  }
+
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, DoubleSupplier topSupplier, DoubleSupplier bottomSupplier) {
     this(shooter, index);
     this.topSupplier = topSupplier;
     this.bottomSupplier = bottomSupplier;
+    this.autoAim = false;
   }
 
   // Called when the command is initially scheduled.
@@ -67,7 +74,7 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (!feeding && shooter.isReady() && (!shooter.usingVision() || (Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError))) {
+    if (!feeding && shooter.isReady() && (!autoAim || !shooter.usingVision() || (Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError))) {
       index.feed();
       feeding = true;
     }
@@ -95,6 +102,7 @@ public class ShootCommand extends Command {
     // Restore default shot
     shooter.setNextShot(null);
 
+    // Adjust LED state
     if (interrupted) {
       LEDSubsystem.setTempState(TempState.ERROR);
     } else {

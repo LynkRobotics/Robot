@@ -81,7 +81,8 @@ public class RobotContainer {
             .andThen(Commands.print("End startup delay")));
         NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index)
             .raceWith(new AimCommand(s_Swerve, s_Vision))
-            .raceWith(Commands.waitSeconds(1.50)));
+            .raceWith(Commands.waitSeconds(2.50))
+            .andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)));
         NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
 
         // Build an autoChooser (defaults to none)

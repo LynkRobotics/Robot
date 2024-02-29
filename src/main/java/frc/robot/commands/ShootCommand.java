@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
@@ -23,6 +24,8 @@ public class ShootCommand extends Command {
   DoubleSupplier bottomSupplier = null;
   private final VisionSubsystem vision = VisionSubsystem.getInstance();
   private boolean cancelled = false;
+  private boolean gone = false;
+  private Timer postShotTimer = new Timer();
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -42,6 +45,7 @@ public class ShootCommand extends Command {
     LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
     feeding = false;
+    gone = false;
 
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
@@ -50,7 +54,6 @@ public class ShootCommand extends Command {
         cancelled = !vision.haveTarget();
       }
       if (cancelled) {
-        // TODO Flash LEDs to indicate failure
         cancel();
       } else {
         shooter.shoot();
@@ -69,7 +72,14 @@ public class ShootCommand extends Command {
       feeding = true;
     }
     if (topSupplier == null || bottomSupplier == null) {
+      // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
       shooter.shoot();
+    }
+    if (feeding) {
+      if (!gone && !index.getIndexSensor().getAsBoolean()) {
+        postShotTimer.restart();
+        gone = true;
+      }
     }
   }
 
@@ -85,13 +95,22 @@ public class ShootCommand extends Command {
     // Restore default shot
     shooter.setNextShot(null);
 
-    LEDSubsystem.clearTempState();
-  }
+    if (interrupted) {
+      LEDSubsystem.setTempState(TempState.ERROR);
+    } else {
+      LEDSubsystem.clearTempState();
+    }
+ }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO Consider ending command when shooter is done (especially for Auto)
-    return cancelled;
+    if (cancelled) {
+      return true;
+    }
+    if (gone && postShotTimer.hasElapsed(Constants.Shooter.postShotTimeout)) {
+      return true;
+    }
+    return false;
   }
 }

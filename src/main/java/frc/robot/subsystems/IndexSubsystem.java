@@ -64,7 +64,7 @@ public class IndexSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    boolean currentVal = indexSensor.get();
+    boolean currentVal = getIndexSensor().getAsBoolean();
 
     if (currentVal != haveNote) {
       haveNote = currentVal;

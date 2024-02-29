@@ -27,8 +27,10 @@ public final class Constants {
         COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(21.75); //TODO: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(15.75); //TODO: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(21.75); 
+        /* Center to Center distance of left and right modules in meters. */
+        public static final double wheelBase = Units.inchesToMeters(15.75); 
+        /* Center to Center distance of front and rear module wheels in meters. */
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -73,8 +75,12 @@ public final class Constants {
 
         /* Drive Motor PID Values */
         public static final double driveKP = 0.10; //TODO: This must be tuned to specific robot
-        public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
+        /* After completeing characterization and inserting 
+         * the KS, KV, and KA values into the code, tune the 
+         * drive motor kP until it doesn't overshoot and 
+         * doesnt oscilate around a target velocity. */
+        public static final double driveKI = 0.0; //Leave driveKI at 0.0
+        public static final double driveKD = 0.0; //Leave driveKD at 0.0
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values From SYSID */
@@ -85,8 +91,23 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        /* These are theorectial values to start with, tune after
+         * Kraken FOC (L1.0): ft/s = 12.4 | m/s = 3.77952
+         * Kraken FOC (L1.5): ft/s = 14.2 | m/s = 4.32816
+         * Kraken FOC (L2.0): ft/s = 15.0 | m/s = 4.572
+         * Kraken FOC (L2.5): ft/s = 17.1 | m/s = 5.21208
+         * Kraken FOC (L3.0): ft/s = 16.5 | m/s = 5.0292
+         * Kraken FOC (L3.5): ft/s = 18.9 | m/s = 5.76072
+         */
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+
+        public static final double maxAngularVelocity1 = 
+                                maxSpeed / 
+                                Units.inchesToMeters(
+                                    Math.hypot(
+                                        Units.metersToInches(wheelBase) / 2.0, //the wheel base is in meters, so convert back to inches 
+                                        Units.metersToInches(trackWidth) / 2.0)); //TODO: refactor later
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
@@ -94,7 +115,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 { //TODO: This must be tuned to specific robot
+        public static final class Mod0 { 
             public static final int driveMotorID = 0;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 0;
@@ -105,7 +126,7 @@ public final class Constants {
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 { //TODO: This must be tuned to specific robot
+        public static final class Mod1 { 
             public static final int driveMotorID = 18;
             public static final int angleMotorID = 19;
             public static final int canCoderID = 1;
@@ -116,7 +137,7 @@ public final class Constants {
         }
         
         /* Back Left Module - Module 2 */
-        public static final class Mod2 { //TODO: This must be tuned to specific robot
+        public static final class Mod2 { 
             public static final int driveMotorID = 8;
             public static final int angleMotorID = 9;
             public static final int canCoderID = 2;
@@ -127,7 +148,7 @@ public final class Constants {
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 { //TODO: This must be tuned to specific robot
+        public static final class Mod3 { 
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 3;

@@ -49,11 +49,11 @@ public class TeleopSwerve extends Command {
             if (magnitude > 10.0) {
                 rotationVal = 0.10 * Math.signum(angleError);
             } else if (magnitude > 7.0) {
-                rotationVal = 0.05 * Math.signum(angleError);
+                rotationVal = 0.06 * Math.signum(angleError);
             } else if (magnitude > 3.0) {
-                rotationVal = 0.03 * Math.signum(angleError);
+                rotationVal = 0.04 * Math.signum(angleError);
             } else if (magnitude > 0.3) {
-                rotationVal = 0.02 * Math.signum(angleError);
+                rotationVal = 0.03 * Math.signum(angleError);
             } else {
                 rotationVal = 0.0;
             }

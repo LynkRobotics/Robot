@@ -80,14 +80,30 @@ public class RobotContainer {
         NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
             .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()))
             .andThen(Commands.print("End startup delay")));
-        NamedCommands.registerCommand("Shoot", new ShootCommand(s_Shooter, s_Index)
-            .raceWith(new AimCommand(s_Swerve, s_Vision))
-            .raceWith(Commands.waitSeconds(2.50))
-            .andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)));
-        NamedCommands.registerCommand("Shoot without aiming", new ShootCommand(s_Shooter, s_Index, false)
-            .raceWith(Commands.waitSeconds(1.50))
-            .andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)));
-        NamedCommands.registerCommand("Intake note", new IntakeCommand(s_Intake, s_Index, driver));
+        NamedCommands.registerCommand("Shoot",
+            Commands.print("Named 'Shoot' command starting")
+            .andThen(
+                (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index)).andThen(Commands.print("After ShootCommand")))
+                 .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
+                 .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
+            .andThen(Commands.print("After race group"))
+            //.andThen(Commands.print("Before idle").andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)).andThen(Commands.print("After idle")))
+            .andThen(Commands.print("Named 'Shoot' command ending"))
+        );
+        NamedCommands.registerCommand("Shoot without aiming",
+            Commands.print("Begin shot w/o aim")
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.50))))
+            .andThen(Commands.print("Shot w/o aim complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+            
+        );
+        NamedCommands.registerCommand("Intake note",
+            Commands.print("Beginning intake")
+            .andThen(new IntakeCommand(s_Intake, s_Index, driver))
+            .andThen(Commands.print("Intake complete")));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();

@@ -91,8 +91,8 @@ public class ShooterSubsystem extends SubsystemBase {
     bottom = new TalonFX(Constants.Shooter.bottomShooterID, Constants.Shooter.shooterMotorCanBus);
     applyConfigs();
 
-    SmartDashboard.putNumber("Shooter top RPM adjustment", 0.0);
-    SmartDashboard.putNumber("Shooter bottom RPM adjustment", 0.0);
+    SmartDashboard.putNumber("shooter/Top RPM adjustment", 0.0);
+    SmartDashboard.putNumber("shooter/Bottom RPM adjustment", 0.0);
 
     defaultShotChooser.setDefaultOption("== VISION ==", Speed.VISION);
     for (Speed speed : Speed.values()) {
@@ -214,8 +214,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }*/
 
   private void setCurrentSpeed(ShooterSpeed speed) {
-    topCurrentTarget = speed.topMotorSpeed + SmartDashboard.getNumber("Shooter top RPM adjustment", 0.0);
-    bottomCurrentTarget = speed.bottomMotorSpeed + SmartDashboard.getNumber("Shooter bottom RPM adjustment", 0.0);
+    topCurrentTarget = speed.topMotorSpeed + SmartDashboard.getNumber("shooter/Top RPM adjustment", 0.0);
+    bottomCurrentTarget = speed.bottomMotorSpeed + SmartDashboard.getNumber("shooter/Bottom RPM adjustment", 0.0);
     top.setControl(topControl.withVelocity(toRPS(topCurrentTarget)));
     bottom.setControl(bottomControl.withVelocity(toRPS(bottomCurrentTarget)));
   }
@@ -251,13 +251,14 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     double topVel = toRPM(top.getVelocity().getValueAsDouble());
     double bottomVel = toRPM(bottom.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("Top RPM", topVel);
-    SmartDashboard.putNumber("Bottom RPM", bottomVel);
-    SmartDashboard.putNumber("Top RPM tgt", topCurrentTarget);
-    SmartDashboard.putNumber("Bottom RPM tgt", bottomCurrentTarget);
-    SmartDashboard.putNumber("Top RPM err", topVel - topCurrentTarget);
-    SmartDashboard.putNumber("Bottom RPM err", bottomVel - bottomCurrentTarget);
+    SmartDashboard.putNumber("shooter/Top RPM", topVel);
+    SmartDashboard.putNumber("shooter/Bottom RPM", bottomVel);
+    SmartDashboard.putNumber("shooter/Top RPM tgt", topCurrentTarget);
+    SmartDashboard.putNumber("shooter/Bottom RPM tgt", bottomCurrentTarget);
+    SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);
+    SmartDashboard.putNumber("shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
     SmartDashboard.putBoolean("shooter/ready", isReady());
     SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
+    SmartDashboard.putBoolean("shooter/usingVision", usingVision());
   }
 }

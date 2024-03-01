@@ -30,11 +30,11 @@ public class AimCommand extends Command {
         if (magnitude > 10.0) {
             rotationVal = 0.10 * Math.signum(angleError);
         } else if (magnitude > 7.0) {
-            rotationVal = 0.05 * Math.signum(angleError);
+            rotationVal = 0.06 * Math.signum(angleError);
         } else if (magnitude > 3.0) {
-            rotationVal = 0.03 * Math.signum(angleError);
+            rotationVal = 0.04 * Math.signum(angleError);
         } else if (magnitude > 0.3) {
-            rotationVal = 0.02 * Math.signum(angleError);
+            rotationVal = 0.03 * Math.signum(angleError);
         } else {
             rotationVal = 0.0;
         }
@@ -44,5 +44,17 @@ public class AimCommand extends Command {
             new Translation2d(0, 0),
             rotationVal * Constants.Swerve.maxAngularVelocity,
             false);
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        s_Swerve.drive(new Translation2d(0, 0), 0.0, false);
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

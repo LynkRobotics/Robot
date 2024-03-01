@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Subwoofer to nearest and back"
+                  "pathName": "Subwoofer to B and back"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to far note and far shot"
+                  "pathName": "Straight on to A and amp-side shot"
                 }
               }
             ]

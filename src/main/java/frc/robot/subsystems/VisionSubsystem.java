@@ -63,7 +63,6 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private Translation2d speakerOffset() {
-    //return lastPose.getTranslation().minus(speakerLocation());
     return speakerLocation().minus(lastPose.getTranslation());
   }
 

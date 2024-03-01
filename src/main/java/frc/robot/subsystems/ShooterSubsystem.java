@@ -173,15 +173,15 @@ public class ShooterSubsystem extends SubsystemBase {
     return speed;
   }
 
-  public void shoot() {
-    setCurrentSpeed(nextShot);
+  public boolean shoot() {
+    return setCurrentSpeed(nextShot);
   }
 
   private Speed defaultSpeed() {
     return defaultShotChooser.getSelected();
   }
 
-  private void setCurrentSpeed(Speed speed) {
+  private boolean setCurrentSpeed(Speed speed) {
     ShooterSpeed shooterSpeed;
 
     if (speed == null) {
@@ -190,7 +190,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     if (speed == Speed.VISION) {
       shooterSpeed = speedFromDistance(VisionSubsystem.getInstance().distanceToSpeaker());
-      // TODO Alert if shooter speed is null (too far)
+      if (shooterSpeed == null) {
+        System.out.println("ShooterSubsystem::setCurrentSpeed: distance too far");
+        return false;
+      }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       visionShootingActive = true;
     } else {
@@ -199,6 +202,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     setCurrentSpeed(shooterSpeed);
+    return true;
   }
 
   public void shoot(double topRPM, double bottomRPM) {

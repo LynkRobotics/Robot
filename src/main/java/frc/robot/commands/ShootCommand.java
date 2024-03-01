@@ -60,10 +60,14 @@ public class ShootCommand extends Command {
       if (!DriverStation.isAutonomous() && shooter.usingVision()) {
         cancelled = !vision.haveTarget();
       }
+      if (!cancelled) {
+        if (!shooter.shoot()) {
+          cancelled = true;
+        }
+      }
       if (cancelled) {
+        LEDSubsystem.setTempState(TempState.ERROR);
         cancel();
-      } else {
-        shooter.shoot();
       }
     }
   }
@@ -80,7 +84,11 @@ public class ShootCommand extends Command {
     }
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
-      shooter.shoot();
+      if (!shooter.shoot()) {
+        cancelled = true;
+        cancel();
+        LEDSubsystem.setTempState(TempState.ERROR);
+      }
     }
     if (feeding) {
       if (!gone && !index.getIndexSensor().getAsBoolean()) {

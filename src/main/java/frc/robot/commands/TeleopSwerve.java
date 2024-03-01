@@ -39,7 +39,7 @@ public class TeleopSwerve extends Command {
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
         /* Override rotation if using vision to aim */
-        if (s_Shooter.usingVision()) {
+        if (s_Shooter.isVisionShootingActive()) {
             double angleError = s_Vision.angleError().getDegrees();
 
             // TODO Tune!

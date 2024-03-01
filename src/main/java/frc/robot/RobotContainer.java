@@ -53,6 +53,7 @@ public class RobotContainer {
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
     private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
     private final IndexSubsystem s_Index = new IndexSubsystem();
+    @SuppressWarnings ("unused")
     private final LEDSubsystem s_Led = new LEDSubsystem();
     private final VisionSubsystem s_Vision = new VisionSubsystem();
 
@@ -102,6 +103,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter top RPM", 1000.0);
         SmartDashboard.putNumber("Shooter bottom RPM", 1000.0);
         SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
+        SmartDashboard.putData("Zero Gyro", Commands.runOnce(s_Swerve::zeroGyro, s_Swerve)); //TODO: Test
 
         // Configure the button bindings
         configureButtonBindings();

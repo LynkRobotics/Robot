@@ -134,8 +134,14 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        SmartDashboard.putBoolean("Shooter intake", false);
+
         /* Driver Buttons */
-        intakeButton.whileTrue(new IntakeCommand(s_Intake, s_Index, driver));
+        intakeButton.whileTrue(Commands.either(
+            new ShooterIntakeCommand(s_Shooter, s_Index, driver),
+            new IntakeCommand(s_Intake, s_Index, driver),
+            () -> SmartDashboard.getBoolean("Shooter intake", false)));
+        //intakeButton.whileTrue(new IntakeCommand(s_Intake, s_Index, driver));
         shooterButton.whileTrue(
             Commands.either(new ShootCommand(s_Shooter, s_Index,
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),

@@ -152,6 +152,10 @@ public class RobotContainer {
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));
     }
 
+    public void hack(){
+        s_Swerve.hack();
+    }
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *

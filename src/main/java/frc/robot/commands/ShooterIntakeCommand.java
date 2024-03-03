@@ -54,7 +54,7 @@ public class ShooterIntakeCommand extends Command {
           return;
         } else {
           pulling = false;
-          index.feed();
+          index.softfeed();
         }
       }
     }

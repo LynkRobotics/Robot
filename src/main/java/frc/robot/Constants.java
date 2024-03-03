@@ -209,6 +209,7 @@ public final class Constants {
         /* Motor Speed Values */
         public static final double indexSpeed = 0.80;
         public static final double feedSpeed = 1.00;
+        public static final double softFeedSpeed = 0.25;
         public static final double ejectSpeed = -1.00;
         public static final double stopSpeed = 0.00;
         /* Timer Values */

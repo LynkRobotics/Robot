@@ -54,6 +54,10 @@ public class IndexSubsystem extends SubsystemBase {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
   }
 
+  public void softfeed() {
+    indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.softFeedSpeed));
+  }
+
   public void stop() {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.stopSpeed));
   }

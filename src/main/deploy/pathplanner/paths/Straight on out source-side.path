@@ -8,49 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.057311750987138,
-        "y": 4.73900293255132
+        "x": 2.178585448079987,
+        "y": 0.5877109936038056
       },
       "isLocked": false,
       "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 2.66,
-        "y": 4.1
+        "x": 7.430669406793358,
+        "y": 2.4161451959267564
       },
       "prevControl": {
-        "x": 2.06,
-        "y": 4.1
-      },
-      "nextControl": {
-        "x": 2.7600000000000002,
-        "y": 4.1
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.0852979887777954,
-        "y": 5.54
-      },
-      "prevControl": {
-        "x": 2.0759692428475764,
-        "y": 5.056180294178771
+        "x": 5.984713787609393,
+        "y": 1.0821345279054206
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -15.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {

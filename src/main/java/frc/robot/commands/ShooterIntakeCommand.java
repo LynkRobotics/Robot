@@ -35,7 +35,7 @@ public class ShooterIntakeCommand extends Command {
     seenIt = false;
     shooter.intake();
     index.eject();
-    LEDSubsystem.setTempState(TempState.INTAKING);
+    LEDSubsystem.setTempState(TempState.SHINTAKING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

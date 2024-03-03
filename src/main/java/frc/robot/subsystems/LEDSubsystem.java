@@ -44,6 +44,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public enum TempState {
     INTAKING,
+    SHINTAKING,
     SHOOTING,
     ERROR
   }
@@ -94,6 +95,8 @@ public class LEDSubsystem extends SubsystemBase {
   private Color tempStateColor(TempState state) {
     if (state == TempState.INTAKING) {
       return Colors.yellow;
+    } else if (state == TempState.SHINTAKING) {
+      return Colors.cyan;
     } else if (state == TempState.SHOOTING) {
       return Colors.green;
     } else if (state == TempState.ERROR) {

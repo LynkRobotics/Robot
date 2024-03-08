@@ -9,70 +9,28 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    private final SwerveDrivePoseEstimator poseEstimator;
     private final SwerveModule[] mSwerveMods;
     private final Pigeon2 gyro;
-    private final Field2d field;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
 
-        
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
             new SwerveModule(1, Constants.Swerve.Mod1.constants),
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
-        
-        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), new Pose2d());
-
-        AutoBuilder.configureHolonomic(
-                this::getPose,
-                this::setPose,
-                this::getSpeeds, 
-                this::driveRobotRelativeAuto,
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this // Reference to this subsystem to set requirements
-            );
-
-        field = new Field2d();
-        SmartDashboard.putData("Swerve/Pose", field);
     }
 
     public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {
@@ -80,7 +38,7 @@ public class Swerve extends SubsystemBase {
                                     translation.getX(), 
                                     translation.getY(), 
                                     rotation, 
-                                    getHeading()
+                                    PoseSubsystem.getInstance().getHeading()
                                 );
 
         driveRobotRelative(desiredChassisSpeeds, isOpenLoop);
@@ -123,7 +81,7 @@ public class Swerve extends SubsystemBase {
         return states;
     }
 
-    public SwerveModulePosition[] getModulePositions(){
+    public SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for(SwerveModule mod : mSwerveMods){
             positions[mod.moduleNumber] = mod.getPosition();
@@ -131,55 +89,32 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-    public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
-    }
-
-    public void setPose(Pose2d pose) {
-        poseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
-    }
-
-    public Rotation2d getHeading() {
-        return getPose().getRotation();
-    }
-
-    public void setHeading(Rotation2d heading) {
-        poseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
-    }
-
-    public void zeroHeading() {
-        setHeading(new Rotation2d());
-    }
-
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
-    public void zeroGyro(){
+    public void zeroGyro() {
         gyro.setYaw(0);
     }
 
-    public void resetModulesToAbsolute(){
+    public void resetModulesToAbsolute() {
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
     }
 
-    public void hack(){
+    public void hack() {
         gyro.setYaw(gyro.getYaw().getValue() + 180.0);
     }
 
     @Override
     public void periodic(){
-        poseEstimator.update(getGyroYaw(), getModulePositions());
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
-
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
-        SmartDashboard.putNumber("Swerve/Gyro", getHeading().getDegrees());
+        //SmartDashboard.putNumber("Swerve/Gyro", getHeading().getDegrees());
     }
 }

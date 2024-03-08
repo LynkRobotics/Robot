@@ -94,7 +94,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   private Color tempStateColor(TempState state) {
     if (state == TempState.INTAKING) {
-      return Colors.yellow;
+      return Colors.blue;
     } else if (state == TempState.SHINTAKING) {
       return Colors.cyan;
     } else if (state == TempState.SHOOTING) {

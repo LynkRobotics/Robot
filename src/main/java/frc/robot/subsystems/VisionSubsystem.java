@@ -75,7 +75,6 @@ public class VisionSubsystem extends SubsystemBase {
       return new Rotation2d(0.0);
     }
 
-    // TODO Verify operation for Red alliance
     Rotation2d speakerAngle = angleToSpeaker();
     Rotation2d robotAngle = lastPose.getRotation();
 

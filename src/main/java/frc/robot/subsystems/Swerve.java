@@ -20,14 +20,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public SwerveDrivePoseEstimator poseEstimator;
-    public SwerveModule[] mSwerveMods;
-    public Pigeon2 gyro;
-    
+    private final SwerveDrivePoseEstimator poseEstimator;
+    private final SwerveModule[] mSwerveMods;
+    private final Pigeon2 gyro;
+    private final Field2d field;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
@@ -69,6 +70,9 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
             );
+
+        field = new Field2d();
+        SmartDashboard.putData("Swerve/Pose", field);
     }
 
     public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {
@@ -168,6 +172,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic(){
         poseEstimator.update(getGyroYaw(), getModulePositions());
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -175,6 +180,6 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
-        SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
+        SmartDashboard.putNumber("Swerve/Gyro", getHeading().getDegrees());
     }
 }

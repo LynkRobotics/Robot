@@ -223,6 +223,7 @@ public final class Constants {
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 0.5; // degrees
+        public static final double distanceFudgeFactor = 0.97; // Scale the distance based on emperical results
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

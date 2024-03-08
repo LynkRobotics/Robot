@@ -8,17 +8,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -35,6 +38,7 @@ public class VisionSubsystem extends SubsystemBase {
   private double lastEstTimestamp = 0.0;
   private boolean haveTarget = false;
   private Pose2d lastPose  = new Pose2d();
+  private boolean updateDashboard = true;
 
   private final Transform3d kRobotToCam =
     new Transform3d(
@@ -51,7 +55,7 @@ public class VisionSubsystem extends SubsystemBase {
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     SmartDashboard.putData("vision/Field", field);
-    SmartDashboard.putBoolean("vision/Update dashboard", true);
+    SmartDashboard.putBoolean("vision/Update dashboard", updateDashboard);
   }
 
   public static VisionSubsystem getInstance() {
@@ -88,38 +92,49 @@ public class VisionSubsystem extends SubsystemBase {
   public double distanceToSpeaker() {
     double distance = lastPose.getTranslation().getDistance(speakerLocation()); // distance from center of robot to speaker
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-    distance *= 0.97; // fudge factor that somehow seems to help
+    distance *= Constants.Vision.distanceFudgeFactor;
     return distance;
+  }
+
+  public boolean updatePoseEstimate(PoseEstimator<SwerveDriveWheelPositions> poseEstimator) {
+    Optional<EstimatedRobotPose> optVisionEst = photonEstimator.update();
+    EstimatedRobotPose visionEst;
+    double latestTimestamp;
+    boolean newResult;
+    
+    if (!optVisionEst.isPresent()) {
+      return false;
+    }
+    visionEst = optVisionEst.get();
+    latestTimestamp = visionEst.timestampSeconds;
+    newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
+    if (updateDashboard) {
+      SmartDashboard.putBoolean("vision/New result", newResult);
+    }
+    if (!newResult) {
+      return false;
+    }
+    lastEstTimestamp = latestTimestamp;
+    lastPose = visionEst.estimatedPose.toPose2d();
+    field.setRobotPose(lastPose);
+    poseEstimator.addVisionMeasurement(lastPose, lastEstTimestamp);
+    return true;
   }
 
   @Override
   public void periodic() {
     PhotonPipelineResult result = camera.getLatestResult();
-    EstimatedRobotPose visionEst = photonEstimator.update().orElse(null);
-    double latestTimestamp = result.getTimestampSeconds();
-    boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
-    boolean updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
-
-    if (visionEst != null) {
-        Pose3d estPose3d = visionEst.estimatedPose;
-        lastPose = estPose3d.toPose2d();
-        field.setRobotPose(lastPose);
-    }
+    haveTarget = result.hasTargets();
+    updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
 
     if (updateDashboard) {
       SmartDashboard.putString("vision/Result", result.toString());
-      SmartDashboard.putBoolean("vision/New result", newResult);
-      SmartDashboard.putBoolean("vision/Have target(s)", result.hasTargets());
+      SmartDashboard.putBoolean("vision/Have target(s)", haveTarget);
       SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
       SmartDashboard.putString("vision/Last pose", lastPose.toString());
       SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
-    }
-
-    if (newResult) {
-      lastEstTimestamp = latestTimestamp;
-      haveTarget = result.hasTargets();
     }
   }
 }

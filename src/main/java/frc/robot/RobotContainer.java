@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -56,6 +57,8 @@ public class RobotContainer {
     @SuppressWarnings ("unused")
     private final LEDSubsystem s_Led = new LEDSubsystem();
     private final VisionSubsystem s_Vision = new VisionSubsystem();
+    @SuppressWarnings ("unused")
+    private final PoseSubsystem s_Pose = new PoseSubsystem(s_Swerve, s_Vision);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -74,6 +77,7 @@ public class RobotContainer {
 
         s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
+        SmartDashboard.putData(CommandScheduler.getInstance());
 
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);

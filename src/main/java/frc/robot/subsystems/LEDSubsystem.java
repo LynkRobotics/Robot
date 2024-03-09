@@ -46,6 +46,8 @@ public class LEDSubsystem extends SubsystemBase {
     INTAKING,
     SHINTAKING,
     SHOOTING,
+    EXTENDING,
+    RETRACTING,
     ERROR
   }
 
@@ -99,6 +101,10 @@ public class LEDSubsystem extends SubsystemBase {
       return Colors.cyan;
     } else if (state == TempState.SHOOTING) {
       return Colors.green;
+    } else if (state == TempState.EXTENDING) {
+      return Colors.magenta;
+    } else if (state == TempState.RETRACTING) {
+      return Colors.lynk;
     } else if (state == TempState.ERROR) {
       return Colors.red;
     } else {

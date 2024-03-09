@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -17,9 +17,9 @@ import frc.robot.subsystems.LEDSubsystem.TempState;
 public class IntakeCommand extends Command {
   private final IntakeSubsystem intake;
   private final IndexSubsystem index;
-  private final Joystick controller;
+  private final GenericHID controller;
 
-  public IntakeCommand(IntakeSubsystem intake, IndexSubsystem index, Joystick controller) {
+  public IntakeCommand(IntakeSubsystem intake, IndexSubsystem index, GenericHID controller) {
     addRequirements(intake, index);
     this.intake = intake;
     this.index = index;

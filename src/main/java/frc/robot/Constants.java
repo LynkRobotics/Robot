@@ -248,6 +248,8 @@ public final class Constants {
         public static final double kG = 0.0; // do not factory in gravity
         public static final double cruiseVelocity = 125.0; // RPS
         public static final double acceleration = cruiseVelocity * 0.5; // Accelerate in 0.5 seconds
+        
+        public static final double timeCutOff = 25.0;
     }
 
 

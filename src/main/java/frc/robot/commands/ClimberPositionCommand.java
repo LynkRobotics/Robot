@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.TempState;
 
 public class ClimberPositionCommand extends Command {
   private final ClimberSubsystem s_Climber;
   private final double position;
   private final LEDSubsystem.TempState ledState;
+  private boolean cancelled = false;
 
   /** Creates a new PushClimberCommand. */
   public ClimberPositionCommand(double position, LEDSubsystem.TempState ledState, ClimberSubsystem s_Climber) {
@@ -26,6 +29,12 @@ public class ClimberPositionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
+      cancelled = true;
+      cancel();
+      LEDSubsystem.setTempState(TempState.ERROR);
+      return;
+    }
     LEDSubsystem.setTempState(ledState);
     s_Climber.setPositionLeft(position);
     s_Climber.setPositionRight(position);
@@ -40,13 +49,18 @@ public class ClimberPositionCommand extends Command {
   public void end(boolean interrupted) {
     s_Climber.stop();
 
-    LEDSubsystem.clearTempState();
+    if (cancelled) {
+      LEDSubsystem.setTempState(TempState.ERROR);
+    } else {
+      LEDSubsystem.clearTempState();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(s_Climber.getPositionLeft() - position) < Constants.Climber.positionError
-        && Math.abs(s_Climber.getPositionRight() - position) < Constants.Climber.positionError;
+    return cancelled ||
+      ( Math.abs(s_Climber.getPositionLeft() - position) < Constants.Climber.positionError
+        && Math.abs(s_Climber.getPositionRight() - position) < Constants.Climber.positionError );
   }
 }

@@ -101,12 +101,8 @@ public final class Constants {
          */
         /** Radians per Second */
         // public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
-        public static final double maxAngularVelocity = 
-                                maxSpeed / 
-                                Units.inchesToMeters(
-                                    Math.hypot(
-                                        Units.metersToInches(wheelBase) / 2.0, //the wheel base is in meters, so convert back to inches 
-                                        Units.metersToInches(trackWidth) / 2.0)); //TODO: refactor later
+        public static final double driveRadius = Math.hypot(wheelBase, trackWidth) / 2.0;
+        public static final double maxAngularVelocity = maxSpeed / driveRadius;
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Brake;

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0852979887777954,
+        "x": 2.8,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.857855101142877,
-        "y": 6.825750951053167
+        "x": 2.8515038074910053,
+        "y": 5.625716730070211
       },
       "isLocked": false,
       "linkedName": "Straight shot"
@@ -17,26 +17,26 @@
     {
       "anchor": {
         "x": 2.8968988847068604,
-        "y": 7.0058881935945685
+        "y": 6.8
       },
       "prevControl": {
-        "x": 2.2678553852945145,
-        "y": 5.958984004016634
+        "x": 2.8968988847068604,
+        "y": 6.7
       },
       "nextControl": {
-        "x": 2.948402692197866,
-        "y": 7.09160492366478
+        "x": 2.8968988847068604,
+        "y": 6.900000000000001
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0852979887777954,
+        "x": 2.8,
         "y": 5.54
       },
       "prevControl": {
-        "x": 2.316636591419483,
+        "x": 3.0313386026416875,
         "y": 5.625070927838514
       },
       "nextControl": null,
@@ -46,13 +46,13 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 59.0,
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 90.0,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 59.0,
+      "rotationDegrees": 90.0,
       "rotateFast": false
     }
   ],

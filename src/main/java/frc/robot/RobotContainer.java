@@ -116,6 +116,17 @@ public class RobotContainer {
             .andThen(new IntakeCommand(s_Intake, s_Index, driver))
             .andThen(Commands.print("Intake complete")));
 
+        NamedCommands.registerCommand("Amp shot",
+            Commands.print("Begin Amp shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Amp shot complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+            
+        );
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("auto/Auto Chooser", autoChooser);

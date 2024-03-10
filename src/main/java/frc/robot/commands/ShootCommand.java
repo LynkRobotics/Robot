@@ -14,11 +14,13 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LEDSubsystem.TempState;
 
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
   private final IndexSubsystem index;
+  private Swerve swerve = null;
   private boolean feeding = false;
   DoubleSupplier topSupplier = null;
   DoubleSupplier bottomSupplier = null;
@@ -28,19 +30,20 @@ public class ShootCommand extends Command {
   private Timer postShotTimer = new Timer();
   private boolean autoAim = true;
 
-  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
+  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
     addRequirements(shooter, index);
     this.shooter = shooter;
     this.index = index;
+    this.swerve = swerve;
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, boolean autoAim) {
-    this(shooter, index);
+    this(shooter, index, null);
     this.autoAim = autoAim;
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, DoubleSupplier topSupplier, DoubleSupplier bottomSupplier) {
-    this(shooter, index);
+    this(shooter, index, null);
     this.topSupplier = topSupplier;
     this.bottomSupplier = bottomSupplier;
     this.autoAim = false;
@@ -78,9 +81,22 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (!feeding && shooter.isReady() && (!autoAim || !shooter.usingVision() || (Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError))) {
-      index.feed();
-      feeding = true;
+    if (!feeding && shooter.isReady()) {
+      boolean aligned = !autoAim; // Aligning if not automatic aiming
+
+      if (shooter.usingVision()) {
+        // Aligned if vision is aligned with target
+        aligned = Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
+      } else if (shooter.dumping() && swerve != null) {
+        aligned = Math.abs(swerve.dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError;
+      } else {
+        // Aligned because all other shots don't align
+        aligned = true;
+      }
+      if (aligned) {
+        index.feed();
+        feeding = true;
+      }
     }
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command

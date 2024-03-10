@@ -24,19 +24,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Amp-side subwoofer and out"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
                 }
               }
             ]

@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.708561597141464,
-        "y": 0.6127198949856547
+        "x": 2.7814456129910163,
+        "y": 4.540172147456013
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "Straight shot"
+    },
+    {
+      "anchor": {
+        "x": 2.4304615881959033,
+        "y": 3.022513681391
+      },
+      "prevControl": {
+        "x": 1.8324958714041877,
+        "y": 3.510852350104235
+      },
+      "nextControl": {
+        "x": 3.5499110998221997,
+        "y": 2.108296580229524
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -32,22 +48,22 @@
     },
     {
       "anchor": {
-        "x": 2.2998591451728356,
-        "y": 3.4329785023206414
+        "x": 1.9546955457547277,
+        "y": 3.274389821506916
       },
       "prevControl": {
-        "x": 2.577326124695045,
-        "y": 1.9901502088051515
+        "x": 2.2321625252769373,
+        "y": 1.8315615279914261
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": null
+      "isLocked": false,
+      "linkedName": "Source-side angle shot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": -10.0,
       "rotateFast": false
     }
   ],

@@ -5,7 +5,7 @@
       "x": 1.33,
       "y": 5.54
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to C and back"
+                  "pathName": "Straight on to D and back"
                 }
               },
               {
@@ -74,9 +74,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Straight on out source-side"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Straight on to E and back"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

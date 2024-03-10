@@ -45,7 +45,7 @@ public class RobotContainer {
     /* Different Position Test Buttons */
     private final JoystickButton ampButton = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton defaultShotButton = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton getNoteButton = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton dumpShotButton = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton trapButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Subsystems */
@@ -83,7 +83,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot",
             Commands.print("Named 'Shoot' command starting")
             .andThen(
-                (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index)).andThen(Commands.print("After ShootCommand")))
+                (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.print("After ShootCommand")))
                  .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
                  .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
             .andThen(Commands.print("After race group"))
@@ -96,6 +96,17 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("Shot w/o aim complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+            
+        );
+        NamedCommands.registerCommand("Shoot OTF",
+            Commands.print("Begin OTF")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.50))))
+            .andThen(Commands.print("Shot OTF complete"))
             //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
             .andThen(Commands.print("Idling again"))
             
@@ -146,13 +157,13 @@ public class RobotContainer {
             Commands.either(new ShootCommand(s_Shooter, s_Index,
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
                 () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
-            new ShootCommand(s_Shooter, s_Index),
+            new ShootCommand(s_Shooter, s_Index, s_Swerve),
             () -> SmartDashboard.getBoolean("Direct set RPM", false)));
 
         /* Buttons to set the next shot */
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }));
         defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }));
-        getNoteButton.onTrue(Commands.print("Getting notes not yet implemented"));
+        dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }));
         trapButton.onTrue(Commands.print("Trap shooting not yet implemented"));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));

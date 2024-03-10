@@ -20,24 +20,24 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot without aiming"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Subwoofer to B"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
               }
             ]
           }
@@ -45,24 +45,24 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot without aiming"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Straight on to A and back"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
               }
             ]
           }
@@ -74,20 +74,20 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Straight on to C and back"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
               }
             ]
           }
@@ -99,19 +99,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Straight on to D and back"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
                 }
               }
             ]

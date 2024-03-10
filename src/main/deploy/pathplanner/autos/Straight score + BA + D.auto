@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
+      "x": 1.33,
       "y": 5.54
     },
     "rotation": 0
@@ -20,23 +20,23 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot without aiming"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Subwoofer to B"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
                 }
               }
             ]
@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot without aiming"
           }
         },
         {

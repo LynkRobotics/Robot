@@ -24,19 +24,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "VABLA -- Subwoofer to B and back"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer to B and back"
                 }
               }
             ]
@@ -49,19 +49,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "VABLA -- Straight on to A and back"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Straight on to A and back"
                 }
               }
             ]
@@ -74,19 +74,19 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "VABLA -- Straight on to C and back"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Straight on to C and back"
                 }
               }
             ]

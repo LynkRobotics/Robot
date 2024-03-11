@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -28,8 +26,8 @@ public class IndexSubsystem extends SubsystemBase {
     applyConfigs();
   }
 
-  public BooleanSupplier getIndexSensor() {
-    return () -> !indexSensor.get();
+  public boolean haveNote() {
+    return !indexSensor.get();
   }
 
   public void applyConfigs() {
@@ -68,7 +66,7 @@ public class IndexSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    boolean currentVal = getIndexSensor().getAsBoolean();
+    boolean currentVal = haveNote();
 
     if (currentVal != haveNote) {
       haveNote = currentVal;

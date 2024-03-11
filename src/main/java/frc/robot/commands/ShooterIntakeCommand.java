@@ -43,14 +43,14 @@ public class ShooterIntakeCommand extends Command {
   public void execute() {
     if (pulling) {
       if (!seenIt) {
-        if (!index.getIndexSensor().getAsBoolean()) {
+        if (!index.haveNote()) {
           return;
         } else {
           seenIt = true;
         }
       } else {
         // Seen it
-        if (index.getIndexSensor().getAsBoolean()) {
+        if (index.haveNote()) {
           return;
         } else {
           pulling = false;
@@ -80,6 +80,6 @@ public class ShooterIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!pulling && index.getIndexSensor().getAsBoolean());
+    return (!pulling && index.haveNote());
   }
 }

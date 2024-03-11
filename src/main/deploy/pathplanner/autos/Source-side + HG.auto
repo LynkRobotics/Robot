@@ -24,13 +24,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source-side SW to H and back"
+                  "pathName": "Source-side SW to H"
                 }
               },
               {
@@ -40,12 +40,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "H to source-side shot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot without aiming"
+            "name": "Shoot"
           }
         },
         {
@@ -55,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source-side shot to G and back"
+                  "pathName": "Source-side shot to G"
                 }
               },
               {
@@ -65,6 +71,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G to source-side shot"
           }
         },
         {

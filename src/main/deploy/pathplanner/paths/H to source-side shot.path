@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 8.288914032373519,
+        "y": 0.7462996744175311
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.423657126994466,
-        "y": 3.238550613013328
+        "x": 5.59290645854019,
+        "y": 0.8955596093010377
       },
       "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.288914032373519,
-        "y": 0.6903271988362164
-      },
-      "prevControl": {
-        "x": 6.8056434294686765,
-        "y": 0.7183134366268737
-      },
-      "nextControl": {
-        "x": 8.388896237195874,
-        "y": 0.688440742141455
-      },
-      "isLocked": false,
-      "linkedName": null
+      "linkedName": "H Note"
     },
     {
       "anchor": {
@@ -44,13 +28,7 @@
       "linkedName": "Source-side angle shot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -67,7 +45,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": -15.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

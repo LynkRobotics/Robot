@@ -8,30 +8,30 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8515038074910057,
-        "y": 5.625716730070211
+        "x": 2.4771053178469993,
+        "y": 5.028194056388113
       },
       "isLocked": false,
       "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 6.8
+        "x": 2.5,
+        "y": 4.15
       },
       "prevControl": {
-        "x": 2.8,
-        "y": 6.7
+        "x": 2.542406539358533,
+        "y": 4.635646662202416
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Intermediate A"
+      "linkedName": "C Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 60.0,
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": -45.0,
       "rotateFast": false
     }
   ],
@@ -40,12 +40,12 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 2.3,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 90.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.0,
+    "rotation": -45.0,
     "rotateFast": false
   },
   "reversed": false,
@@ -54,5 +54,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

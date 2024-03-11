@@ -55,7 +55,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to C and back"
+                  "pathName": "B to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C to B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B to A"
                 }
               },
               {
@@ -80,7 +111,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to A"
+                  "pathName": "A to D"
                 }
               },
               {
@@ -93,28 +124,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "From A to D and back"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              }
-            ]
+            "pathName": "D to B"
           }
         },
         {

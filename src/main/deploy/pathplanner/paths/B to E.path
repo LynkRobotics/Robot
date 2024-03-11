@@ -3,51 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 2.8,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.423657126994466,
-        "y": 3.238550613013328
+        "x": 3.186090008543654,
+        "y": 5.727850001154548
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 8.288914032373519,
-        "y": 0.6903271988362164
+        "x": 8.27025654051308,
+        "y": 5.951739903479806
       },
       "prevControl": {
-        "x": 6.8056434294686765,
-        "y": 0.7183134366268737
-      },
-      "nextControl": {
-        "x": 8.388896237195874,
-        "y": 0.688440742141455
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.178585448079987,
-        "y": 3.610224674994805
-      },
-      "prevControl": {
-        "x": 3.316692451566721,
-        "y": 2.341515228485004
+        "x": 4.844439632303975,
+        "y": 7.19863528611379
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side angle shot"
+      "linkedName": "E Note"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
+      "rotationDegrees": -16.6992442339935,
       "rotateFast": false
     }
   ],
@@ -61,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -20.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false

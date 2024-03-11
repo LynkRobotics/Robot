@@ -3,72 +3,66 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 2.8,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.423657126994466,
-        "y": 3.238550613013328
+        "x": 2.785737317672637,
+        "y": 4.771436369415953
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 8.288914032373519,
-        "y": 0.6903271988362164
+        "x": 2.46777657191678,
+        "y": 2.7892950331355215
       },
       "prevControl": {
-        "x": 6.8056434294686765,
-        "y": 0.7183134366268737
+        "x": 1.6176177049964955,
+        "y": 3.568607327812449
       },
       "nextControl": {
-        "x": 8.388896237195874,
-        "y": 0.688440742141455
+        "x": 4.035005888193594,
+        "y": 1.3526681598817754
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.178585448079987,
-        "y": 3.610224674994805
+        "x": 8.298242778303738,
+        "y": 2.2575565151130306
       },
       "prevControl": {
-        "x": 3.316692451566721,
-        "y": 2.341515228485004
+        "x": 6.488466067841226,
+        "y": 1.5112568406955007
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side angle shot"
+      "linkedName": "G Note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 2.8,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": 15.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

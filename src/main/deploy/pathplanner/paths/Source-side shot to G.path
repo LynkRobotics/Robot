@@ -16,41 +16,19 @@
     },
     {
       "anchor": {
-        "x": 8.27025654051308,
-        "y": 2.1829265476712774
+        "x": 8.298242778303738,
+        "y": 2.2575565151130306
       },
       "prevControl": {
-        "x": 5.58357771260997,
-        "y": 0.531738518022491
-      },
-      "nextControl": {
-        "x": 8.355452828565051,
-        "y": 2.2352867663698848
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.178585448079987,
-        "y": 3.610224674994805
-      },
-      "prevControl": {
-        "x": 5.257071605052301,
-        "y": 0.41979356685986224
+        "x": 5.611563950400629,
+        "y": 0.6063684854642442
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side angle shot"
+      "linkedName": "G Note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 25.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -61,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": 35.0,
     "rotateFast": false
   },
   "reversed": false,

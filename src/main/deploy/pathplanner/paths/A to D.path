@@ -3,50 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 2.8,
+        "y": 6.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.423657126994466,
-        "y": 3.238550613013328
+        "x": 4.436141963193017,
+        "y": 7.173805620338514
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A Note"
     },
     {
       "anchor": {
-        "x": 8.288914032373519,
-        "y": 0.6903271988362164
+        "x": 8.3,
+        "y": 7.55
       },
       "prevControl": {
-        "x": 6.8056434294686765,
-        "y": 0.7183134366268737
-      },
-      "nextControl": {
-        "x": 8.388896237195874,
-        "y": 0.688440742141455
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.178585448079987,
-        "y": 3.610224674994805
-      },
-      "prevControl": {
-        "x": 3.316692451566721,
-        "y": 2.341515228485004
+        "x": 6.050015009120926,
+        "y": 7.341723047082458
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side angle shot"
+      "linkedName": "D Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.8,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -61,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 45.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

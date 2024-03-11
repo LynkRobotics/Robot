@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to A and back"
+                  "pathName": "B to A"
                 }
               },
               {
@@ -65,6 +65,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A to B"
           }
         },
         {
@@ -80,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to C and back"
+                  "pathName": "B to C"
                 }
               },
               {
@@ -90,6 +96,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C to B"
           }
         },
         {
@@ -99,13 +111,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to D and back"
+                  "pathName": "B to D"
                 }
               },
               {
@@ -115,6 +127,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D to B"
           }
         },
         {

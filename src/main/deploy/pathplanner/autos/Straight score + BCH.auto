@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to C and back"
+                  "pathName": "B to C"
                 }
               },
               {
@@ -65,6 +65,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C to B"
           }
         },
         {
@@ -74,13 +80,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to H and almost back"
+                  "pathName": "B to H"
                 }
               },
               {
@@ -90,6 +96,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "H to source-side shot"
           }
         },
         {

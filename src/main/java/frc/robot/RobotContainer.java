@@ -128,11 +128,10 @@ public class RobotContainer {
         SmartDashboard.putData("Stop climbers", Commands.runOnce(s_Climber::stop, s_Climber));
         SmartDashboard.putData("Left down slow", Commands.runOnce(() -> { s_Climber.applyVoltageLeft(Constants.Climber.slowVoltage); }, s_Climber));
         SmartDashboard.putData("Right down slow", Commands.runOnce(() -> { s_Climber.applyVoltageRight(Constants.Climber.slowVoltage); }, s_Climber));
-/*
+
         SmartDashboard.putNumber("Left climber voltage", 0.0);
         SmartDashboard.putNumber("Right climber voltage", 0.0);
         SmartDashboard.putData("Set climber voltage", Commands.runOnce(() -> { s_Climber.applyVoltageLeft(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_Climber.applyVoltageRight(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_Climber));
-*
 
 /*
         SmartDashboard.putNumber("Left climber target position", 0.0);

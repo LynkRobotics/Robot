@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8,
-        "y": 5.54
+        "x": 0.7326298288960215,
+        "y": 6.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8515038074910057,
-        "y": 5.625716730070211
+        "x": 1.922609977740597,
+        "y": 6.656873525721918
       },
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "Amp-side SW"
     },
     {
       "anchor": {
@@ -20,39 +20,18 @@
         "y": 6.8
       },
       "prevControl": {
-        "x": 2.8,
-        "y": 6.7
-      },
-      "nextControl": {
-        "x": 2.8,
-        "y": 6.900000000000001
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.8,
-        "y": 5.54
-      },
-      "prevControl": {
-        "x": 3.0313386026416884,
-        "y": 5.625070927838514
+        "x": 2.1749304260341105,
+        "y": 6.8
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "A Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 60.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 60.0,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 38.0,
       "rotateFast": false
     }
   ],
@@ -66,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 38.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

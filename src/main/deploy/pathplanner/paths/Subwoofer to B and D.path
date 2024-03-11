@@ -32,49 +32,27 @@
     },
     {
       "anchor": {
-        "x": 8.232941556792204,
-        "y": 7.444339252314869
+        "x": 8.3,
+        "y": 7.55
       },
       "prevControl": {
-        "x": 5.032941556792204,
-        "y": 7.444339252314869
-      },
-      "nextControl": {
-        "x": 8.282941556792204,
-        "y": 7.444339252314869
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.8,
-        "y": 5.54
-      },
-      "prevControl": {
-        "x": 3.521924862031542,
-        "y": 6.688710831967119
+        "x": 5.1000000000000005,
+        "y": 7.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "D Note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.2000000000000002,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.45,
-      "maxWaypointRelativePos": 0.55,
+      "minWaypointRelativePos": 0.95,
+      "maxWaypointRelativePos": 1.15,
       "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 0.2,
+        "maxVelocity": 1.5,
+        "maxAcceleration": 2.8,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -83,7 +61,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.0499999999999998,
+      "waypointRelativePos": 1.05,
       "command": {
         "type": "sequential",
         "data": {

@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 0.7326298288960215,
+        "y": 6.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1311360749994224,
-        "y": 3.0318424273212186
+        "x": 1.1666421514340923,
+        "y": 7.084012322538071
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Amp-side SW"
     },
     {
       "anchor": {
-        "x": 2.8968988847068604,
-        "y": 1.5
+        "x": 3.0,
+        "y": 6.9872307017341315
       },
       "prevControl": {
-        "x": 1.3822401311000132,
-        "y": 2.3358880667422834
+        "x": 1.60068811046713,
+        "y": 6.949915718013254
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,7 +51,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

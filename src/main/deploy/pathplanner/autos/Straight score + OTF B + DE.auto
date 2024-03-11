@@ -24,16 +24,15 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer to B and D"
-                }
-              }
-            ]
+            "pathName": "Subwoofer to B and D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D to B"
           }
         },
         {
@@ -43,16 +42,28 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Straight on to E and back"
+                  "pathName": "B to E"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E to B"
           }
         },
         {

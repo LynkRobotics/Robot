@@ -3,56 +3,56 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8,
-        "y": 5.54
+        "x": 2.0,
+        "y": 6.744683307548434
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.772013762209343,
-        "y": 4.73900293255132
+        "x": 2.8315976631953266,
+        "y": 6.744683307548434
       },
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "Amp-side shot"
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 4.3
+        "x": 7.421340660863139,
+        "y": 7.55
       },
       "prevControl": {
-        "x": 2.5,
-        "y": 4.2
+        "x": 5.286604936846237,
+        "y": 7.5356817604544295
       },
       "nextControl": {
-        "x": 2.5,
-        "y": 4.399999999999997
+        "x": 7.92132941438955,
+        "y": 7.553353557380682
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 5.54
+        "x": 8.3,
+        "y": 7.55
       },
       "prevControl": {
-        "x": 2.8,
-        "y": 5.4399999999999995
+        "x": 8.100000000000001,
+        "y": 7.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "D Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": -60.0,
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 1.15,
-      "rotationDegrees": -60.0,
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
@@ -61,8 +61,8 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 2.3,
-    "maxAngularVelocity": 90.0,
-    "maxAngularAcceleration": 270.0
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -72,8 +72,8 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 38.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

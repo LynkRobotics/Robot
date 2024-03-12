@@ -5,7 +5,7 @@
       "x": 1.33,
       "y": 5.54
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B to C"
+                  "pathName": "B to A"
                 }
               },
               {
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C to B"
+            "pathName": "A to amp-side shot"
           }
         },
         {
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B to H"
+                  "pathName": "Amp-side shot to D"
                 }
               },
               {
@@ -101,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to source-side shot"
+            "pathName": "D to Amp-side shot"
           }
         },
         {

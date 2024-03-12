@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 6.65
+      "x": 1.33,
+      "y": 5.54
     },
-    "rotation": 60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -18,34 +18,22 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot without aiming"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Amp-side SW escape"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Subwoofer to D"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         }
       ]

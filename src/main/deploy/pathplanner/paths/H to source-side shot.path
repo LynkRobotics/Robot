@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8,
-        "y": 5.54
+        "x": 8.288914032373519,
+        "y": 0.7462996744175311
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3016833306393887,
-        "y": 2.070981596508648
+        "x": 5.59290645854019,
+        "y": 0.8955596093010377
       },
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "H Note"
     },
     {
       "anchor": {
-        "x": 7.430669406793358,
-        "y": 2.4161451959267564
+        "x": 2.178585448079987,
+        "y": 3.610224674994805
       },
       "prevControl": {
-        "x": 4.4827856928441125,
-        "y": 0.6250259773246829
+        "x": 3.316692451566721,
+        "y": 2.341515228485004
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source-side angle shot"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -45.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -15.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

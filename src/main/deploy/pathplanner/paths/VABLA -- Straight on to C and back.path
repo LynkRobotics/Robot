@@ -8,51 +8,46 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.857855101142877,
-        "y": 6.825750951053167
+        "x": 2.057311750987138,
+        "y": 4.73900293255132
       },
-      "isLocked": true,
-      "linkedName": "Straight shot"
+      "isLocked": false,
+      "linkedName": "VABLA -- Straight shot"
     },
     {
       "anchor": {
-        "x": 2.8968988847068604,
-        "y": 7.0058881935945685
+        "x": 2.85,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.2678553852945145,
-        "y": 5.958984004016634
+        "x": 2.25,
+        "y": 4.1
       },
       "nextControl": {
-        "x": 2.948402692197866,
-        "y": 7.09160492366478
+        "x": 2.95,
+        "y": 4.1
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 6.744683307548434
+        "x": 2.0852979887777954,
+        "y": 5.54
       },
       "prevControl": {
-        "x": 2.0478989780051555,
-        "y": 6.782106090588224
+        "x": 2.0759692428475764,
+        "y": 5.056180294178771
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Far shot"
+      "linkedName": "VABLA -- Straight shot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 59.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 63.94650468950909,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -15.0,
       "rotateFast": false
     }
   ],
@@ -66,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 38.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,

@@ -47,8 +47,8 @@ public class RobotContainer {
     
     /* Different Position Test Buttons */
     private final Trigger ampButton = driver.a();
+    private final Trigger dumpShotButton = driver.b();
     private final Trigger defaultShotButton = driver.x();
-    private final Trigger getNoteButton = driver.b();
     private final Trigger climberExtendButton = driver.y();
 
     /* Subsystems */
@@ -88,7 +88,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot",
             Commands.print("Named 'Shoot' command starting")
             .andThen(
-                (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index)).andThen(Commands.print("After ShootCommand")))
+                (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.print("After ShootCommand")))
                  .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
                  .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
             .andThen(Commands.print("After race group"))
@@ -105,11 +105,33 @@ public class RobotContainer {
             .andThen(Commands.print("Idling again"))
             
         );
+        NamedCommands.registerCommand("Shoot OTF",
+            Commands.print("Begin OTF")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.50))))
+            .andThen(Commands.print("Shot OTF complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+            
+        );
         NamedCommands.registerCommand("Intake note",
             Commands.print("Beginning intake")
             .andThen(new IntakeCommand(s_Intake, s_Index, driver.getHID()))
             .andThen(Commands.print("Intake complete")));
 
+        NamedCommands.registerCommand("Amp shot",
+            Commands.print("Begin Amp shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Amp shot complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+            
+        );
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("auto/Auto Chooser", autoChooser);
@@ -168,7 +190,7 @@ public class RobotContainer {
             Commands.either(new ShootCommand(s_Shooter, s_Index,
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
                 () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
-            new ShootCommand(s_Shooter, s_Index),
+            new ShootCommand(s_Shooter, s_Index, s_Swerve),
             () -> SmartDashboard.getBoolean("Direct set RPM", false)));
         climberExtendButton.onTrue(
             new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
@@ -179,7 +201,7 @@ public class RobotContainer {
         /* Buttons to set the next shot */
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }));
         defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }));
-        getNoteButton.onTrue(Commands.print("Getting notes not yet implemented"));
+        dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));
     }

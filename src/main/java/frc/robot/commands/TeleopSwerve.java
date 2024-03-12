@@ -8,6 +8,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -39,24 +40,9 @@ public class TeleopSwerve extends Command {
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
         /* Override rotation if using vision to aim */
-        if (s_Shooter.isVisionShootingActive()) {
-            double angleError = s_Vision.angleError().getDegrees();
-
-            // TODO Tune!
-            // TODO More precise from longer distance
-            // TODO Turn into a PID, etc.
-            double magnitude = Math.abs(angleError);
-            if (magnitude > 10.0) {
-                rotationVal = 0.10 * Math.signum(angleError);
-            } else if (magnitude > 7.0) {
-                rotationVal = 0.06 * Math.signum(angleError);
-            } else if (magnitude > 3.0) {
-                rotationVal = 0.04 * Math.signum(angleError);
-            } else if (magnitude > 0.3) {
-                rotationVal = 0.03 * Math.signum(angleError);
-            } else {
-                rotationVal = 0.0;
-            }
+        if (s_Shooter.isAutoAimingActive()) {
+            Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : s_Swerve.dumpShotError();
+            rotationVal = Swerve.angleErrorToSpeed(angleError);
         }
 
         /* Drive */

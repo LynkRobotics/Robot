@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8,
-        "y": 5.54
+        "x": 2.178585448079987,
+        "y": 3.610224674994805
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3016833306393887,
-        "y": 2.070981596508648
+        "x": 2.924885122497518,
+        "y": 2.360172720345441
       },
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "Source-side angle shot"
     },
     {
       "anchor": {
-        "x": 7.430669406793358,
-        "y": 2.4161451959267564
+        "x": 8.298242778303738,
+        "y": 2.2575565151130306
       },
       "prevControl": {
-        "x": 4.4827856928441125,
-        "y": 0.6250259773246829
+        "x": 5.611563950400629,
+        "y": 0.6063684854642442
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 35.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -45.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

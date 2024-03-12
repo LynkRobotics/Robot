@@ -3,59 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0852979887777954,
+        "x": 2.8,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9920105294756045,
-        "y": 0.5130810261620523
+        "x": 2.785737317672637,
+        "y": 4.771436369415953
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 8.288914032373519,
-        "y": 2.425473941856975
+        "x": 2.46777657191678,
+        "y": 2.7892950331355215
       },
       "prevControl": {
-        "x": 6.6004110190038565,
-        "y": 1.800447964532293
+        "x": 1.6176177049964955,
+        "y": 3.568607327812449
       },
       "nextControl": {
-        "x": 8.382695156960823,
-        "y": 2.4601885017870817
+        "x": 4.035005888193594,
+        "y": 1.3526681598817754
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.2998591451728356,
-        "y": 3.4329785023206414
+        "x": 8.298242778303738,
+        "y": 2.2575565151130306
       },
       "prevControl": {
-        "x": 2.859583900985984,
-        "y": 0.5224097720922722
+        "x": 6.488466067841226,
+        "y": 1.5112568406955007
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -66,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -39.289406862500314,
+    "rotation": 15.0,
     "rotateFast": false
   },
   "reversed": false,

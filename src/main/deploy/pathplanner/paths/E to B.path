@@ -3,56 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7326298288960215,
-        "y": 6.65
+        "x": 8.27025654051308,
+        "y": 5.951739903479806
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1666421514340923,
-        "y": 7.084012322538071
+        "x": 5.91941256609786,
+        "y": 7.145819382547857
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "E Note"
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 6.9872307017341315
+        "x": 2.8,
+        "y": 5.54
       },
       "prevControl": {
-        "x": 1.60068811046713,
-        "y": 6.949915718013254
+        "x": 4.83727803819244,
+        "y": 6.707368323827557
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Straight shot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.7,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -0.819065955894331,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 60.0,
+    "rotation": -20.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

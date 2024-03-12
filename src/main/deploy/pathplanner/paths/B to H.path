@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3016833306393887,
-        "y": 2.070981596508648
+        "x": 2.7814456129910163,
+        "y": 4.540172147456013
       },
       "isLocked": false,
       "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 7.430669406793358,
-        "y": 2.4161451959267564
+        "x": 2.4304615881959033,
+        "y": 3.022513681391
       },
       "prevControl": {
-        "x": 4.4827856928441125,
-        "y": 0.6250259773246829
+        "x": 1.8324958714041877,
+        "y": 3.510852350104235
+      },
+      "nextControl": {
+        "x": 3.5499110998221997,
+        "y": 2.108296580229524
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.288914032373519,
+        "y": 0.7462996744175311
+      },
+      "prevControl": {
+        "x": 7.467984390514236,
+        "y": 1.0448195441845434
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "H Note"
     }
   ],
   "rotationTargets": [],
@@ -33,13 +49,13 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxAcceleration": 2.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -10.0,
     "rotateFast": false
   },
   "reversed": false,
@@ -48,5 +64,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

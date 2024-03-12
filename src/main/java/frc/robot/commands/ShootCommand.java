@@ -14,11 +14,13 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LEDSubsystem.TempState;
 
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
   private final IndexSubsystem index;
+  private Swerve swerve = null;
   private boolean feeding = false;
   DoubleSupplier topSupplier = null;
   DoubleSupplier bottomSupplier = null;
@@ -32,6 +34,12 @@ public class ShootCommand extends Command {
     addRequirements(shooter, index);
     this.shooter = shooter;
     this.index = index;
+    assert(vision != null);
+  }
+
+  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
+    this(shooter, index);
+    this.swerve = swerve;
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, boolean autoAim) {
@@ -58,7 +66,7 @@ public class ShootCommand extends Command {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
       if (!DriverStation.isAutonomous() && shooter.usingVision()) {
-        cancelled = !vision.haveTarget();
+        cancelled = !vision.haveTarget(); // TODO Consider removing this vision is integrated into poses
       }
       if (!cancelled) {
         if (!shooter.shoot()) {
@@ -78,9 +86,28 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (!feeding && shooter.isReady() && (!autoAim || !shooter.usingVision() || (Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError))) {
-      index.feed();
-      feeding = true;
+    if (!feeding && shooter.isReady()) {
+      boolean aligned = !autoAim; // "Aligned" if not automatic aiming
+
+      if (!aligned) {
+        if (shooter.usingVision()) {
+          // Aligned if vision is aligned with target
+          aligned = Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
+        } else if (shooter.dumping()) {
+          if (swerve == null) {
+            System.out.println("ERROR: Cannot aim for dumping without swerve object");
+          } else {
+            aligned = Math.abs(swerve.dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError;
+          }
+        } else {
+          // "Aligned" because all other shots don't require alignment
+          aligned = true;
+        }
+      }
+      if (aligned) {
+        index.feed();
+        feeding = true;
+      }
     }
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
@@ -91,7 +118,7 @@ public class ShootCommand extends Command {
       }
     }
     if (feeding) {
-      if (!gone && !index.getIndexSensor().getAsBoolean()) {
+      if (!gone && !index.haveNote()) {
         postShotTimer.restart();
         gone = true;
       }

@@ -51,9 +51,9 @@ public class Swerve extends SubsystemBase {
                 this::driveRobotRelativeAuto,
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new PIDConstants(3.0, 0.0, 0.0), // Rotation PID constants
+                    Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                    Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -163,6 +163,29 @@ public class Swerve extends SubsystemBase {
 
     public void hack(){
         gyro.setYaw(gyro.getYaw().getValue() + 180.0);
+    }
+
+    public Rotation2d dumpShotError() {
+        Rotation2d robotAngle = getPose().getRotation();
+    
+        return Constants.Swerve.dumpAngle.minus(robotAngle);    
+    }
+
+    public static double angleErrorToSpeed(Rotation2d angleError) {
+        double angleErrorDeg = angleError.getDegrees();
+        double magnitude = Math.abs(angleErrorDeg);
+        double rotationVal = 0.0;
+
+        if (magnitude > 10.0) {
+            rotationVal = 0.10 * Math.signum(angleErrorDeg);
+        } else if (magnitude > 7.0) {
+            rotationVal = 0.06 * Math.signum(angleErrorDeg);
+        } else if (magnitude > 3.0) {
+            rotationVal = 0.04 * Math.signum(angleErrorDeg);
+        } else if (magnitude > 0.3) {
+            rotationVal = 0.03 * Math.signum(angleErrorDeg);
+        }
+        return rotationVal;
     }
 
     @Override

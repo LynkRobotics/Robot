@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
+      "x": 1.33,
       "y": 5.54
     },
     "rotation": 0
@@ -20,50 +20,50 @@
         {
           "type": "named",
           "data": {
+            "name": "Shoot without aiming"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer to B and D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D to B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B to E"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer to B and back"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Straight on to A and amp-side shot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp-side shot to D and back"
+            "pathName": "E to B"
           }
         },
         {

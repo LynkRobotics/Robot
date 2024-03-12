@@ -3,50 +3,56 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 2.8,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1311360749994224,
-        "y": 3.0318424273212186
+        "x": 2.4771053178469993,
+        "y": 5.028194056388113
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 2.8968988847068604,
-        "y": 1.5
+        "x": 2.5,
+        "y": 4.15
       },
       "prevControl": {
-        "x": 1.3822401311000132,
-        "y": 2.3358880667422834
+        "x": 2.542406539358533,
+        "y": 4.635646662202416
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "C Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": -45.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 2.3,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 90.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -45.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

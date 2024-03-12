@@ -95,7 +95,9 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(s_Swerve.getGyroYaw(), s_Swerve.getModulePositions());
-        s_Vision.updatePoseEstimate(poseEstimator);
+        if (DriverStation.isTeleop()) {
+            s_Vision.updatePoseEstimate(poseEstimator);
+        }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 }

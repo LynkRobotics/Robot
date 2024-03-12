@@ -203,7 +203,7 @@ public class RobotContainer {
         defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }));
         dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }));
 
-        ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index));
+        ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
     }
 
     public void hack(){

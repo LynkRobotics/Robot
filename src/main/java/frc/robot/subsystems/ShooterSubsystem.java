@@ -62,7 +62,8 @@ public class ShooterSubsystem extends SubsystemBase {
     FULL,
     VISION,
     OTF,
-    DUMP
+    DUMP,
+    EJECT
   };
 
   private Speed nextShot = null;
@@ -77,7 +78,8 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
       Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
-      Map.entry(Speed.DUMP, new ShooterSpeed(3000, 3000))
+      Map.entry(Speed.DUMP, new ShooterSpeed(3000, 3000)),
+      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
@@ -241,6 +243,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void intake() {
     setCurrentSpeed(Speed.INTAKE);
+  }
+
+  public void eject() {
+    setCurrentSpeed(Speed.EJECT);
   }
 
   public void stop() {

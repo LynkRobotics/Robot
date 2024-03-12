@@ -1,0 +1,118 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.73,
+      "y": 6.65
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Startup delay"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot without aiming"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp-side SW to A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A to D"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D to Amp-side shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp-side shot to E"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E to Amp-side shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

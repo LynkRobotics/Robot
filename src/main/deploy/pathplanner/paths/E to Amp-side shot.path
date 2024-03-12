@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.3,
-        "y": 7.55
+        "x": 8.27025654051308,
+        "y": 5.951739903479806
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.635786559465712,
-        "y": 7.55
+        "x": 7.365368185281825,
+        "y": 6.45549218371164
       },
       "isLocked": false,
-      "linkedName": "D Note"
+      "linkedName": "E Note"
     },
     {
       "anchor": {
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -30.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

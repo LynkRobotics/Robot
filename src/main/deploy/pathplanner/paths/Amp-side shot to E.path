@@ -8,54 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8315976631953266,
-        "y": 6.744683307548434
+        "x": 4.51077193063477,
+        "y": 7.0058881935945685
       },
       "isLocked": false,
       "linkedName": "Amp-side shot"
     },
     {
       "anchor": {
-        "x": 7.421340660863139,
-        "y": 7.55
+        "x": 8.27025654051308,
+        "y": 5.951739903479806
       },
       "prevControl": {
-        "x": 5.286604936846237,
-        "y": 7.5356817604544295
-      },
-      "nextControl": {
-        "x": 7.92132941438955,
-        "y": 7.553353557380682
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.3,
-        "y": 7.55
-      },
-      "prevControl": {
-        "x": 8.100000000000001,
-        "y": 7.55
+        "x": 7.160135774817003,
+        "y": 6.56743713487427
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Note"
+      "linkedName": "E Note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -66,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -35.0,
     "rotateFast": false
   },
   "reversed": false,

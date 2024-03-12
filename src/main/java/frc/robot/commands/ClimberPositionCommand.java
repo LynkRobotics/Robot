@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -16,7 +17,7 @@ public class ClimberPositionCommand extends Command {
   private final double position;
   private final LEDSubsystem.TempState ledState;
   private boolean cancelled = false;
-
+  
   /** Creates a new PushClimberCommand. */
   public ClimberPositionCommand(double position, LEDSubsystem.TempState ledState, ClimberSubsystem s_Climber) {
     this.s_Climber = s_Climber;
@@ -30,14 +31,20 @@ public class ClimberPositionCommand extends Command {
   @Override
   public void initialize() {
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
+      System.out.println("ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
+    } else if (SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
+      System.out.println("ERROR: Attempt to use climbers, but they are disabled");
+      cancelled = true;
+    }
+    if (cancelled) {
       cancel();
       LEDSubsystem.setTempState(TempState.ERROR);
       return;
     }
+    cancelled = false;
     LEDSubsystem.setTempState(ledState);
-    s_Climber.setPositionLeft(position);
-    s_Climber.setPositionRight(position);
+    s_Climber.setPosition(position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -59,8 +66,9 @@ public class ClimberPositionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return cancelled ||
-      ( Math.abs(s_Climber.getPositionLeft() - position) < Constants.Climber.positionError
-        && Math.abs(s_Climber.getPositionRight() - position) < Constants.Climber.positionError );
+    if (cancelled) {
+      return true;
+    }
+    return Math.abs(s_Climber.getPosition() - position) < Constants.Climber.positionError;
   }
 }

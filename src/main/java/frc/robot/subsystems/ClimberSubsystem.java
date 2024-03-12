@@ -14,14 +14,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private static TalonFX right;
-  private static TalonFX left;
+  private final TalonFX motor;
+  private final ClimberSelection which;
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final PositionVoltage positionVoltage = new PositionVoltage(1.5).withEnableFOC(true);
 
-  public ClimberSubsystem() {
-    right = new TalonFX(Constants.Climber.rightID, Constants.Climber.CanBus);
-    left = new TalonFX(Constants.Climber.leftID, Constants.Climber.CanBus);
+  public enum ClimberSelection {
+    LEFT,
+    RIGHT
+  }
+
+  public ClimberSubsystem(ClimberSelection which) {
+    this.which = which;
+    motor = new TalonFX(which == ClimberSelection.LEFT ? Constants.Climber.leftID : Constants.Climber.rightID, Constants.Climber.CanBus);
     applyConfigs();
   }
 
@@ -52,47 +57,34 @@ public class ClimberSubsystem extends SubsystemBase {
     //motionMagicConfigs.MotionMagicJerk = Constants.Climber.jerk;
 
     /* Apply Shooters Motor Configs */
-    right.getConfigurator().apply(m_ClimberMotorsConfiguration);
-    left.getConfigurator().apply(m_ClimberMotorsConfiguration);
+    motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
   }
 
-  public void applyVoltageLeft(double voltage) {
-    left.setControl(voltageOut.withOutput(voltage));
+  public void applyVoltage(double voltage) {
+    motor.setControl(voltageOut.withOutput(voltage));
   }
 
-  public void applyVoltageRight(double voltage) {
-    right.setControl(voltageOut.withOutput(voltage));
+  public void setPosition(double position) {
+    motor.setControl(positionVoltage.withPosition(position));
   }
 
-  public void setPositionLeft(double position) {
-    left.setControl(positionVoltage.withPosition(position));
-  }
-
-  public void setPositionRight(double position) {
-    right.setControl(positionVoltage.withPosition(position));
-  }
-
-  public double getPositionLeft() {
-    return left.getPosition().getValueAsDouble();
-  }
-
-  public double getPositionRight() {
-    return right.getPosition().getValueAsDouble();
+  public double getPosition() {
+    return motor.getPosition().getValueAsDouble();
   }
 
   public void stop() {
-    right.setControl(voltageOut.withOutput(0.0));
-    left.setControl(voltageOut.withOutput(0.0));
+    motor.setControl(voltageOut.withOutput(0.0));
+  }
+
+  public void zero() {
+    motor.setPosition(0.0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("climber/Right position", getPositionRight());
-    SmartDashboard.putNumber("climber/Left position", getPositionLeft());
-    SmartDashboard.putNumber("climber/Right velocity", right.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("climber/Left velocity", left.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("climber/Right voltage", right.getMotorVoltage().getValueAsDouble());
-    SmartDashboard.putNumber("climber/Left voltage", left.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("climber/" + which.toString() + " position", getPosition());
+    SmartDashboard.putNumber("climber/" + which.toString() + " velocity", motor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("climber/" + which.toString() + " voltage", motor.getMotorVoltage().getValueAsDouble());
   }
 }

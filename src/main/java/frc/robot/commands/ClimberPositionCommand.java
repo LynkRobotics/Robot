@@ -33,7 +33,7 @@ public class ClimberPositionCommand extends Command {
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
       System.out.println("ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
-    } else if (SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
+    } else if (!SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
       System.out.println("ERROR: Attempt to use climbers, but they are disabled");
       cancelled = true;
     }

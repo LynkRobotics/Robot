@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TeleopSwerve extends Command {
@@ -42,7 +43,16 @@ public class TeleopSwerve extends Command {
 
         /* Override rotation if using vision to aim */
         if (s_Shooter.isAutoAimingActive()) {
-            Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : PoseSubsystem.getInstance().dumpShotError();
+            Rotation2d angleError;
+            if (s_Shooter.usingVision()) {
+                if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+                    angleError = s_Vision.angleError();
+                } else {
+                    angleError = PoseSubsystem.getInstance().angleError();
+                }
+            } else {
+                angleError = PoseSubsystem.getInstance().dumpShotError();
+            }
             rotationVal = Swerve.angleErrorToSpeed(angleError);
         }
 

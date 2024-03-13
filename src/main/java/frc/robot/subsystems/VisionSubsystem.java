@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -67,7 +66,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private Translation2d speakerOffset() {
-    return speakerLocation().minus(lastPose.getTranslation());
+    return PoseSubsystem.getInstance().speakerLocation().minus(lastPose.getTranslation());
   }
 
   private Rotation2d angleToSpeaker() {
@@ -85,12 +84,8 @@ public class VisionSubsystem extends SubsystemBase {
     return speakerAngle.minus(robotAngle);
   }
 
-  private Translation2d speakerLocation() {
-    return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Vision.blueSpeakerLocation : Constants.Vision.redSpeakerLocation);
-  }
-
   public double distanceToSpeaker() {
-    double distance = lastPose.getTranslation().getDistance(speakerLocation()); // distance from center of robot to speaker
+    double distance = lastPose.getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
     distance *= Constants.Vision.distanceFudgeFactor;
     return distance;

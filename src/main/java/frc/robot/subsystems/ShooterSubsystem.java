@@ -191,13 +191,19 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private boolean setCurrentSpeed(Speed speed) {
     ShooterSpeed shooterSpeed;
+    double distance;
 
     if (speed == null) {
       speed = defaultSpeed();
     }
 
     if (speed == Speed.VISION) {
-      shooterSpeed = speedFromDistance(VisionSubsystem.getInstance().distanceToSpeaker());
+      if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+        distance = VisionSubsystem.getInstance().distanceToSpeaker();
+      } else {
+        distance = PoseSubsystem.getInstance().distanceToSpeaker();
+      }
+      shooterSpeed = speedFromDistance(distance);
       if (shooterSpeed == null) {
         System.out.println("ShooterSubsystem::setCurrentSpeed: distance too far");
         return false;

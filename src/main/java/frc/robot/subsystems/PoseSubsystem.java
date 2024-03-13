@@ -12,6 +12,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -91,12 +92,40 @@ public class PoseSubsystem extends SubsystemBase {
         setHeading(new Rotation2d());
     }
 
+    public Translation2d speakerLocation() {
+        return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
+                ? Constants.Vision.blueSpeakerLocation
+                : Constants.Vision.redSpeakerLocation);
+    }
+
+    public double distanceToSpeaker() {
+        double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker 
+        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+        //distance *= Constants.Vision.distanceFudgeFactor;
+        return distance;
+    }
+       
     public Rotation2d dumpShotError() {
         Rotation2d robotAngle = getPose().getRotation();
     
         return Constants.Swerve.dumpAngle.minus(robotAngle);    
     }
 
+    private Translation2d speakerOffset() {
+        return speakerLocation().minus(getPose().getTranslation());
+    }
+
+    private Rotation2d angleToSpeaker() {
+        return speakerOffset().getAngle();
+    }
+
+    public Rotation2d angleError() {
+        Rotation2d speakerAngle = angleToSpeaker();
+        Rotation2d robotAngle = getPose().getRotation();
+
+        return speakerAngle.minus(robotAngle);
+    }
+    
     @Override
     public void periodic() {
         poseEstimator.update(s_Swerve.getGyroYaw(), s_Swerve.getModulePositions());

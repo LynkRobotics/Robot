@@ -129,8 +129,10 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(s_Swerve.getGyroYaw(), s_Swerve.getModulePositions());
-        if (DriverStation.isTeleop()) {
+        if (DriverStation.isTeleop() || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("Use Vision Pose in Auto", false))) {
             s_Vision.updatePoseEstimate(poseEstimator);
+        } else {
+            s_Vision.updatePoseEstimate(null);
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }

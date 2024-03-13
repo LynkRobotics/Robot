@@ -112,7 +112,9 @@ public class VisionSubsystem extends SubsystemBase {
     lastEstTimestamp = latestTimestamp;
     lastPose = visionEst.estimatedPose.toPose2d();
     field.setRobotPose(lastPose);
-    poseEstimator.addVisionMeasurement(lastPose, lastEstTimestamp);
+    if (poseEstimator != null) {
+      poseEstimator.addVisionMeasurement(lastPose, lastEstTimestamp);
+    }
     return true;
   }
 

@@ -7,15 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class EjectCommand extends Command {
   private final IntakeSubsystem intake;
   private final IndexSubsystem index;
+  private final ShooterSubsystem shooter;
 
-  public EjectCommand(IntakeSubsystem intake, IndexSubsystem index) {
-    addRequirements(intake, index);
+  public EjectCommand(IntakeSubsystem intake, IndexSubsystem index, ShooterSubsystem shooter) {
+    addRequirements(intake, index, shooter);
     this.intake = intake;
     this.index = index;
+    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -23,6 +26,7 @@ public class EjectCommand extends Command {
   public void initialize() {
     intake.eject();
     index.eject();
+    shooter.eject();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +38,7 @@ public class EjectCommand extends Command {
   public void end(boolean interrupted) {
     intake.stop();
     index.stop();
+    shooter.stop();
   }
 
   // Returns true when the command should end.

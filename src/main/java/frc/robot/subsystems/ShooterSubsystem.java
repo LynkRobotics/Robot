@@ -29,7 +29,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double topCurrentTarget = 0.0;
   private double bottomCurrentTarget = 0.0;
   SendableChooser<Speed> defaultShotChooser = new SendableChooser<>();
-  private boolean visionShootingActive = false;
+  private boolean autoAimingActive = false;
 
   private class ShooterSpeed {
     double topMotorSpeed;
@@ -60,7 +60,10 @@ public class ShooterSubsystem extends SubsystemBase {
     MIDLINE,
     PODIUM,
     FULL,
-    VISION
+    VISION,
+    OTF,
+    DUMP,
+    EJECT
   };
 
   private Speed nextShot = null;
@@ -73,7 +76,10 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1400, 2900)),
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
-      Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed))
+      Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
+      Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
+      Map.entry(Speed.DUMP, new ShooterSpeed(3000, 3000)),
+      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
@@ -142,8 +148,8 @@ public class ShooterSubsystem extends SubsystemBase {
     nextShot = speed;
   }
 
-  public boolean isVisionShootingActive() {
-    return visionShootingActive;
+  public boolean isAutoAimingActive() {
+    return autoAimingActive;
   }
 
   private ShooterSpeed speedFromDistance(double meters) {
@@ -197,10 +203,10 @@ public class ShooterSubsystem extends SubsystemBase {
         return false;
       }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
-      visionShootingActive = true;
+      autoAimingActive = true;
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
-      visionShootingActive = false;
+      autoAimingActive = (speed == Speed.DUMP);
     }
 
     setCurrentSpeed(shooterSpeed);
@@ -239,6 +245,10 @@ public class ShooterSubsystem extends SubsystemBase {
     setCurrentSpeed(Speed.INTAKE);
   }
 
+  public void eject() {
+    setCurrentSpeed(Speed.EJECT);
+  }
+
   public void stop() {
     setCurrentSpeed(Speed.STOP);
   }
@@ -250,6 +260,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean usingVision() {
     return nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION);
+  }
+
+  public boolean dumping() {
+    return nextShot == Speed.DUMP || (nextShot == null && defaultSpeed() == Speed.DUMP);
   }
 
   @Override

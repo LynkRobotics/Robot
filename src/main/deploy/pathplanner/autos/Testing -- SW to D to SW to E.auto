@@ -18,34 +18,33 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot without aiming"
+            "pathName": "Subwoofer to D"
           }
         },
         {
-          "type": "deadline",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer to B"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              }
-            ]
+            "waitTime": 2.0
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot without aiming"
+            "pathName": "D to Subwoofer"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer to E"
           }
         }
       ]

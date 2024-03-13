@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -17,11 +17,11 @@ import frc.robot.subsystems.LEDSubsystem.TempState;
 public class ShooterIntakeCommand extends Command {
   private final ShooterSubsystem shooter;
   private final IndexSubsystem index;
-  private final Joystick controller;
+  private final GenericHID controller;
   private boolean pulling = true;
   private boolean seenIt = false;
 
-  public ShooterIntakeCommand(ShooterSubsystem shooter, IndexSubsystem index, Joystick controller) {
+  public ShooterIntakeCommand(ShooterSubsystem shooter, IndexSubsystem index, GenericHID controller) {
     addRequirements(shooter, index);
     this.shooter = shooter;
     this.index = index;
@@ -43,14 +43,14 @@ public class ShooterIntakeCommand extends Command {
   public void execute() {
     if (pulling) {
       if (!seenIt) {
-        if (!index.getIndexSensor().getAsBoolean()) {
+        if (!index.haveNote()) {
           return;
         } else {
           seenIt = true;
         }
       } else {
         // Seen it
-        if (index.getIndexSensor().getAsBoolean()) {
+        if (index.haveNote()) {
           return;
         } else {
           pulling = false;
@@ -80,6 +80,6 @@ public class ShooterIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!pulling && index.getIndexSensor().getAsBoolean());
+    return (!pulling && index.haveNote());
   }
 }

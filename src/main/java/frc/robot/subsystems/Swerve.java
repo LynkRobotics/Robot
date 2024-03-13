@@ -107,6 +107,23 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(gyro.getYaw().getValue() + 180.0);
     }
 
+    public static double angleErrorToSpeed(Rotation2d angleError) {
+        double angleErrorDeg = angleError.getDegrees();
+        double magnitude = Math.abs(angleErrorDeg);
+        double rotationVal = 0.0;
+
+        if (magnitude > 10.0) {
+            rotationVal = 0.10 * Math.signum(angleErrorDeg);
+        } else if (magnitude > 7.0) {
+            rotationVal = 0.06 * Math.signum(angleErrorDeg);
+        } else if (magnitude > 3.0) {
+            rotationVal = 0.04 * Math.signum(angleErrorDeg);
+        } else if (magnitude > 0.3) {
+            rotationVal = 0.03 * Math.signum(angleErrorDeg);
+        }
+        return rotationVal;
+    }
+
     @Override
     public void periodic(){
         for(SwerveModule mod : mSwerveMods){

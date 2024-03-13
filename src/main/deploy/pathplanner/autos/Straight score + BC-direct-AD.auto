@@ -68,9 +68,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "C to B"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C to A"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
           }
         },
         {
@@ -80,13 +99,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "wait",
+          "data": {
+            "waitTime": 90000.0
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B to H"
+                  "pathName": "A to D"
                 }
               },
               {
@@ -101,7 +126,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to source-side shot"
+            "pathName": "D to A"
           }
         },
         {

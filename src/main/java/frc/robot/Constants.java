@@ -14,7 +14,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-    public static final double driveStickSensitivity = 0.50;
+    public static final double driveStickSensitivity = 1.00;
     public static final double turnStickSensitivity = 0.45;
 
     public static final boolean tuningMode = true;
@@ -24,14 +24,17 @@ public final class Constants {
         public static final String swerveCanBus = "lynk";
 
         public static final COTSTalonFXSwerveConstants chosenModule =  
-        COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
+            COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
+
+        public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
+        public static final double maxDumpError = 1.0; // degrees
 
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(21.75); 
         /* Center to Center distance of left and right modules in meters. */
         public static final double wheelBase = Units.inchesToMeters(15.75); 
         /* Center to Center distance of front and rear module wheels in meters. */
-        public static final double wheelCircumference = chosenModule.wheelCircumference;
+        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.94; // testing
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -84,9 +87,9 @@ public final class Constants {
         public static final double driveKF = 0.0; //Leave driveKF at 0.0 
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.32; //TODO: This must be tuned to specific robot
-        public static final double driveKV = 1.51;
-        public static final double driveKA = 0.27;
+        public static final double driveKS = 0.43; //was 0.32
+        public static final double driveKV = 2.63; //was 1.51
+        public static final double driveKA = 0.15; //was 0.27
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -115,7 +118,7 @@ public final class Constants {
             public static final int angleMotorID = 1;
             public static final int canCoderID = 0;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.36);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(33.57);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -126,7 +129,7 @@ public final class Constants {
             public static final int angleMotorID = 19;
             public static final int canCoderID = 1;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-70.56);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-71.54);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -137,7 +140,7 @@ public final class Constants {
             public static final int angleMotorID = 9;
             public static final int canCoderID = 2;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(163.82);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(163.74);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -148,7 +151,7 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 3;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-25.22);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-24.697);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -216,6 +219,38 @@ public final class Constants {
         public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
     }
+
+    public class Climber {
+        /* IDs */
+        public static final int rightID = 47;
+        public static final int leftID = 48;
+        /* CANBus */
+        public static final String CanBus = "rio";
+        /* Motor Config Values */
+        public static final double peakForwardVoltage = 12.0;
+        public static final double peakReverseVoltage = -12.0;
+        public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
+        public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
+
+        public static final double extendedPosition = -875.0;
+        public static final double retractedPosition = -75.0;
+        public static final double positionError = 1.5;
+        public static final double slowVoltage = 2.75;
+
+        public static final double RPSperVolt = 8.5; // RPS increase with every volt
+        public static final double kP = 0.50; // output per unit of error in position (output/rotation)
+        public static final double kI = 0.0; // output per unit of integrated error in position (output/(rotation*s))
+        public static final double kD = 0.0; // output per unit of error in velocity (output/rps)
+        public static final double kS = 0.25; // output to overcome static friction (output)
+        public static final double kV = 1.0 / RPSperVolt; // output per unit of target velocity (output/rps)
+        public static final double kA = 0.0; // output per unit of target acceleration (output/(rps/s))
+        public static final double kG = 0.0; // do not factory in gravity
+        public static final double cruiseVelocity = 125.0; // RPS
+        public static final double acceleration = cruiseVelocity * 0.5; // Accelerate in 0.5 seconds
+        
+        public static final double timeCutOff = 25.0;
+    }
+
 
     public static final class Vision {
         public static final String cameraName = "Arducam_OV2311_USB_Camera";

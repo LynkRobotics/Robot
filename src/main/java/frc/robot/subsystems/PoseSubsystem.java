@@ -46,7 +46,7 @@ public class PoseSubsystem extends SubsystemBase {
             // TODO Configure PIDs
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
-                new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
                 Constants.Swerve.maxSpeed, // Max module speed, in m/s
                 Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -91,6 +91,11 @@ public class PoseSubsystem extends SubsystemBase {
         setHeading(new Rotation2d());
     }
 
+    public Rotation2d dumpShotError() {
+        Rotation2d robotAngle = getPose().getRotation();
+    
+        return Constants.Swerve.dumpAngle.minus(robotAngle);    
+    }
 
     @Override
     public void periodic() {

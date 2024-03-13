@@ -93,7 +93,7 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public Translation2d speakerLocation() {
-        return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue
+        return (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue
                 ? Constants.Vision.blueSpeakerLocation
                 : Constants.Vision.redSpeakerLocation);
     }

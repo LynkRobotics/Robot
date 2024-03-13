@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -166,6 +167,9 @@ public class RobotContainer {
         SmartDashboard.putData("Set right climber position", Commands.runOnce(() -> { s_Climber.setPositionRight(SmartDashboard.getNumber("Right climber target position", 0.0));}, s_Climber));
 */
 
+        // Testing...
+        SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
+        
         // Configure the button bindings
         configureButtonBindings();
     }

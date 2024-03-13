@@ -8,19 +8,19 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.336141963193018,
-        "y": 7.2238056203385135
+        "x": 4.454799455053456,
+        "y": 7.1924631121989515
       },
       "isLocked": false,
       "linkedName": "A Note"
     },
     {
       "anchor": {
-        "x": 8.3,
+        "x": 8.2,
         "y": 7.55
       },
       "prevControl": {
-        "x": 6.050015009120926,
+        "x": 5.950015009120925,
         "y": 7.341723047082458
       },
       "nextControl": null,
@@ -38,8 +38,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 2.8,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -51,7 +51,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 45.0,
+    "rotation": 30.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

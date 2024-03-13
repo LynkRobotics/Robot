@@ -68,12 +68,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "C to B"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot"
@@ -86,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B to A"
+                  "pathName": "C to A"
                 }
               },
               {

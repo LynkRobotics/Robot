@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8,
-        "y": 5.54
+        "x": 2.7,
+        "y": 5.58
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8,
-        "y": 6.04
+        "x": 2.7,
+        "y": 6.08
       },
       "isLocked": false,
       "linkedName": "Straight shot"
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 6.8
+        "x": 2.7,
+        "y": 6.85
       },
       "prevControl": {
-        "x": 2.8,
-        "y": 6.3
+        "x": 2.7,
+        "y": 6.35
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,12 +31,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4,
-      "rotationDegrees": 60.0,
+      "rotationDegrees": 45.0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 60.0,
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 45.0,
       "rotateFast": false
     }
   ],
@@ -50,8 +50,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.0,
-    "rotateFast": false
+    "rotation": 35.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,

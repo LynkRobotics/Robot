@@ -105,12 +105,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 90000.0
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -132,7 +126,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to B"
+            "pathName": "D to A"
           }
         },
         {

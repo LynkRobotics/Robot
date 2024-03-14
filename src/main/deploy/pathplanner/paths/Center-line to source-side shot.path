@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.288914032373519,
+        "x": 8.1,
         "y": 0.7462996744175311
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.59290645854019,
+        "x": 5.4039924261666705,
         "y": 0.8955596093010377
       },
       "isLocked": false,
-      "linkedName": "H Note"
+      "linkedName": "Center-line Source-Side"
     },
     {
       "anchor": {
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -15.0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

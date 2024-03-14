@@ -1,0 +1,113 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7046435911053639,
+        "y": 6.660724594176462
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.329669568430046,
+        "y": 7.416353014524211
+      },
+      "isLocked": false,
+      "linkedName": "Amp-side SW"
+    },
+    {
+      "anchor": {
+        "x": 2.36516036668437,
+        "y": 7.6775579005703465
+      },
+      "prevControl": {
+        "x": 1.6882635792640102,
+        "y": 7.6775579005703465
+      },
+      "nextControl": {
+        "x": 4.3651603666843695,
+        "y": 7.6775579005703465
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.740342207957143,
+        "y": 7.68
+      },
+      "prevControl": {
+        "x": 4.740342207957143,
+        "y": 7.68
+      },
+      "nextControl": {
+        "x": 7.340342207957143,
+        "y": 7.68
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.1,
+        "y": 7.4
+      },
+      "prevControl": {
+        "x": 7.47493042603411,
+        "y": 7.4
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Center-line Amp-side"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8999999999999999,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.7,
+      "rotationDegrees": 0,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake note"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.2,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

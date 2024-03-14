@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
+      "x": 0.7326298288960215,
       "y": 6.65
     },
     "rotation": 60.0
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to Amp-side shot"
+            "pathName": "D to A"
           }
         },
         {
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp-side shot to E"
+                  "pathName": "A to E"
                 }
               },
               {
@@ -101,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "E to Amp-side shot"
+            "pathName": "E to A"
           }
         },
         {

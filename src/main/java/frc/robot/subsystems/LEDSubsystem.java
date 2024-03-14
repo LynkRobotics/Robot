@@ -85,7 +85,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
   
   public void setColor(Color color) {
-    System.out.printf("Setting color (%d, %d, %d)%n", color.R, color.G, color.B);
+    //System.out.printf("Setting color (%d, %d, %d)%n", color.R, color.G, color.B);
     m_candle.setLEDs(color.R, color.G, color.B);
   }
 

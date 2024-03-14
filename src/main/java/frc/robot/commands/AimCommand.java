@@ -22,6 +22,9 @@ public class AimCommand extends Command {
         // TODO Remove code duplication with TeleopSwerve (or need for this entirely)
         Rotation2d angleError = s_Vision.angleError();
         double rotationVal = Swerve.angleErrorToSpeed(angleError);
+        if (!s_Vision.haveTarget()) {
+            rotationVal = 0.0;
+        }
         /* Drive */
         s_Swerve.drive(
             new Translation2d(0, 0),

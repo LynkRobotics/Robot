@@ -92,7 +92,7 @@ public class ShootCommand extends Command {
       if (!aligned) {
         if (shooter.usingVision()) {
           // Aligned if vision is aligned with target
-          aligned = Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
+          aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
         } else if (shooter.dumping()) {
           if (swerve == null) {
             System.out.println("ERROR: Cannot aim for dumping without swerve object");

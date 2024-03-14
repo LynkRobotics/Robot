@@ -42,7 +42,12 @@ public class TeleopSwerve extends Command {
         /* Override rotation if using vision to aim */
         if (s_Shooter.isAutoAimingActive()) {
             Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : s_Swerve.dumpShotError();
-            rotationVal = Swerve.angleErrorToSpeed(angleError);
+            
+            if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
+                rotationVal = 0.0;
+            } else {
+                rotationVal = Swerve.angleErrorToSpeed(angleError);
+            }
         }
 
         /* Drive */

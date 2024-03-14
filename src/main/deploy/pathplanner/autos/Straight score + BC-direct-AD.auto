@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "B to C"
+                  "pathName": "B to C for shooting"
                 }
               },
               {
@@ -96,12 +96,6 @@
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 90000.0
           }
         },
         {

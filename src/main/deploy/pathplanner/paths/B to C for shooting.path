@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.7,
+        "y": 5.58
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4118040963354654,
+        "y": 4.974906597085922
+      },
+      "isLocked": false,
+      "linkedName": "Straight shot"
+    },
+    {
+      "anchor": {
+        "x": 2.68,
+        "y": 4.23
+      },
+      "prevControl": {
+        "x": 2.6263652527305057,
+        "y": 4.701687948830443
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C Note"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": -45.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.3,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -37.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

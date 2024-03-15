@@ -233,7 +233,7 @@ public final class Constants {
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
 
         public static final double extendedPosition = -875.0;
-        public static final double retractedPosition = -75.0;
+        public static final double retractedPosition = -15.0;
         public static final double positionError = 1.5;
         public static final double slowVoltage = 2.75;
 

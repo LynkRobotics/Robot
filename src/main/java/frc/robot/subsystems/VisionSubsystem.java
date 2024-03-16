@@ -89,7 +89,7 @@ public class VisionSubsystem extends SubsystemBase {
   public double distanceToSpeaker() {
     double distance = lastPose.getTranslation().getDistance(speakerLocation()); // distance from center of robot to speaker
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-    distance *= 0.95; // fudge factor that somehow seems to help
+    distance *= 0.97; // fudge factor that somehow seems to help
     distance -= 0.05; 
     return distance;
   }

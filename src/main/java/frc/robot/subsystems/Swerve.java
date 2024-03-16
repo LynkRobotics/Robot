@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -167,8 +168,11 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d dumpShotError() {
         Rotation2d robotAngle = getPose().getRotation();
-    
-        return Constants.Swerve.dumpAngle.minus(robotAngle);    
+        if (DriverStation.getAlliance().get() == Alliance.Red){
+            return Constants.Swerve.redDumpAngle.minus(robotAngle);
+        } else {
+            return Constants.Swerve.dumpAngle.minus(robotAngle);    
+        }
     }
 
     public static double angleErrorToSpeed(Rotation2d angleError) {

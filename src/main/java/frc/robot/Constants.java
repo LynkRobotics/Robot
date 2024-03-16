@@ -27,6 +27,7 @@ public final class Constants {
             COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
         public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
+        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
         public static final double maxDumpError = 1.0; // degrees
 
         /* Drivetrain Constants */

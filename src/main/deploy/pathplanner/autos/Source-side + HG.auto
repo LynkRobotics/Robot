@@ -59,15 +59,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Source-side shot to G"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source-side shot to G"
                 }
               }
             ]

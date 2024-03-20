@@ -16,18 +16,20 @@ import frc.robot.subsystems.LEDSubsystem.BaseState;
 public class IndexSubsystem extends SubsystemBase {
   private final TalonFX indexMotor;
   private final DutyCycleOut indexSpeedDutyCycleOut;
-  private final DigitalInput indexSensor;
+  private final DigitalInput leftIndexSensor;
+  private final DigitalInput rightIndexSensor;
   private boolean haveNote = false;
 
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
     indexSpeedDutyCycleOut = new DutyCycleOut(0);
-    indexSensor = new DigitalInput(Constants.Index.indexSensorID);
+    leftIndexSensor = new DigitalInput(Constants.Index.leftIndexSensorID);
+    rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
     applyConfigs();
   }
 
   public boolean haveNote() {
-    return !indexSensor.get();
+    return !leftIndexSensor.get() || !rightIndexSensor.get();
   }
 
   public void applyConfigs() {

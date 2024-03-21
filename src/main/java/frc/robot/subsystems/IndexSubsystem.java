@@ -23,13 +23,17 @@ public class IndexSubsystem extends SubsystemBase {
   public IndexSubsystem() {
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
     indexSpeedDutyCycleOut = new DutyCycleOut(0);
+    applyConfigs();
+
     leftIndexSensor = new DigitalInput(Constants.Index.leftIndexSensorID);
     rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
-    applyConfigs();
+    SmartDashboard.putBoolean("indexer/Left sensor enabled", true);
+    SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
   }
 
   public boolean haveNote() {
-    return !leftIndexSensor.get() || !rightIndexSensor.get();
+    return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
+      (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());
   }
 
   public void applyConfigs() {
@@ -74,6 +78,8 @@ public class IndexSubsystem extends SubsystemBase {
       haveNote = currentVal;
       LEDSubsystem.setBaseState(haveNote ? BaseState.NOTE : BaseState.EMPTY);
     }
-    SmartDashboard.putBoolean("Have note", haveNote);
+    SmartDashboard.putBoolean("indexer/Have note", haveNote);
+    SmartDashboard.putBoolean("indexer/Left sensor", leftIndexSensor.get());
+    SmartDashboard.putBoolean("indexer/Right sensor", rightIndexSensor.get());
   }
 }

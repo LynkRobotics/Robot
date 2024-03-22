@@ -83,15 +83,15 @@ public class ShooterSubsystem extends SubsystemBase {
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
-    new ShooterCalibration(40.5/12.0, new ShooterSpeed(1400, 2900)),
-    new ShooterCalibration(4.0, new ShooterSpeed(1400, 2700)),
-    new ShooterCalibration(5.0, new ShooterSpeed(2200, 2200)),
-    new ShooterCalibration(6.0, new ShooterSpeed(2700, 2200)),
-    new ShooterCalibration(7.0, new ShooterSpeed(3000, 1900)),
-    new ShooterCalibration(8.0, new ShooterSpeed(2900, 1700)),
-    new ShooterCalibration(9.0, new ShooterSpeed(2800, 1550)),
-    new ShooterCalibration(10.0, new ShooterSpeed(2800, 1450)),
-    new ShooterCalibration(11.0, new ShooterSpeed(2700, 1400)),
+    new ShooterCalibration(35.9, new ShooterSpeed(1200, 3200)),
+    new ShooterCalibration(46.9, new ShooterSpeed(1500, 2500)),
+    new ShooterCalibration(59.5, new ShooterSpeed(2200, 2200)),
+    new ShooterCalibration(72.2, new ShooterSpeed(2700, 2200)),
+    new ShooterCalibration(83.5, new ShooterSpeed(3000, 1900)),
+    new ShooterCalibration(95.7, new ShooterSpeed(2900, 1700)),
+    new ShooterCalibration(108.1, new ShooterSpeed(2800, 1550)),
+    new ShooterCalibration(120.9, new ShooterSpeed(2800, 1450)),
+    new ShooterCalibration(132.0, new ShooterSpeed(2700, 1400))
   };
 
   public ShooterSubsystem() {
@@ -153,7 +153,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private ShooterSpeed speedFromDistance(double meters) {
-    double distance = Units.metersToFeet(meters);
+    double distance = Units.metersToInches(meters);
     ShooterCalibration priorEntry = null;
     ShooterSpeed speed = null;
 

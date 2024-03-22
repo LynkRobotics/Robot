@@ -5,7 +5,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -253,13 +256,18 @@ public final class Constants {
         public static final double timeCutOff = 25.0;
     }
 
-
     public static final class Vision {
         public static final String cameraName = "Arducam_OV2311_USB_Camera";
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
+        public static final Transform3d robotToCam = new Transform3d(
+            new Translation3d(Units.inchesToMeters(6.0), 0.0, Units.inchesToMeters(13.5)),
+            new Rotation3d(0, Units.degreesToRadians(-31.7), 0));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 0.5; // degrees
+        public static final double calibrationFactor =  0.981; // Lynk HQ = 72 / (113 - 39.6) 
+        public static final double calibrationOffset = -Units.inchesToMeters(2.2); // Lynk HQ
+        //public static final double calibrationOffset = -0.05; // NCASH
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

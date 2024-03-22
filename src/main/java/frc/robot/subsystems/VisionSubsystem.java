@@ -11,10 +11,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -36,18 +33,13 @@ public class VisionSubsystem extends SubsystemBase {
   private boolean haveTarget = false;
   private Pose2d lastPose  = new Pose2d();
 
-  private final Transform3d kRobotToCam =
-    new Transform3d(
-        new Translation3d(Units.inchesToMeters(6.0), 0.0, Units.inchesToMeters(13.5)),
-        new Rotation3d(0, Units.degreesToRadians(-31.7), 0));
-
   public VisionSubsystem() {
     assert(instance == null);
     instance = this;
 
     camera = new PhotonCamera(Constants.Vision.cameraName);
 
-    photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
+    photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.robotToCam);
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     SmartDashboard.putData("vision/Field", field);
@@ -86,11 +78,23 @@ public class VisionSubsystem extends SubsystemBase {
     return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Vision.blueSpeakerLocation : Constants.Vision.redSpeakerLocation);
   }
 
-  public double distanceToSpeaker() {
-    double distance = lastPose.getTranslation().getDistance(speakerLocation()); // distance from center of robot to speaker
+  // Distance from center of robot to speaker
+  public double distanceToSpeakerFromCenter() {
+    return lastPose.getTranslation().getDistance(speakerLocation());
+  }
+
+  // Distance from edge of robot to speaker 
+  public double distanceToSpeakerRaw() {
+    double distance = distanceToSpeakerFromCenter();
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-    distance *= 0.97; // fudge factor that somehow seems to help
-    distance -= 0.05; 
+    return distance;
+  }
+
+  public double distanceToSpeaker() {
+    double distance = distanceToSpeakerFromCenter();
+    distance *= Constants.Vision.calibrationFactor; // fudge factor based on calibration between two points
+    distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+    distance += Constants.Vision.calibrationOffset; // fudge amount based on calibration after factor is applied
     return distance;
   }
 
@@ -113,6 +117,7 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("vision/New result", newResult);
       SmartDashboard.putBoolean("vision/Have target(s)", result.hasTargets());
       SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
+      SmartDashboard.putNumber("vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
       SmartDashboard.putString("vision/Last pose", lastPose.toString());
       SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
@@ -125,3 +130,23 @@ public class VisionSubsystem extends SubsystemBase {
     }
   }
 }
+
+/* 
+ * Calibration procedure:
+ *   1. Place the robot, with bumpers, against the subwoofer.  This puts the robot bumper outside edge 36.125 inches from the alliance wall
+ *   2. Record the "Raw distance" as measured by vision to speaker in inches as data point (A)
+ *   3. Move the robot back 6 feet (72 inches), putting the robot bumper outside edge 108.125 inches from the alliance wall
+ *   4. Record the "Raw distance" as measured by vision to speaker in inches as data point (B)
+ *   5. Subtract (A) from (B) and divide by 72 to get the "Calibration factor" (i.e., (B-A)/72.0)), and record this as Constants.Vision.calibrationFactor
+ *   6. Set Constants.Vision.calibrationOffset to 0.0
+ *   7. Build and deploy the updated code to the robot
+ *   8. Move the robot bumpers against the subwoofer again
+ *   9. Record the "distance" as measured by vision to speaker in inches as data point (C)
+ *  10. Subtract (C) from 36.125, and record this as Constants.Vision.calibrationOffset (i.e., (C) values above 36.125 should result in a negative offset)
+ *  11. Build and deploy the updated code to the robot
+ *  12. Verify that the "distance" as measured by vision to speaker in inches is approximately 36.125
+ *  13. Move the robot back 6 feet (72 inches) again
+ *  14. Verify that the "distance" as meansured by vision to speaker in inches is approximately 108.125, or other value measured against reference equipment
+ *  15. Optionally compare other distances against values measured against reference equipment for additional verification
+ *  16. Use values from vision when calibrating the Shooter subsystem
+ */

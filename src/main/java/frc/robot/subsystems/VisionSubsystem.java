@@ -137,7 +137,7 @@ public class VisionSubsystem extends SubsystemBase {
  *   2. Record the "Raw distance" as measured by vision to speaker in inches as data point (A)
  *   3. Move the robot back 6 feet (72 inches), putting the robot bumper outside edge 108.125 inches from the alliance wall
  *   4. Record the "Raw distance" as measured by vision to speaker in inches as data point (B)
- *   5. Subtract (A) from (B) and divide by 72 to get the "Calibration factor" (i.e., (B-A)/72.0)), and record this as Constants.Vision.calibrationFactor
+ *   5. Subtract (A) from (B) and divide into 72 to get the "Calibration factor" (i.e., 72.0/(B-A))), and record this as Constants.Vision.calibrationFactor
  *   6. Set Constants.Vision.calibrationOffset to 0.0
  *   7. Build and deploy the updated code to the robot
  *   8. Move the robot bumpers against the subwoofer again

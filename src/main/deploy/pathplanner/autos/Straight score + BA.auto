@@ -78,6 +78,25 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp-side shot to D"
+                }
+              }
+            ]
+          }
         }
       ]
     }

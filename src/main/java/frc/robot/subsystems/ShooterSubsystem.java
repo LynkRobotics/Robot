@@ -78,7 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
       Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
-      Map.entry(Speed.DUMP, new ShooterSpeed(3000, 3000)),
+      Map.entry(Speed.DUMP, new ShooterSpeed(2900, 2900)),
       Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
   ));
 

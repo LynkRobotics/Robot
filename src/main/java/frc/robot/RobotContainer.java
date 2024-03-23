@@ -211,8 +211,14 @@ public class RobotContainer {
             new ShootCommand(s_Shooter, s_Index, s_Swerve),
             () -> SmartDashboard.getBoolean("Direct set RPM", false)));
         climberExtendButton.onTrue(
-            new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
-            .alongWith(new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)));
+            Commands.either(
+                new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
+                .alongWith(new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)),
+                new ClimberPositionCommand(Constants.Climber.midPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
+                .alongWith(new ClimberPositionCommand(Constants.Climber.midPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)),
+                () -> s_LeftClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError ||
+                      s_RightClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError));
+
         leftClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
         rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 

@@ -206,7 +206,8 @@ public final class Constants {
     public class Index {
         /* IDs */
         public static final int indexMotorID = 13;
-        public static final int indexSensorID = 0;
+        public static final int leftIndexSensorID = 0;
+        public static final int rightIndexSensorID = 1;
         /* CANBus */
         public static final String indexMotorCanBus = "rio";
         /* Motor Speed Values */

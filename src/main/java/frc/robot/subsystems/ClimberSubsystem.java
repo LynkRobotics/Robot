@@ -38,8 +38,8 @@ public class ClimberSubsystem extends SubsystemBase {
     /* Set the Shooters motor direction */
     m_ClimberMotorsConfiguration.MotorOutput.Inverted = Constants.Climber.motorOutputInverted;
     /* Config the peak outputs */
-    m_ClimberMotorsConfiguration.Voltage.PeakForwardVoltage = 12.0; //Constants.Climber.peakForwardVoltage;
-    m_ClimberMotorsConfiguration.Voltage.PeakReverseVoltage = -12.0; //Constants.Climber.peakReverseVoltage;
+    m_ClimberMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Climber.peakForwardVoltage;
+    m_ClimberMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Climber.peakReverseVoltage;
 
     // PID & FF configuration
     m_ClimberMotorsConfiguration.Slot0.kP = Constants.Climber.kP;

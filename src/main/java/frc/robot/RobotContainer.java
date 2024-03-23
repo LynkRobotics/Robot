@@ -109,6 +109,17 @@ public class RobotContainer {
             .andThen(Commands.print("Idling again"))
             
         );
+        NamedCommands.registerCommand("Fixed SW shot",
+            Commands.print("Begin SW shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SUBWOOFER); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.50))))
+            .andThen(Commands.print("SW shot complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+            
+        );
         NamedCommands.registerCommand("Shoot OTF",
             Commands.print("Begin OTF")
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))

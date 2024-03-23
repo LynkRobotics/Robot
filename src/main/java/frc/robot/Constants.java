@@ -265,8 +265,12 @@ public final class Constants {
             new Rotation3d(0, Units.degreesToRadians(-31.7), 0));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 0.5; // degrees
-        public static final double calibrationFactor =  0.945; // Lynk HQ = 72 / (113 - 39.6) was .981
-        public static final double calibrationOffset = -Units.inchesToMeters(4); // Lynk HQ
+        public static final double calibrationFactorRed =  0.945; // NCMEC
+        public static final double calibrationOffsetRed = -Units.inchesToMeters(4.0); // NCMEC
+        public static final double calibrationFactorBlue =  0.945; // NCMEC
+        public static final double calibrationOffsetBlue = -Units.inchesToMeters(3.25); // NCMEC
+        //public static final double calibrationFactor =  0.981; // Lynk HQ = 72 / (113 - 39.6)
+        //public static final double calibrationOffset = -Units.inchesToMeters(2.2); // Lynk HQ
         //public static final double calibrationOffset = -0.05; // NCASH
     }
 

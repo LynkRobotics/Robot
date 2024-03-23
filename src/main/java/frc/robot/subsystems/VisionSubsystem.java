@@ -91,10 +91,26 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double distanceToSpeaker() {
+    boolean isRed = (DriverStation.getAlliance().get() == DriverStation.Alliance.Red);
     double distance = distanceToSpeakerFromCenter();
-    distance *= Constants.Vision.calibrationFactor; // fudge factor based on calibration between two points
-    distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-    distance += Constants.Vision.calibrationOffset; // fudge amount based on calibration after factor is applied
+
+    // Fudge factor based on calibration between two points
+    if (isRed) {
+      distance *= Constants.Vision.calibrationFactorRed;
+    } else {
+      distance *= Constants.Vision.calibrationFactorBlue;
+    }
+
+    // Distance from center of robot to reference point
+    distance -= Constants.Vision.centerToReferenceOffset;
+
+    // Fudge amount based on calibration after factor is applied
+    if (isRed) {
+      distance += Constants.Vision.calibrationOffsetRed;
+    } else {
+      distance += Constants.Vision.calibrationOffsetBlue;
+    }
+
     return distance;
   }
 
@@ -149,4 +165,6 @@ public class VisionSubsystem extends SubsystemBase {
  *  14. Verify that the "distance" as meansured by vision to speaker in inches is approximately 108.125, or other value measured against reference equipment
  *  15. Optionally compare other distances against values measured against reference equipment for additional verification
  *  16. Use values from vision when calibrating the Shooter subsystem
+ * 
+ * Repeat for both Red and Blue
  */

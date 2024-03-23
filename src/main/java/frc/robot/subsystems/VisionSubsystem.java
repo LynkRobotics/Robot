@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -75,7 +76,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private Translation2d speakerLocation() {
-    return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Vision.blueSpeakerLocation : Constants.Vision.redSpeakerLocation);
+    return (Robot.isRed() ? Constants.Vision.redSpeakerLocation : Constants.Vision.blueSpeakerLocation);
   }
 
   // Distance from center of robot to speaker
@@ -91,7 +92,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double distanceToSpeaker() {
-    boolean isRed = (DriverStation.getAlliance().get() == DriverStation.Alliance.Red);
+    boolean isRed = Robot.isRed();
     double distance = distanceToSpeakerFromCenter();
 
     // Fudge factor based on calibration between two points

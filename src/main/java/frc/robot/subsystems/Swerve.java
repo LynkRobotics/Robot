@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
-
+import frc.robot.Robot;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -62,11 +62,7 @@ public class Swerve extends SubsystemBase {
                     // This will flip the path being followed to the red side of the field.
                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
+                    return Robot.isRed();
                 },
                 this // Reference to this subsystem to set requirements
             );
@@ -168,10 +164,10 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d dumpShotError() {
         Rotation2d robotAngle = getPose().getRotation();
-        if (DriverStation.getAlliance().get() == Alliance.Red){
+        if (Robot.isRed()){
             return Constants.Swerve.redDumpAngle.minus(robotAngle);
         } else {
-            return Constants.Swerve.dumpAngle.minus(robotAngle);    
+            return Constants.Swerve.dumpAngle.minus(robotAngle);
         }
     }
 

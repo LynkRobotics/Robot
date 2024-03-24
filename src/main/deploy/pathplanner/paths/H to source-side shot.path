@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.288914032373519,
-        "y": 1.1
+        "y": 0.8
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.59290645854019,
-        "y": 1.2492599348835067
+        "y": 0.9492599348835068
       },
       "isLocked": false,
       "linkedName": "H Note"
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -50.0,
     "rotateFast": false
   },
   "reversed": false,

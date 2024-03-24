@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.35,
-        "y": 2.9
+        "y": 2.5
       },
       "prevControl": null,
       "nextControl": {
         "x": 8.435196288051971,
-        "y": 2.9523602186986073
+        "y": 2.5523602186986074
       },
       "isLocked": false,
       "linkedName": "G Note"
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -50.0,
     "rotateFast": false
   },
   "reversed": false,

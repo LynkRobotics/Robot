@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.35,
-        "y": 2.3
+        "y": 2.65
       },
       "prevControl": null,
       "nextControl": {
         "x": 8.435196288051971,
-        "y": 2.3523602186986072
+        "y": 2.7023602186986073
       },
       "isLocked": false,
       "linkedName": "G Note"

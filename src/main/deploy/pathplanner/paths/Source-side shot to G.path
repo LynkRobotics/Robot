@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.924885122497518,
-        "y": 2.360172720345441
+        "x": 3.7178285265661435,
+        "y": 1.585886808137253
       },
       "isLocked": false,
       "linkedName": "Source-side angle shot"
     },
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.3
+        "x": 8.4,
+        "y": 2.5
       },
       "prevControl": {
-        "x": 5.66332117209689,
-        "y": 0.6488119703512134
+        "x": 5.713321172096891,
+        "y": 0.8488119703512136
       },
       "nextControl": null,
       "isLocked": false,

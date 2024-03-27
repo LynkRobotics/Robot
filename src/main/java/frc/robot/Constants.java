@@ -97,7 +97,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 5.21208; //L2.5 therotical max speed, test later.
         /* These are theorectial values to start with, tune after
          * Kraken FOC (L1.0): ft/s = 12.4 | m/s = 3.77952
          * Kraken FOC (L1.5): ft/s = 14.2 | m/s = 4.32816

@@ -27,7 +27,7 @@ public final class Constants {
         public static final String swerveCanBus = "lynk";
 
         public static final COTSTalonFXSwerveConstants chosenModule =  
-            COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
+            COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2_5);
 
         public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
         public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
@@ -65,7 +65,7 @@ public final class Constants {
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
+        public static final int driveCurrentLimit = 40; 
         public static final int driveCurrentThreshold = 60;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
@@ -90,10 +90,10 @@ public final class Constants {
         public static final double driveKD = 0.0; //Leave driveKD at 0.0
         public static final double driveKF = 0.0; //Leave driveKF at 0.0 
 
-        /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.43; //was 0.32
-        public static final double driveKV = 2.63; //was 1.51
-        public static final double driveKA = 0.15; //was 0.27
+        /* Drive Motor Characterization Values From SYSID */ 
+        public static final double driveKS = 0.32; 
+        public static final double driveKV = 1.51; 
+        public static final double driveKA = 0.27;  
 
         /* Swerve Profiling Values */
         /** Meters per Second */

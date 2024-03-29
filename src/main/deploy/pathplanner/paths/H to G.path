@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.178585448079987,
-        "y": 3.610224674994805
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 4.053663380054033,
-        "y": 1.9310504075553612
-      },
-      "isLocked": false,
-      "linkedName": "Source-side angle shot"
-    },
-    {
-      "anchor": {
         "x": 8.3,
         "y": 0.8
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.3,
+        "y": 1.1
+      },
+      "isLocked": false,
+      "linkedName": "H Note"
+    },
+    {
+      "anchor": {
+        "x": 8.35,
+        "y": 2.5
+      },
       "prevControl": {
-        "x": 6.816729397095158,
-        "y": 0.8279862377906573
+        "x": 8.35,
+        "y": 2.2
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "H Note"
+      "linkedName": "G Note"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -10.0,
-    "rotateFast": false
+    "rotation": 125.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -45.0,
+    "rotation": -15.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

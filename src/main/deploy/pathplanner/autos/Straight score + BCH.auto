@@ -101,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to source-side shot"
+            "pathName": "H to G"
           }
         },
         {
@@ -113,6 +113,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight-on",
   "choreoAuto": false
 }

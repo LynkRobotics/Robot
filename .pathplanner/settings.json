@@ -4,7 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [],
   "autoFolders": [
-    "New Folder"
+    "Amp-side",
+    "Testing",
+    "Source-side",
+    "Straight-on"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 2.3,

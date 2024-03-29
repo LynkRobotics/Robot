@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -150,6 +151,7 @@ public class RobotContainer {
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("auto/Auto Chooser", autoChooser);
+        buildAutos(autoChooser);
 
         // During calibration allow for direct control
         //SmartDashboard.putNumber("Shooter voltage direct", 0.0);
@@ -241,5 +243,18 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+    }
+
+    private void buildAutos(SendableChooser<Command> chooser) {
+        Command smartHG =
+            Commands.sequence(
+                new PathPlannerAuto("Source-side to H"),
+                Commands.either(
+                    new PathPlannerAuto("H-Shoot-G-Shoot"),
+                    new PathPlannerAuto("H-G-Shoot"),
+                    s_Index::haveNote
+                )
+            ).withName("Smart HG");
+        chooser.addOption("Smart HG", smartHG);
     }
 }

@@ -146,8 +146,10 @@ public class RobotContainer {
             .andThen(Commands.print("Amp shot complete"))
             //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
             .andThen(Commands.print("Idling again"))
-            
         );
+        NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
+        NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
+
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("auto/Auto Chooser", autoChooser);

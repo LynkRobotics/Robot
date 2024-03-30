@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.73,
-        "y": 4.44
+        "x": 0.69,
+        "y": 4.43
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7401343893596877,
-        "y": 4.272565636040364
+        "x": 1.7001343893596876,
+        "y": 4.262565636040363
       },
       "isLocked": false,
       "linkedName": "Source-side SW"

@@ -249,11 +249,13 @@ public class RobotContainer {
         Command smartHG =
             Commands.sequence(
                 new PathPlannerAuto("Source-side to H"),
+                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
                 Commands.either(
-                    new PathPlannerAuto("H-Shoot-G-Shoot"),
-                    new PathPlannerAuto("H-G-Shoot"),
+                    Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
+                    Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
                     s_Index::haveNote
-                )
+                ),
+                Commands.print("Conditional part over")
             ).withName("Smart HG");
         chooser.addOption("Smart HG", smartHG);
     }

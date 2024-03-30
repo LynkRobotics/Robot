@@ -185,7 +185,7 @@ public final class Constants {
         /* CANBus */
         public static final String shooterMotorCanBus = "rio";
         /* Motor Speed Values */
-        public static final double idleSpeed = 800;
+        public static final double idleSpeed = 2500;
         public static final double intakeSpeed = -800;
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;

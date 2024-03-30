@@ -269,7 +269,7 @@ public final class Constants {
             new Translation3d(Units.inchesToMeters(6.0), 0.0, Units.inchesToMeters(13.5)),
             new Rotation3d(0, Units.degreesToRadians(-31.7), 0));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
-        public static final double maxAngleError = 0.5; // degrees
+        public static final double maxAngleError = 1.0; // degrees
         public static final double calibrationFactor =  0.981; // Lynk HQ = 72 / (113 - 39.6) was .981
         public static final double calibrationOffset = -Units.inchesToMeters(4); // Lynk HQ
         //public static final double calibrationOffset = -0.05; // NCASH

@@ -15,6 +15,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -31,11 +33,14 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
+    private static PIDController rotationPID = new PIDController(0.013, 0.0, 0.0); // TODO Constants
+
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
 
+        rotationPID.enableContinuousInput(-180.0, 180.0);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -54,6 +59,7 @@ public class Swerve extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
+                    // TODO Should rotation PID be higher so that we can aim in auto?
                     Constants.Swerve.maxSpeed, // Max module speed, in m/s
                     Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -166,21 +172,14 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public static void angleErrorReset() {
+        rotationPID.reset();
+    }
+
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
-        double magnitude = Math.abs(angleErrorDeg);
-        double rotationVal = 0.0;
 
-        if (magnitude > 10.0) {
-            rotationVal = 0.10 * Math.signum(angleErrorDeg);
-        } else if (magnitude > 7.0) {
-            rotationVal = 0.06 * Math.signum(angleErrorDeg);
-        } else if (magnitude > 3.0) {
-            rotationVal = 0.04 * Math.signum(angleErrorDeg);
-        } else if (magnitude > 0.3) {
-            rotationVal = 0.03 * Math.signum(angleErrorDeg);
-        }
-        return rotationVal;
+        return MathUtil.clamp(-rotationPID.calculate(angleErrorDeg), -1.0, 1.0);
     }
 
     public void enableSpeedLimit() {

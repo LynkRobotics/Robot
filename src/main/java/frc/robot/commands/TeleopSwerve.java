@@ -22,6 +22,7 @@ public class TeleopSwerve extends Command {
     private final DoubleSupplier strafeSup;
     private final DoubleSupplier rotationSup;
     private DoubleSupplier speedLimitRotSupplier;
+    private boolean inProgress = false;
 
     public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedLimitRotSupplier) {
         this.s_Swerve = s_Swerve;
@@ -49,6 +50,10 @@ public class TeleopSwerve extends Command {
             if (s_Shooter.isAutoAimingActive()) {
                 Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : s_Swerve.dumpShotError();
                 
+                if (!inProgress) {
+                    Swerve.angleErrorReset();
+                }
+                inProgress = true;
                 if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
                     rotationVal = 0.0;
                 } else {
@@ -57,17 +62,28 @@ public class TeleopSwerve extends Command {
             } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
                 /* Testing -- auto-aim when available */
                 if (IndexSubsystem.getInstance().haveNote() && s_Vision.haveSpeakerTarget()) {                
+                    if (!inProgress) {
+                        Swerve.angleErrorReset();
+                    }
+                    inProgress = true;
                     rotationVal = Swerve.angleErrorToSpeed(s_Vision.angleError());
+                } else {
+                    inProgress = false;
                 }
+                inProgress = false;
+            } else {
+                inProgress = false;
             }
+        } else {
+            inProgress = false;
         }
 
         /* Drive */
-            s_Swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-                rotationVal * Constants.Swerve.maxAngularVelocity * speedLimitRotSupplier.getAsDouble(), 
-                true
-            );
-            // SmartDashboard.putNumber("rotationValue", speedLimitRotSupplier.getAsDouble());
+        s_Swerve.drive(
+            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+            rotationVal * Constants.Swerve.maxAngularVelocity * speedLimitRotSupplier.getAsDouble(), 
+            true
+        );
+        // SmartDashboard.putNumber("rotationValue", speedLimitRotSupplier.getAsDouble());
     }
 }

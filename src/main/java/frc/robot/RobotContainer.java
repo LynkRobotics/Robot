@@ -77,7 +77,9 @@ public class RobotContainer {
                         s_Vision,
                         () -> -translation.get() * Constants.driveStickSensitivity,
                         () -> -strafe.get() * Constants.driveStickSensitivity,
-                        () -> -rotation.get() * Constants.turnStickSensitivity));
+                        () -> -rotation.get() * Constants.turnStickSensitivity,
+                        s_Swerve::getSpeedLimitRot
+                        ));
 
         s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
@@ -200,10 +202,15 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Shooter intake", false);
 
         /* Driver Buttons */
-        intakeButton.whileTrue(Commands.either(
-            new ShooterIntakeCommand(s_Shooter, s_Index, driver.getHID()),
-            new IntakeCommand(s_Intake, s_Index, driver.getHID()),
-            () -> SmartDashboard.getBoolean("Shooter intake", false)));
+        intakeButton.whileTrue(
+            Commands.sequence(
+                Commands.runOnce(s_Swerve::enableSpeedLimit),
+                Commands.either(
+                    new ShooterIntakeCommand(s_Shooter, s_Index, driver.getHID()),
+                    new IntakeCommand(s_Intake, s_Index, driver.getHID()),
+                    () -> SmartDashboard.getBoolean("Shooter intake", false)),
+                Commands.runOnce(s_Swerve::disableSpeedLimit))
+            .handleInterrupt(s_Swerve::disableSpeedLimit));
         shooterButton.whileTrue(
             Commands.either(new ShootCommand(s_Shooter, s_Index,
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),

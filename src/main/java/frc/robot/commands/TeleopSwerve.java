@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TeleopSwerve extends Command {
@@ -19,9 +20,9 @@ public class TeleopSwerve extends Command {
     private final DoubleSupplier translationSup;
     private final DoubleSupplier strafeSup;
     private final DoubleSupplier rotationSup;
+    private DoubleSupplier speedLimitRotSupplier;
 
-    public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup,
-            DoubleSupplier rotationSup) {
+    public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedLimitRotSupplier) {
         this.s_Swerve = s_Swerve;
         this.s_Shooter = s_Shooter;
         this.s_Vision = s_Vision;
@@ -30,6 +31,7 @@ public class TeleopSwerve extends Command {
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
+        this.speedLimitRotSupplier = speedLimitRotSupplier;
     }
 
     @Override
@@ -51,9 +53,11 @@ public class TeleopSwerve extends Command {
         }
 
         /* Drive */
-        s_Swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-            rotationVal * Constants.Swerve.maxAngularVelocity,
-            true);
+            s_Swerve.drive(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+                rotationVal * Constants.Swerve.maxAngularVelocity * speedLimitRotSupplier.getAsDouble(), 
+                true
+            );
+            SmartDashboard.putNumber("rotationValue", speedLimitRotSupplier.getAsDouble());
     }
 }

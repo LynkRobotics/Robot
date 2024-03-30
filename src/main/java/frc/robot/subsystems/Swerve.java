@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
+    private boolean speedLimit = false;
+
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -179,6 +181,18 @@ public class Swerve extends SubsystemBase {
             rotationVal = 0.03 * Math.signum(angleErrorDeg);
         }
         return rotationVal;
+    }
+
+    public void enableSpeedLimit() {
+        speedLimit = true;
+    }
+
+    public void disableSpeedLimit() {
+        speedLimit = false;
+    }
+
+    public double getSpeedLimitRot() {
+        return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
     @Override

@@ -18,7 +18,7 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final double driveStickSensitivity = 1.00;
-    public static final double turnStickSensitivity = 0.45;
+    public static final double turnStickSensitivity = 1.00;
     public static final double aimingOverride = 0.25;
 
     public static final boolean tuningMode = true;
@@ -26,6 +26,9 @@ public final class Constants {
     public static final class Swerve {
         public static final int pigeonID = 1;
         public static final String swerveCanBus = "lynk";
+
+        // Multipliers when speed limit is in effect;
+        public static final double speedLimitRot = 0.50;
 
         public static final COTSTalonFXSwerveConstants chosenModule =  
             COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2_5);
@@ -168,7 +171,7 @@ public final class Constants {
         /* CANBus */
         public static final String intakeMotorCanBus = "rio";
         /* Motor Speed Values */
-        public static final double intakingSpeed = 0.30;
+        public static final double intakingSpeed = 0.50;
         public static final double ejectingSpeed = -0.50;
         public static final double stoppingSpeed = 0.00;
         /* Motor Config Values */

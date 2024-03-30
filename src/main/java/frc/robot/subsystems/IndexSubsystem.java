@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
 
 public class IndexSubsystem extends SubsystemBase {
+  private static IndexSubsystem instance = null;
   private final TalonFX indexMotor;
   private final DutyCycleOut indexSpeedDutyCycleOut;
   private final DigitalInput leftIndexSensor;
@@ -21,6 +22,9 @@ public class IndexSubsystem extends SubsystemBase {
   private boolean haveNote = false;
 
   public IndexSubsystem() {
+    assert(instance == null);
+    instance = this;
+
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
     indexSpeedDutyCycleOut = new DutyCycleOut(0);
     applyConfigs();
@@ -29,6 +33,10 @@ public class IndexSubsystem extends SubsystemBase {
     rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
     SmartDashboard.putBoolean("indexer/Left sensor enabled", true);
     SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
+  }
+
+  public static IndexSubsystem getInstance() {
+    return instance;
   }
 
   public boolean haveNote() {

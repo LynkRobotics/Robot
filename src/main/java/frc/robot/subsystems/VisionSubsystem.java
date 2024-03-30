@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -35,6 +36,7 @@ public class VisionSubsystem extends SubsystemBase {
   private final Field2d field = new Field2d();
   private double lastEstTimestamp = 0.0;
   private boolean haveTarget = false;
+  private boolean haveSpeakerTarget = false;
   private Pose2d lastPose  = new Pose2d();
   private boolean overrideRotation = false;
 
@@ -58,7 +60,7 @@ public class VisionSubsystem extends SubsystemBase {
   public void disableRotationTargetOverride() { overrideRotation = false; }
 
   public Optional<Rotation2d> getRotationTargetOverride() {
-      if (!overrideRotation || !haveTarget()) {
+      if (!overrideRotation || !haveSpeakerTarget()) {
           return Optional.empty();
       }
       Rotation2d adjustment = new Rotation2d(Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
@@ -75,6 +77,10 @@ public class VisionSubsystem extends SubsystemBase {
     return haveTarget;
   }
 
+  public boolean haveSpeakerTarget() {
+    return haveSpeakerTarget;
+  }
+
   private Translation2d speakerOffset() {
     return speakerLocation().minus(lastPose.getTranslation());
   }
@@ -84,7 +90,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public Rotation2d angleError() {
-    if (!haveTarget) {
+    if (!haveSpeakerTarget) {
       return new Rotation2d(0.0);
     }
 
@@ -119,6 +125,14 @@ public class VisionSubsystem extends SubsystemBase {
     return distance;
   }
 
+  private boolean isSpeakerId(int id) {
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+      return (id == 3 || id == 4);
+    } else {
+      return (id == 7 || id == 8);
+    }
+  }
+
   @Override
   public void periodic() {
     PhotonPipelineResult result = camera.getLatestResult();
@@ -149,6 +163,10 @@ public class VisionSubsystem extends SubsystemBase {
     if (newResult) {
       lastEstTimestamp = latestTimestamp;
       haveTarget = result.hasTargets();
+      haveSpeakerTarget = false;
+      if (haveTarget) {
+        result.getTargets().forEach((t) -> { haveSpeakerTarget = haveSpeakerTarget || isSpeakerId(t.getFiducialId()); } );
+      }
     }
   }
 }

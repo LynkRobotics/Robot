@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
@@ -47,6 +48,11 @@ public class TeleopSwerve extends Command {
                 rotationVal = 0.0;
             } else {
                 rotationVal = Swerve.angleErrorToSpeed(angleError);
+            }
+        } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
+            /* Testing -- auto-aim when available */
+            if (IndexSubsystem.getInstance().haveNote() && s_Vision.haveSpeakerTarget()) {                
+                rotationVal = Swerve.angleErrorToSpeed(s_Vision.angleError());
             }
         }
 

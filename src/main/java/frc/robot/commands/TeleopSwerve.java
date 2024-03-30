@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TeleopSwerve extends Command {
@@ -32,6 +33,8 @@ public class TeleopSwerve extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.speedLimitRotSupplier = speedLimitRotSupplier;
+
+        SmartDashboard.putBoolean("Aiming enabled", true);
     }
 
     @Override
@@ -42,18 +45,20 @@ public class TeleopSwerve extends Command {
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
         /* Override rotation if using vision to aim */
-        if (s_Shooter.isAutoAimingActive()) {
-            Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : s_Swerve.dumpShotError();
-            
-            if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
-                rotationVal = 0.0;
-            } else {
-                rotationVal = Swerve.angleErrorToSpeed(angleError);
-            }
-        } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
-            /* Testing -- auto-aim when available */
-            if (IndexSubsystem.getInstance().haveNote() && s_Vision.haveSpeakerTarget()) {                
-                rotationVal = Swerve.angleErrorToSpeed(s_Vision.angleError());
+        if (SmartDashboard.getBoolean("Aiming enabled", true)) {
+            if (s_Shooter.isAutoAimingActive()) {
+                Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : s_Swerve.dumpShotError();
+                
+                if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
+                    rotationVal = 0.0;
+                } else {
+                    rotationVal = Swerve.angleErrorToSpeed(angleError);
+                }
+            } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
+                /* Testing -- auto-aim when available */
+                if (IndexSubsystem.getInstance().haveNote() && s_Vision.haveSpeakerTarget()) {                
+                    rotationVal = Swerve.angleErrorToSpeed(s_Vision.angleError());
+                }
             }
         }
 

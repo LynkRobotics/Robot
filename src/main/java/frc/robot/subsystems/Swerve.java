@@ -192,6 +192,6 @@ public class Swerve extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
-        System.out.println("Swerve: Heading @ " + getHeading().getDegrees());
+        // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());
     }
 }

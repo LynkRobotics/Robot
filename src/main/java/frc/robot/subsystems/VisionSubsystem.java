@@ -157,7 +157,7 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
-      System.out.println("Vision(" + newResult + "," + result.hasTargets() + "): Angle error between speaker @ " + angleToSpeaker().getDegrees() + " and robot @ " + lastPose.getRotation().getDegrees());
+      // System.out.println("Vision(" + newResult + "," + result.hasTargets() + "): Angle error between speaker @ " + angleToSpeaker().getDegrees() + " and robot @ " + lastPose.getRotation().getDegrees());
     }
 
     if (newResult) {

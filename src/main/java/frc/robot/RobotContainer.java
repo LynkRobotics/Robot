@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
+// import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
 import frc.robot.subsystems.ShooterSubsystem.Speed;
 
 /**
@@ -45,23 +45,23 @@ public class RobotContainer {
     private final Trigger intakeButton = driver.leftBumper();
     private final Trigger shooterButton = driver.rightBumper();
     private final Trigger ejectButton = driver.start();
-    private final Trigger leftClimberButton = driver.leftTrigger();
-    private final Trigger rightClimberButton = driver.rightTrigger();
+    // private final Trigger leftClimberButton = driver.leftTrigger();
+    // private final Trigger rightClimberButton = driver.rightTrigger();
     
     /* Different Position Test Buttons */
     private final Trigger ampButton = driver.a();
     private final Trigger dumpShotButton = driver.b();
     private final Trigger defaultShotButton = driver.back();
     private final Trigger slideShotButton = driver.x();
-    //private final Trigger climberExtendButton = driver.y();
+    // private final Trigger climberExtendButton = driver.y();
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
     private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
     private final IndexSubsystem s_Index = new IndexSubsystem();
-    private final ClimberSubsystem s_LeftClimber = new ClimberSubsystem(ClimberSelection.LEFT);
-    private final ClimberSubsystem s_RightClimber = new ClimberSubsystem(ClimberSelection.RIGHT);
+    // private final ClimberSubsystem s_LeftClimber = new ClimberSubsystem(ClimberSelection.LEFT);
+    // private final ClimberSubsystem s_RightClimber = new ClimberSubsystem(ClimberSelection.RIGHT);
     @SuppressWarnings ("unused")
     private final LEDSubsystem s_Led = new LEDSubsystem();
     private final VisionSubsystem s_Vision = new VisionSubsystem();
@@ -171,15 +171,15 @@ public class RobotContainer {
         SmartDashboard.putData("Zero Gyro", Commands.runOnce(s_Swerve::zeroGyro, s_Swerve)); //TODO: Test
 
         // Allow for direct climber control
-        SmartDashboard.putData("Stop climbers", Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber));
-        SmartDashboard.putData("Left down slow", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_LeftClimber));
-        SmartDashboard.putData("Right down slow", Commands.runOnce(() -> { s_RightClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_RightClimber));
+        // SmartDashboard.putData("Stop climbers", Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber));
+        // SmartDashboard.putData("Left down slow", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_LeftClimber));
+        // SmartDashboard.putData("Right down slow", Commands.runOnce(() -> { s_RightClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_RightClimber));
 
-        SmartDashboard.putNumber("Left climber voltage", 0.0);
-        SmartDashboard.putNumber("Right climber voltage", 0.0);
-        SmartDashboard.putData("Set climber voltage", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber));
-        SmartDashboard.putData("Zero climbers", Commands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber));
-        SmartDashboard.putBoolean("climber/Climbers enabled", true);
+        // SmartDashboard.putNumber("Left climber voltage", 0.0);
+        // SmartDashboard.putNumber("Right climber voltage", 0.0);
+        // SmartDashboard.putData("Set climber voltage", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber));
+        // SmartDashboard.putData("Zero climbers", Commands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber));
+        // SmartDashboard.putBoolean("climber/Climbers enabled", true);
 
 /*
         SmartDashboard.putNumber("Left climber target position", 0.0);
@@ -231,8 +231,8 @@ public class RobotContainer {
                 // () -> s_LeftClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError ||
                     //   s_RightClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError));
 
-        leftClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
-        rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
+        // leftClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
+        // rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
         /* Buttons to set the next shot */
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }));

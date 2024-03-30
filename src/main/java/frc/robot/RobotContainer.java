@@ -51,8 +51,8 @@ public class RobotContainer {
     /* Different Position Test Buttons */
     private final Trigger ampButton = driver.a();
     private final Trigger dumpShotButton = driver.b();
-    private final Trigger defaultShotButton = driver.x();
-    private final Trigger slideShotButton = driver.back();
+    private final Trigger defaultShotButton = driver.back();
+    private final Trigger slideShotButton = driver.x();
     //private final Trigger climberExtendButton = driver.y();
 
     /* Subsystems */

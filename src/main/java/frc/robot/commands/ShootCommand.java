@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
@@ -90,7 +91,7 @@ public class ShootCommand extends Command {
       return;
     }
     if (!feeding && shooter.isReady()) {
-      boolean aligned = !autoAim; // "Aligned" if not automatic aiming
+      boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
 
       if (!shooterReady) {
         System.out.println("Shooter is ready");

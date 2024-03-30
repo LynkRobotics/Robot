@@ -52,6 +52,7 @@ public class RobotContainer {
     private final Trigger ampButton = driver.a();
     private final Trigger dumpShotButton = driver.b();
     private final Trigger defaultShotButton = driver.x();
+    private final Trigger slideShotButton = driver.back();
     //private final Trigger climberExtendButton = driver.y();
 
     /* Subsystems */
@@ -230,6 +231,7 @@ public class RobotContainer {
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }));
         defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }));
         dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }));
+        slideShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
     }

@@ -29,6 +29,7 @@ public class ShootCommand extends Command {
   private boolean gone = false;
   private Timer postShotTimer = new Timer();
   private boolean autoAim = true;
+  private boolean shooterReady = false;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -57,6 +58,8 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Spinning up shooter");
+    shooterReady = false;
     LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
     feeding = false;
@@ -88,6 +91,11 @@ public class ShootCommand extends Command {
     }
     if (!feeding && shooter.isReady()) {
       boolean aligned = !autoAim; // "Aligned" if not automatic aiming
+
+      if (!shooterReady) {
+        System.out.println("Shooter is ready");
+        shooterReady = true;
+      }
 
       if (!aligned) {
         if (shooter.usingVision()) {

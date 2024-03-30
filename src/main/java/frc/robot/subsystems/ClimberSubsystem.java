@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private final TalonFX motor;
+  // private final TalonFX motor;
   private final ClimberSelection which;
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final PositionVoltage positionVoltage = new PositionVoltage(1.5).withEnableFOC(true);
@@ -26,7 +26,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public ClimberSubsystem(ClimberSelection which) {
     this.which = which;
-    motor = new TalonFX(which == ClimberSelection.LEFT ? Constants.Climber.leftID : Constants.Climber.rightID, Constants.Climber.CanBus);
+    // motor = new TalonFX(which == ClimberSelection.LEFT ? Constants.Climber.leftID : Constants.Climber.rightID, Constants.Climber.CanBus);
     applyConfigs();
   }
 
@@ -57,34 +57,34 @@ public class ClimberSubsystem extends SubsystemBase {
     //motionMagicConfigs.MotionMagicJerk = Constants.Climber.jerk;
 
     /* Apply Shooters Motor Configs */
-    motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
+    // motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
   }
 
   public void applyVoltage(double voltage) {
-    motor.setControl(voltageOut.withOutput(voltage));
+    // motor.setControl(voltageOut.withOutput(voltage));
   }
 
   public void setPosition(double position) {
-    motor.setControl(positionVoltage.withPosition(position));
+    // motor.setControl(positionVoltage.withPosition(position));
   }
 
-  public double getPosition() {
-    return motor.getPosition().getValueAsDouble();
-  }
+  // public double getPosition() {
+    // return motor.getPosition().getValueAsDouble();
+  // }
 
   public void stop() {
-    motor.setControl(voltageOut.withOutput(0.0));
+    // motor.setControl(voltageOut.withOutput(0.0));
   }
 
   public void zero() {
-    motor.setPosition(0.0);
+    // motor.setPosition(0.0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("climber/" + which.toString() + " position", getPosition());
-    SmartDashboard.putNumber("climber/" + which.toString() + " velocity", motor.getVelocity().getValueAsDouble());
-    SmartDashboard.putNumber("climber/" + which.toString() + " voltage", motor.getMotorVoltage().getValueAsDouble());
+    // SmartDashboard.putNumber("climber/" + which.toString() + " position", getPosition());
+    // SmartDashboard.putNumber("climber/" + which.toString() + " velocity", motor.getVelocity().getValueAsDouble());
+    // SmartDashboard.putNumber("climber/" + which.toString() + " voltage", motor.getMotorVoltage().getValueAsDouble());
   }
 }

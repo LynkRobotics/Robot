@@ -52,7 +52,7 @@ public class RobotContainer {
     private final Trigger ampButton = driver.a();
     private final Trigger dumpShotButton = driver.b();
     private final Trigger defaultShotButton = driver.x();
-    private final Trigger climberExtendButton = driver.y();
+    //private final Trigger climberExtendButton = driver.y();
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -260,5 +260,9 @@ public class RobotContainer {
                 Commands.print("Conditional part over")
             ).withName("Smart HG");
         chooser.addOption("Smart HG", smartHG);
+    }
+
+    public void teleopInit() {
+        s_Vision.disableRotationTargetOverride();
     }
 }

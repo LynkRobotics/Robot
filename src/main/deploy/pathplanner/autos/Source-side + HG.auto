@@ -51,6 +51,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Restore rotation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
@@ -77,6 +83,12 @@
           "type": "path",
           "data": {
             "pathName": "G to source-side shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Restore rotation"
           }
         },
         {

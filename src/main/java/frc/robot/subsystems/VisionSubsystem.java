@@ -61,7 +61,10 @@ public class VisionSubsystem extends SubsystemBase {
       if (!overrideRotation || !haveTarget()) {
           return Optional.empty();
       }
-      return Optional.of(angleToSpeaker());
+      Rotation2d adjustment = new Rotation2d(Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
+      Rotation2d rotation = angleToSpeaker().plus(adjustment); // Adjust angle to PathPlanner coordinates
+      System.out.println("Overriding rotation target to be " + rotation.getDegrees());
+      return Optional.of(rotation);
   }
 
   public static VisionSubsystem getInstance() {
@@ -140,6 +143,7 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
+      System.out.println("Vision(" + newResult + "," + result.hasTargets() + "): Angle error between speaker @ " + angleToSpeaker().getDegrees() + " and robot @ " + lastPose.getRotation().getDegrees());
     }
 
     if (newResult) {

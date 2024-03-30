@@ -89,6 +89,7 @@ public class Robot extends TimedRobot {
       if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
         m_robotContainer.hack();
       }
+      m_robotContainer.teleopInit();
     } else {
       LEDSubsystem.setBaseState(BaseState.READY);
     }

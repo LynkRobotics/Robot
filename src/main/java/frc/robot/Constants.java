@@ -27,7 +27,7 @@ public final class Constants {
         public static final String swerveCanBus = "lynk";
 
         public static final COTSTalonFXSwerveConstants chosenModule =  
-            COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
+            COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2_5);
 
         public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
         public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
@@ -65,7 +65,7 @@ public final class Constants {
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
+        public static final int driveCurrentLimit = 40; 
         public static final int driveCurrentThreshold = 60;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
@@ -90,14 +90,14 @@ public final class Constants {
         public static final double driveKD = 0.0; //Leave driveKD at 0.0
         public static final double driveKF = 0.0; //Leave driveKF at 0.0 
 
-        /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.43; //was 0.32
-        public static final double driveKV = 2.63; //was 1.51
-        public static final double driveKA = 0.15; //was 0.27
+        /* Drive Motor Characterization Values From SYSID */ 
+        public static final double driveKS = 0.32; 
+        public static final double driveKV = 1.51; 
+        public static final double driveKA = 0.27;  
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 5.21208; //L2.5 therotical max speed, test later.
         /* These are theorectial values to start with, tune after
          * Kraken FOC (L1.0): ft/s = 12.4 | m/s = 3.77952
          * Kraken FOC (L1.5): ft/s = 14.2 | m/s = 4.32816
@@ -122,7 +122,7 @@ public final class Constants {
             public static final int angleMotorID = 1;
             public static final int canCoderID = 0;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.62);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(33.83);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -133,7 +133,7 @@ public final class Constants {
             public static final int angleMotorID = 19;
             public static final int canCoderID = 1;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-71.19);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-71.63);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -155,7 +155,7 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 3;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-26.01);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-25.83);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -266,7 +266,7 @@ public final class Constants {
             new Rotation3d(0, Units.degreesToRadians(-31.7), 0));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 0.5; // degrees
-        public static final double calibrationFactor =  0.945; // Lynk HQ = 72 / (113 - 39.6) was .981
+        public static final double calibrationFactor =  0.981; // Lynk HQ = 72 / (113 - 39.6) was .981
         public static final double calibrationOffset = -Units.inchesToMeters(4); // Lynk HQ
         //public static final double calibrationOffset = -0.05; // NCASH
     }

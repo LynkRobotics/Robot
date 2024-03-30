@@ -167,7 +167,7 @@ public final class Constants {
         /* CANBus */
         public static final String intakeMotorCanBus = "rio";
         /* Motor Speed Values */
-        public static final double intakingSpeed = 0.30;
+        public static final double intakingSpeed = 0.50;
         public static final double ejectingSpeed = -0.50;
         public static final double stoppingSpeed = 0.00;
         /* Motor Config Values */

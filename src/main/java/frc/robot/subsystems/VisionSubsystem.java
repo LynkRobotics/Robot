@@ -17,11 +17,15 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.Optional;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
+
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class VisionSubsystem extends SubsystemBase {
   private static VisionSubsystem instance;
@@ -32,6 +36,7 @@ public class VisionSubsystem extends SubsystemBase {
   private double lastEstTimestamp = 0.0;
   private boolean haveTarget = false;
   private Pose2d lastPose  = new Pose2d();
+  private boolean overrideRotation = false;
 
   public VisionSubsystem() {
     assert(instance == null);
@@ -42,8 +47,21 @@ public class VisionSubsystem extends SubsystemBase {
     photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.robotToCam);
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
+    overrideRotation = false;
+    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+
     SmartDashboard.putData("vision/Field", field);
     SmartDashboard.putBoolean("vision/Update dashboard", true);
+  }
+
+  public void enableRotationTargetOverride() { overrideRotation = true; }
+  public void disableRotationTargetOverride() { overrideRotation = false; }
+
+  public Optional<Rotation2d> getRotationTargetOverride() {
+      if (!overrideRotation || !haveTarget()) {
+          return Optional.empty();
+      }
+      return Optional.of(angleToSpeaker());
   }
 
   public static VisionSubsystem getInstance() {

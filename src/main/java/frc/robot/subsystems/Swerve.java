@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -34,6 +35,7 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
 
     private static PIDController rotationPID = new PIDController(0.013, 0.0, 0.0); // TODO Constants
+    private final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
@@ -41,6 +43,8 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
 
         rotationPID.enableContinuousInput(-180.0, 180.0);
+
+        SmartDashboard.putData("swerve/Field", field);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -133,16 +137,16 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
-    public Rotation2d getHeading(){
+    public Rotation2d getHeading() {
         return getPose().getRotation();
     }
 
-    public void setHeading(Rotation2d heading){
+    public void setHeading(Rotation2d heading) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
-    public void zeroHeading(){
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    public void zeroHeading() {
+        setHeading(new Rotation2d());
     }
 
     public Rotation2d getGyroYaw() {
@@ -206,5 +210,7 @@ public class Swerve extends SubsystemBase {
 
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
         // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());
+        SmartDashboard.putString("swerve/Pose", getPose().toString());
+        field.setRobotPose(getPose());
     }
 }

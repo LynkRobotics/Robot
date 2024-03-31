@@ -266,8 +266,8 @@ public final class Constants {
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
         public static final Transform3d robotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(6.0), 0.0, Units.inchesToMeters(13.5)),
-            new Rotation3d(0, Units.degreesToRadians(-31.7), 0));
+            new Translation3d(Units.inchesToMeters(-6.0), 0.0, Units.inchesToMeters(13.5)),
+            new Rotation3d(0, Units.degreesToRadians(-31.7), Math.PI));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 1.0; // degrees
         public static final double calibrationFactor =  0.981; // Lynk HQ = 72 / (113 - 39.6) was .981

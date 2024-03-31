@@ -59,7 +59,7 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Spinning up shooter");
+    // System.out.println("Spinning up shooter");
     shooterReady = false;
     LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
@@ -94,7 +94,7 @@ public class ShootCommand extends Command {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
 
       if (!shooterReady) {
-        System.out.println("Shooter is ready");
+        // System.out.println("Shooter is ready");
         shooterReady = true;
       }
 

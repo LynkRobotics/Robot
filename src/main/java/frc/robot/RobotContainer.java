@@ -281,6 +281,19 @@ public class RobotContainer {
                 Commands.print("Conditional part over")
             ).withName("Smart HG");
         chooser.addOption("Smart HG", smartHG);
+
+        Command smartADE =
+            Commands.sequence(
+                new PathPlannerAuto("Amp-side score + AD"),
+                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+                Commands.either(
+                    Commands.print("Running DE from close").andThen(new PathPlannerAuto("DE from close")),
+                    Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                    s_Index::haveNote
+                ),
+                Commands.print("Conditional part over")
+            ).withName("Smart ADE");
+        chooser.addOption("Smart ADE", smartADE);
     }
 
     public void teleopInit() {

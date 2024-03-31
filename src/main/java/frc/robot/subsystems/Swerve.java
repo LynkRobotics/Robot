@@ -62,7 +62,7 @@ public class Swerve extends SubsystemBase {
                 this::driveRobotRelativeAuto,
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
+                    new PIDConstants(1.5, 0.0, 0.0), // Rotation PID constants
                     // TODO Should rotation PID be higher so that we can aim in auto?
                     Constants.Swerve.maxSpeed, // Max module speed, in m/s
                     Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.

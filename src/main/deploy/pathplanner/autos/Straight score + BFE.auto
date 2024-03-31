@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 6.68
+      "x": 1.33,
+      "y": 5.54
     },
-    "rotation": 60.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp-side SW to A"
+                  "pathName": "Subwoofer to B"
                 }
               },
               {
@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot without aiming"
           }
         },
         {
@@ -53,15 +53,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "A to D"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B to F"
                 }
               }
             ]
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to Amp-side shot"
+            "pathName": "F to B"
           }
         },
         {
@@ -92,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp-side shot to E"
+                  "pathName": "B to E"
                 }
               }
             ]
@@ -101,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "E to Amp-side shot"
+            "pathName": "E to B"
           }
         },
         {
@@ -109,10 +109,16 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B to E"
+          }
         }
       ]
     }
   },
-  "folder": "Amp-side",
+  "folder": "Straight-on",
   "choreoAuto": false
 }

@@ -80,7 +80,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
       Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
       Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
-      Map.entry(Speed.DUMP, new ShooterSpeed(2900, 2900)),
+      Map.entry(Speed.DUMP, new ShooterSpeed(2800, 2800)),
       Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
   ));
 
@@ -208,7 +208,7 @@ public class ShooterSubsystem extends SubsystemBase {
       autoAimingActive = true;
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
-      autoAimingActive = (speed == Speed.DUMP);
+      autoAimingActive = (speed == Speed.DUMP || speed == Speed.SLIDE);
     }
 
     setCurrentSpeed(shooterSpeed);
@@ -267,6 +267,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public boolean dumping() {
     return nextShot == Speed.DUMP || (nextShot == null && defaultSpeed() == Speed.DUMP);
   }
+
+  public boolean sliding() {
+    return nextShot == Speed.SLIDE || (nextShot == null && defaultSpeed() == Speed.SLIDE);
+  }
+
 
   @Override
   public void periodic() {

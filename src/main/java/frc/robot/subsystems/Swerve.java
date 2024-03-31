@@ -176,6 +176,39 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public boolean dumpShotAligned() {
+        if (Math.abs(dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError) {
+            System.out.println("Dump shot w/velocity error: " + rotationPID.getVelocityError());
+            if (Math.abs(rotationPID.getVelocityError()) < 100.0) { // TODO Make constant
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public Rotation2d slideShotError() {
+        Rotation2d robotAngle = getPose().getRotation();
+        if (DriverStation.getAlliance().get() == Alliance.Red){
+            return Constants.Swerve.redSlideAngle.minus(robotAngle);
+        } else {
+            return Constants.Swerve.slideAngle.minus(robotAngle);
+        }
+    }
+
+    public boolean slideShotAligned() {
+        if (Math.abs(slideShotError().getDegrees()) < Constants.Swerve.maxSlideError) {
+            System.out.println("Slide shot w/velocity error: " + rotationPID.getVelocityError());
+            if (Math.abs(rotationPID.getVelocityError()) < 60.0) { // TODO Make constant
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     public static void angleErrorReset() {
         rotationPID.reset();
     }

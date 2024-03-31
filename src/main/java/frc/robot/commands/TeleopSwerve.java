@@ -48,7 +48,7 @@ public class TeleopSwerve extends Command {
         /* Override rotation if using vision to aim */
         if (SmartDashboard.getBoolean("Aiming enabled", true)) {
             if (s_Shooter.isAutoAimingActive()) {
-                Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : s_Swerve.dumpShotError();
+                Rotation2d angleError = s_Shooter.usingVision() ? s_Vision.angleError() : (s_Shooter.dumping() ? s_Swerve.dumpShotError() : (s_Shooter.sliding() ? s_Swerve.slideShotError() : new Rotation2d()));
                 
                 if (!inProgress) {
                     Swerve.angleErrorReset();

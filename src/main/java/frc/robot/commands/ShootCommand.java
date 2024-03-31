@@ -106,7 +106,13 @@ public class ShootCommand extends Command {
           if (swerve == null) {
             System.out.println("ERROR: Cannot aim for dumping without swerve object");
           } else {
-            aligned = Math.abs(swerve.dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError;
+            aligned = swerve.dumpShotAligned();
+          }
+        } else if (shooter.sliding()) {
+          if (swerve == null) {
+            System.out.println("ERROR: Cannot aim for sliding without swerve object");
+          } else {
+            aligned = swerve.slideShotAligned();
           }
         } else {
           // "Aligned" because all other shots don't require alignment

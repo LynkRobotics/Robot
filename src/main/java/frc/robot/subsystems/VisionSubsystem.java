@@ -105,7 +105,7 @@ public class VisionSubsystem extends SubsystemBase {
     return lastPose.getTranslation().minus(speakerLocation());
   }
 
-  private Rotation2d angleToSpeaker() {
+  public Rotation2d angleToSpeaker() {
     return speakerOffset().getAngle();
   }
 

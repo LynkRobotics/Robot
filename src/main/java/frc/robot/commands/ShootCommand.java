@@ -122,6 +122,7 @@ public class ShootCommand extends Command {
       if (aligned) {
         index.feed();
         feeding = true;
+        System.out.println("Shooting from vision angle " + vision.angleToSpeaker() + " @ " + vision.distanceToSpeaker());
       }
     }
     if (topSupplier == null || bottomSupplier == null) {

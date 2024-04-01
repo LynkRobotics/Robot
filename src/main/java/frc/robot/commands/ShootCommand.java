@@ -70,10 +70,12 @@ public class ShootCommand extends Command {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
       if (!DriverStation.isAutonomous() && shooter.usingVision()) {
-        cancelled = !vision.haveTarget(); // TODO Consider removing this vision is integrated into poses
+        cancelled = !vision.haveSpeakerTarget(); // TODO Consider removing this vision is integrated into poses
+        System.out.println("Cancelling ShootCommand due to lack of target");
       }
       if (!cancelled) {
         if (!shooter.shoot()) {
+          System.out.println("Cancelling ShootCommand due to shoot() failure");
           cancelled = true;
         }
       }
@@ -128,6 +130,7 @@ public class ShootCommand extends Command {
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
       if (!shooter.shoot()) {
+        System.out.println("Cancelling ShootCommand due to shoot() failure [2]");
         cancelled = true;
         cancel();
         LEDSubsystem.setTempState(TempState.ERROR);

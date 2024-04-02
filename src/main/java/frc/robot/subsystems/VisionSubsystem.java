@@ -182,7 +182,7 @@ public class VisionSubsystem extends SubsystemBase {
     if (updateDashboard) {
       SmartDashboard.putString("vision/Result", result.toString());
       SmartDashboard.putBoolean("vision/New result", newResult);
-      SmartDashboard.putBoolean("vision/Have target(s)", result.hasTargets());
+      SmartDashboard.putBoolean("vision/Result hasTargets", result.hasTargets());
       SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
       SmartDashboard.putNumber("vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
       SmartDashboard.putString("vision/Last pose", lastPose.toString());

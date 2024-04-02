@@ -196,6 +196,8 @@ public final class Constants {
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
         public static final double maxRPMError = 60.0;
+        public static final double slideShotVelocityErrorMax = 100.0;
+        public static final double dumpShotVelocityErrorMax = 60.0;
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
         public static final double peakReverseVoltage = -12.0;

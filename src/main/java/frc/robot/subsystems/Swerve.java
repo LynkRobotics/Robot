@@ -178,8 +178,7 @@ public class Swerve extends SubsystemBase {
 
     public boolean dumpShotAligned() {
         if (Math.abs(dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError) {
-            System.out.println("Dump shot w/velocity error: " + rotationPID.getVelocityError());
-            if (Math.abs(rotationPID.getVelocityError()) < 100.0) { // TODO Make constant
+            if (Math.abs(rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -199,8 +198,7 @@ public class Swerve extends SubsystemBase {
 
     public boolean slideShotAligned() {
         if (Math.abs(slideShotError().getDegrees()) < Constants.Swerve.maxSlideError) {
-            System.out.println("Slide shot w/velocity error: " + rotationPID.getVelocityError());
-            if (Math.abs(rotationPID.getVelocityError()) < 60.0) { // TODO Make constant
+            if (Math.abs(rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;

@@ -71,7 +71,9 @@ public class ShootCommand extends Command {
     } else {
       if (!DriverStation.isAutonomous() && shooter.usingVision()) {
         cancelled = !vision.haveSpeakerTarget(); // TODO Consider removing this vision is integrated into poses
-        System.out.println("Cancelling ShootCommand due to lack of target");
+        if (cancelled) {
+          System.out.println("Cancelling ShootCommand due to lack of target");
+        }
       }
       if (!cancelled) {
         if (!shooter.shoot()) {

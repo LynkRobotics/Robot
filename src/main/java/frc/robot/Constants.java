@@ -37,7 +37,6 @@ public final class Constants {
         public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
         public static final double maxDumpError = 1.5; // degrees
         public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
-        public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
         public static final double maxSlideError = 3.0; // degrees
 
         /* Drivetrain Constants */

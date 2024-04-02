@@ -188,12 +188,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d slideShotError() {
-        Rotation2d robotAngle = getPose().getRotation();
-        if (DriverStation.getAlliance().get() == Alliance.Red){
-            return Constants.Swerve.redSlideAngle.minus(robotAngle);
-        } else {
-            return Constants.Swerve.slideAngle.minus(robotAngle);
-        }
+        return Constants.Swerve.slideAngle.minus(getPose().getRotation());
     }
 
     public boolean slideShotAligned() {

@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot without aiming"
+            "name": "Fixed SW shot"
           }
         },
         {
@@ -80,7 +80,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -113,6 +113,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight-on",
   "choreoAuto": false
 }

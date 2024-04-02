@@ -82,12 +82,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight on out source-side"
+            "pathName": "B to source-side exit"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight-on",
   "choreoAuto": false
 }

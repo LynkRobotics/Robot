@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -13,18 +12,25 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    private final SwerveModule[] mSwerveMods;
-    private final Pigeon2 gyro;
+    private boolean speedLimit = false;
+
+    public SwerveModule[] mSwerveMods;
+    public Pigeon2 gyro;
+
+    private final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
 
+        SmartDashboard.putData("swerve/Field", field);
+        
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
             new SwerveModule(1, Constants.Swerve.Mod1.constants),
@@ -63,16 +69,6 @@ public class Swerve extends SubsystemBase {
         }
     }    
 
-    /* Used by SwerveControllerCommand in Auto */
-    // TODO Remove me
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-        
-        for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
-        }
-    }
-
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
@@ -107,21 +103,16 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(gyro.getYaw().getValue() + 180.0);
     }
 
-    public static double angleErrorToSpeed(Rotation2d angleError) {
-        double angleErrorDeg = angleError.getDegrees();
-        double magnitude = Math.abs(angleErrorDeg);
-        double rotationVal = 0.0;
+    public void enableSpeedLimit() {
+        speedLimit = true;
+    }
 
-        if (magnitude > 10.0) {
-            rotationVal = 0.10 * Math.signum(angleErrorDeg);
-        } else if (magnitude > 7.0) {
-            rotationVal = 0.06 * Math.signum(angleErrorDeg);
-        } else if (magnitude > 3.0) {
-            rotationVal = 0.04 * Math.signum(angleErrorDeg);
-        } else if (magnitude > 0.3) {
-            rotationVal = 0.03 * Math.signum(angleErrorDeg);
-        }
-        return rotationVal;
+    public void disableSpeedLimit() {
+        speedLimit = false;
+    }
+
+    public double getSpeedLimitRot() {
+        return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
     @Override
@@ -131,7 +122,5 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
-
-        //SmartDashboard.putNumber("Swerve/Gyro", getHeading().getDegrees());
     }
 }

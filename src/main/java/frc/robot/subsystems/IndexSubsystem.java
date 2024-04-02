@@ -14,20 +14,34 @@ import frc.robot.Constants;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
 
 public class IndexSubsystem extends SubsystemBase {
+  private static IndexSubsystem instance = null;
   private final TalonFX indexMotor;
   private final DutyCycleOut indexSpeedDutyCycleOut;
-  private final DigitalInput indexSensor;
+  private final DigitalInput leftIndexSensor;
+  private final DigitalInput rightIndexSensor;
   private boolean haveNote = false;
 
   public IndexSubsystem() {
+    assert(instance == null);
+    instance = this;
+
     indexMotor = new TalonFX(Constants.Index.indexMotorID, Constants.Index.indexMotorCanBus);
     indexSpeedDutyCycleOut = new DutyCycleOut(0);
-    indexSensor = new DigitalInput(Constants.Index.indexSensorID);
     applyConfigs();
+
+    leftIndexSensor = new DigitalInput(Constants.Index.leftIndexSensorID);
+    rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
+    SmartDashboard.putBoolean("indexer/Left sensor enabled", true);
+    SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
+  }
+
+  public static IndexSubsystem getInstance() {
+    return instance;
   }
 
   public boolean haveNote() {
-    return !indexSensor.get();
+    return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
+      (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());
   }
 
   public void applyConfigs() {
@@ -72,6 +86,8 @@ public class IndexSubsystem extends SubsystemBase {
       haveNote = currentVal;
       LEDSubsystem.setBaseState(haveNote ? BaseState.NOTE : BaseState.EMPTY);
     }
-    SmartDashboard.putBoolean("Have note", haveNote);
+    SmartDashboard.putBoolean("indexer/Have note", haveNote);
+    SmartDashboard.putBoolean("indexer/Left sensor", leftIndexSensor.get());
+    SmartDashboard.putBoolean("indexer/Right sensor", rightIndexSensor.get());
   }
 }

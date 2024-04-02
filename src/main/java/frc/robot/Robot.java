@@ -86,9 +86,10 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-      if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+      if (isRed()) {
         m_robotContainer.hack();
       }
+      m_robotContainer.teleopInit();
     } else {
       LEDSubsystem.setBaseState(BaseState.READY);
     }
@@ -115,4 +116,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  public static boolean isRed() {
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
+  }
 }

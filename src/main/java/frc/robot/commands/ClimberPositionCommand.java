@@ -36,13 +36,14 @@ public class ClimberPositionCommand extends Command {
     } else if (!SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
       System.out.println("ERROR: Attempt to use climbers, but they are disabled");
       cancelled = true;
+    } else {
+      cancelled = false;
     }
     if (cancelled) {
       cancel();
       LEDSubsystem.setTempState(TempState.ERROR);
       return;
     }
-    cancelled = false;
     LEDSubsystem.setTempState(ledState);
     s_Climber.setPosition(position);
   }
@@ -66,9 +67,10 @@ public class ClimberPositionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (cancelled) {
-      return true;
-    }
-    return Math.abs(s_Climber.getPosition() - position) < Constants.Climber.positionError;
+    // if (cancelled) {
+      // return true;
+    // }
+    // return Math.abs(s_Climber.getPosition() - position) < Constants.Climber.positionError;
+    return false;
   }
 }

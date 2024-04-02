@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
@@ -30,6 +31,7 @@ public class ShootCommand extends Command {
   private boolean gone = false;
   private Timer postShotTimer = new Timer();
   private boolean autoAim = true;
+  private boolean shooterReady = false;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -58,6 +60,8 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // System.out.println("Spinning up shooter");
+    shooterReady = false;
     LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
     feeding = false;
@@ -67,10 +71,14 @@ public class ShootCommand extends Command {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
       if (!DriverStation.isAutonomous() && shooter.usingVision()) {
-        cancelled = !vision.haveTarget(); // TODO Consider removing this vision is integrated into poses
+        cancelled = !vision.haveSpeakerTarget(); // TODO Consider removing this vision is integrated into poses
+        if (cancelled) {
+          System.out.println("Cancelling ShootCommand due to lack of target");
+        }
       }
       if (!cancelled) {
         if (!shooter.shoot()) {
+          System.out.println("Cancelling ShootCommand due to shoot() failure");
           cancelled = true;
         }
       }
@@ -88,17 +96,28 @@ public class ShootCommand extends Command {
       return;
     }
     if (!feeding && shooter.isReady()) {
-      boolean aligned = !autoAim; // "Aligned" if not automatic aiming
+      boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
+
+      if (!shooterReady) {
+        // System.out.println("Shooter is ready");
+        shooterReady = true;
+      }
 
       if (!aligned) {
         if (shooter.usingVision()) {
           // Aligned if vision is aligned with target
-          aligned = Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
+          aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
         } else if (shooter.dumping()) {
           if (swerve == null) {
             System.out.println("ERROR: Cannot aim for dumping without swerve object");
           } else {
-            aligned = Math.abs(PoseSubsystem.getInstance().dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError;
+            aligned = PoseSubsystem.getInstance().dumpShotAligned();
+          }
+        } else if (shooter.sliding()) {
+          if (swerve == null) {
+            System.out.println("ERROR: Cannot aim for sliding without swerve object");
+          } else {
+            aligned = PoseSubsystem.getInstance().slideShotAligned();
           }
         } else {
           // "Aligned" because all other shots don't require alignment
@@ -108,11 +127,13 @@ public class ShootCommand extends Command {
       if (aligned) {
         index.feed();
         feeding = true;
+        System.out.printf("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), vision.distanceToSpeaker());
       }
     }
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
       if (!shooter.shoot()) {
+        System.out.println("Cancelling ShootCommand due to shoot() failure [2]");
         cancelled = true;
         cancel();
         LEDSubsystem.setTempState(TempState.ERROR);

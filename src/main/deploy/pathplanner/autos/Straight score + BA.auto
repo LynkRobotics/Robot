@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot without aiming"
+            "name": "Fixed SW shot"
           }
         },
         {
@@ -78,10 +78,29 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp-side shot to D"
+                }
+              }
+            ]
+          }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight-on",
   "choreoAuto": false
 }

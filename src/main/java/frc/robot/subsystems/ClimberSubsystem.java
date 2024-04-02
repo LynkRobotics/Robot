@@ -38,8 +38,8 @@ public class ClimberSubsystem extends SubsystemBase {
     /* Set the Shooters motor direction */
     m_ClimberMotorsConfiguration.MotorOutput.Inverted = Constants.Climber.motorOutputInverted;
     /* Config the peak outputs */
-    m_ClimberMotorsConfiguration.Voltage.PeakForwardVoltage = 12.0; //Constants.Climber.peakForwardVoltage;
-    m_ClimberMotorsConfiguration.Voltage.PeakReverseVoltage = -12.0; //Constants.Climber.peakReverseVoltage;
+    m_ClimberMotorsConfiguration.Voltage.PeakForwardVoltage = Constants.Climber.peakForwardVoltage;
+    m_ClimberMotorsConfiguration.Voltage.PeakReverseVoltage = Constants.Climber.peakReverseVoltage;
 
     // PID & FF configuration
     m_ClimberMotorsConfiguration.Slot0.kP = Constants.Climber.kP;
@@ -57,7 +57,7 @@ public class ClimberSubsystem extends SubsystemBase {
     //motionMagicConfigs.MotionMagicJerk = Constants.Climber.jerk;
 
     /* Apply Shooters Motor Configs */
-    motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
+    // motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
   }
 
   public void applyVoltage(double voltage) {
@@ -73,11 +73,11 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    motor.setControl(voltageOut.withOutput(0.0));
+    // motor.setControl(voltageOut.withOutput(0.0));
   }
 
   public void zero() {
-    motor.setPosition(0.0);
+    // motor.setPosition(0.0);
   }
 
   @Override

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 6.65
+      "x": 0.68,
+      "y": 6.68
     },
     "rotation": 60.0
   },
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot without aiming"
+            "name": "Fixed SW shot"
           }
         },
         {
@@ -51,6 +51,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Amp-side",
   "choreoAuto": false
 }

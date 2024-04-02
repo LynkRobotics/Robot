@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.298242778303738,
-        "y": 2.2575565151130306
+        "x": 8.35,
+        "y": 2.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.38343906635571,
-        "y": 2.309916733811638
+        "x": 8.435196288051971,
+        "y": 2.5523602186986074
       },
       "isLocked": false,
       "linkedName": "G Note"
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Override rotation"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,
@@ -39,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -50.0,
     "rotateFast": false
   },
   "reversed": false,

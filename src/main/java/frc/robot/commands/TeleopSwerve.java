@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseSubsystem;
+import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
@@ -21,9 +22,10 @@ public class TeleopSwerve extends Command {
     private final DoubleSupplier translationSup;
     private final DoubleSupplier strafeSup;
     private final DoubleSupplier rotationSup;
+    private DoubleSupplier speedLimitRotSupplier;
+    private boolean inProgress = false;
 
-    public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup,
-            DoubleSupplier rotationSup) {
+    public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedLimitRotSupplier) {
         this.s_Swerve = s_Swerve;
         this.s_Shooter = s_Shooter;
         this.s_Vision = s_Vision;
@@ -32,6 +34,9 @@ public class TeleopSwerve extends Command {
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
+        this.speedLimitRotSupplier = speedLimitRotSupplier;
+
+        SmartDashboard.putBoolean("Aiming enabled", true);
     }
 
     @Override
@@ -42,24 +47,59 @@ public class TeleopSwerve extends Command {
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
         /* Override rotation if using vision to aim */
-        if (s_Shooter.isAutoAimingActive()) {
-            Rotation2d angleError;
-            if (s_Shooter.usingVision()) {
-                if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
-                    angleError = s_Vision.angleError();
+        if (SmartDashboard.getBoolean("Aiming enabled", true)) {
+            if (s_Shooter.isAutoAimingActive()) {
+                Rotation2d angleError;
+                
+                if (s_Shooter.usingVision()) {
+                    if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+                        angleError = s_Vision.angleError();
+                    } else {
+                        angleError = PoseSubsystem.getInstance().angleError();
+                    }
+                } else if (s_Shooter.dumping()) {
+                    angleError = PoseSubsystem.getInstance().dumpShotError();
+                } else if (s_Shooter.sliding()) {
+                    angleError = PoseSubsystem.getInstance().slideShotError();
                 } else {
-                    angleError = PoseSubsystem.getInstance().angleError();
+                    System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding");
+                    angleError = new Rotation2d();
                 }
+                
+                if (!inProgress) {
+                    PoseSubsystem.angleErrorReset();
+                }
+                inProgress = true;
+                if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
+                    rotationVal = 0.0;
+                } else {
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                }
+            } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
+                /* Testing -- auto-aim when available */
+                if (IndexSubsystem.getInstance().haveNote() && s_Vision.haveSpeakerTarget()) {                
+                    if (!inProgress) {
+                        PoseSubsystem.angleErrorReset();
+                    }
+                    inProgress = true;
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(s_Vision.angleError());
+                } else {
+                    inProgress = false;
+                }
+                inProgress = false;
             } else {
-                angleError = PoseSubsystem.getInstance().dumpShotError();
+                inProgress = false;
             }
-            rotationVal = Swerve.angleErrorToSpeed(angleError);
+        } else {
+            inProgress = false;
         }
 
         /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-            rotationVal * Constants.Swerve.maxAngularVelocity,
-            true);
+            rotationVal * Constants.Swerve.maxAngularVelocity * speedLimitRotSupplier.getAsDouble(), 
+            true
+        );
+        // SmartDashboard.putNumber("rotationValue", speedLimitRotSupplier.getAsDouble());
     }
 }

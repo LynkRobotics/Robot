@@ -103,15 +103,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "A to D"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A to D"
                 }
               }
             ]
@@ -132,6 +132,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight-on",
   "choreoAuto": false
 }

@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot without aiming"
+            "name": "Fixed SW shot"
           }
         },
         {
@@ -51,6 +51,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Restore rotation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
@@ -59,15 +65,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Source-side shot to G"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source-side shot to G"
                 }
               }
             ]
@@ -82,12 +88,18 @@
         {
           "type": "named",
           "data": {
+            "name": "Restore rotation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Source-side",
   "choreoAuto": false
 }

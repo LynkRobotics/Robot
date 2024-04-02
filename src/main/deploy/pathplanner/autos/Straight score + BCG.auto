@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot without aiming"
+            "name": "Fixed SW shot"
           }
         },
         {
@@ -80,19 +80,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "B to G"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B to G"
                 }
               }
             ]
@@ -113,6 +113,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Straight-on",
   "choreoAuto": false
 }

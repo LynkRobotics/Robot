@@ -62,6 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
     FULL,
     VISION,
     OTF,
+    SLIDE,
     DUMP,
     EJECT
   };
@@ -73,25 +74,26 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.INTAKE, new ShooterSpeed(Constants.Shooter.intakeSpeed, Constants.Shooter.intakeSpeed)),
       Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
       Map.entry(Speed.AMP, new ShooterSpeed(300, 900)),
-      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1400, 2900)),
+      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1300, 3100)),
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
       Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
-      Map.entry(Speed.DUMP, new ShooterSpeed(3000, 3000)),
+      Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
+      Map.entry(Speed.DUMP, new ShooterSpeed(2700, 2700)),
       Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
-    new ShooterCalibration(40.5/12.0, new ShooterSpeed(1400, 2900)),
-    new ShooterCalibration(4.0, new ShooterSpeed(1400, 2700)),
-    new ShooterCalibration(5.0, new ShooterSpeed(2200, 2200)),
-    new ShooterCalibration(6.0, new ShooterSpeed(2700, 2200)),
-    new ShooterCalibration(7.0, new ShooterSpeed(3000, 1900)),
-    new ShooterCalibration(8.0, new ShooterSpeed(2900, 1700)),
-    new ShooterCalibration(9.0, new ShooterSpeed(2800, 1550)),
-    new ShooterCalibration(10.0, new ShooterSpeed(2800, 1450)),
-    new ShooterCalibration(11.0, new ShooterSpeed(2700, 1400)),
+    new ShooterCalibration(35.9, new ShooterSpeed(1200, 3200)),
+    new ShooterCalibration(46.9, new ShooterSpeed(1500, 2500)),
+    new ShooterCalibration(59.5, new ShooterSpeed(2200, 2200)),
+    new ShooterCalibration(72.2, new ShooterSpeed(2700, 2200)),
+    new ShooterCalibration(83.5, new ShooterSpeed(3000, 1900)),
+    new ShooterCalibration(95.7, new ShooterSpeed(2900, 1700)),
+    new ShooterCalibration(108.1, new ShooterSpeed(2800, 1550)),
+    new ShooterCalibration(120.9, new ShooterSpeed(2800, 1450)),
+    new ShooterCalibration(132.0, new ShooterSpeed(2700, 1400))
   };
 
   public ShooterSubsystem() {
@@ -153,7 +155,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private ShooterSpeed speedFromDistance(double meters) {
-    double distance = Units.metersToFeet(meters);
+    double distance = Units.metersToInches(meters);
     ShooterCalibration priorEntry = null;
     ShooterSpeed speed = null;
 
@@ -212,7 +214,7 @@ public class ShooterSubsystem extends SubsystemBase {
       autoAimingActive = true;
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
-      autoAimingActive = (speed == Speed.DUMP);
+      autoAimingActive = (speed == Speed.DUMP || speed == Speed.SLIDE);
     }
 
     setCurrentSpeed(shooterSpeed);
@@ -271,6 +273,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public boolean dumping() {
     return nextShot == Speed.DUMP || (nextShot == null && defaultSpeed() == Speed.DUMP);
   }
+
+  public boolean sliding() {
+    return nextShot == Speed.SLIDE || (nextShot == null && defaultSpeed() == Speed.SLIDE);
+  }
+
 
   @Override
   public void periodic() {

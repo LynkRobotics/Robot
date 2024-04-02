@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,7 +22,10 @@ public class AimCommand extends Command {
     public void execute() {
         // TODO Remove code duplication with TeleopSwerve (or need for this entirely)
         Rotation2d angleError = s_Vision.angleError();
-        double rotationVal = Swerve.angleErrorToSpeed(angleError);
+        double rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+        if (!s_Vision.haveTarget()) {
+            rotationVal = 0.0;
+        }
         /* Drive */
         s_Swerve.drive(
             new Translation2d(0, 0),

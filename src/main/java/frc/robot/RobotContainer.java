@@ -91,8 +91,8 @@ public class RobotContainer {
                         s_Swerve::getSpeedLimitRot
                         ));
 
-        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter));
-        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index));
+        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter).withName("Shooter Idle"));
+        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index).withName("Index Stop"));
 
         SmartDashboard.putData("Command scheduler", CommandScheduler.getInstance());
 
@@ -225,13 +225,15 @@ public class RobotContainer {
                     new IntakeCommand(s_Intake, s_Index, driver.getHID()),
                     () -> SmartDashboard.getBoolean("Shooter intake", false)),
                 Commands.runOnce(s_Swerve::disableSpeedLimit))
-            .handleInterrupt(s_Swerve::disableSpeedLimit));
+            .handleInterrupt(s_Swerve::disableSpeedLimit)
+            .withName("Intake"));
         shooterButton.whileTrue(
             Commands.either(new ShootCommand(s_Shooter, s_Index,
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
                 () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
             new ShootCommand(s_Shooter, s_Index, s_Swerve),
-            () -> SmartDashboard.getBoolean("Direct set RPM", false)));
+            () -> SmartDashboard.getBoolean("Direct set RPM", false))
+            .withName("Shoot"));
         // climberExtendButton.onTrue(
             // Commands.either(
                 // new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
@@ -245,14 +247,14 @@ public class RobotContainer {
         // rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
         /* Buttons to set the next shot */
-        ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }));
-        defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }));
-        dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }));
-        slideShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }));
+        ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }).withName("Set amp shot"));
+        defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }).withName("Set default shot"));
+        dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }).withName("Set dump shot"));
+        slideShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }).withName("Set slide shot"));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
 
-        ampShotButton.whileTrue(ampPathCommand());
+        ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
     }
 
     public void hack(){

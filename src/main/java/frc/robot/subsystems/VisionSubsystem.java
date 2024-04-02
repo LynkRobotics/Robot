@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,8 +14,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -122,7 +121,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private Translation2d speakerLocation() {
-    return (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? Constants.Vision.blueSpeakerLocation : Constants.Vision.redSpeakerLocation);
+    return (Robot.isRed() ? Constants.Vision.redSpeakerLocation : Constants.Vision.blueSpeakerLocation);
   }
 
   // Distance from center of robot to speaker
@@ -138,15 +137,31 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double distanceToSpeaker() {
+    boolean isRed = Robot.isRed();
     double distance = distanceToSpeakerFromCenter();
-    distance *= Constants.Vision.calibrationFactor; // fudge factor based on calibration between two points
-    distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-    distance += Constants.Vision.calibrationOffset; // fudge amount based on calibration after factor is applied
+
+    // Fudge factor based on calibration between two points
+    if (isRed) {
+      distance *= Constants.Vision.calibrationFactorRed;
+    } else {
+      distance *= Constants.Vision.calibrationFactorBlue;
+    }
+
+    // Distance from center of robot to reference point
+    distance -= Constants.Vision.centerToReferenceOffset;
+
+    // Fudge amount based on calibration after factor is applied
+    if (isRed) {
+      distance += Constants.Vision.calibrationOffsetRed;
+    } else {
+      distance += Constants.Vision.calibrationOffsetBlue;
+    }
+
     return distance;
   }
 
   private boolean isSpeakerId(int id) {
-    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+    if (Robot.isRed()) {
       return (id == 3 || id == 4);
     } else {
       return (id == 7 || id == 8);
@@ -154,7 +169,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private boolean isAmpId(int id) {
-    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+    if (Robot.isRed()) {
       return (id == 5);
     } else {
       return (id == 6);
@@ -230,4 +245,6 @@ public class VisionSubsystem extends SubsystemBase {
  *  14. Verify that the "distance" as meansured by vision to speaker in inches is approximately 108.125, or other value measured against reference equipment
  *  15. Optionally compare other distances against values measured against reference equipment for additional verification
  *  16. Use values from vision when calibrating the Shooter subsystem
+ * 
+ * Repeat for both Red and Blue
  */

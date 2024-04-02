@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
-
+import frc.robot.Robot;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -21,8 +21,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -68,17 +66,7 @@ public class Swerve extends SubsystemBase {
                     Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
+                Robot::isRed,
                 this // Reference to this subsystem to set requirements
             );
     }
@@ -169,10 +157,10 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d dumpShotError() {
         Rotation2d robotAngle = getPose().getRotation();
-        if (DriverStation.getAlliance().get() == Alliance.Red){
+        if (Robot.isRed()){
             return Constants.Swerve.redDumpAngle.minus(robotAngle);
         } else {
-            return Constants.Swerve.dumpAngle.minus(robotAngle);    
+            return Constants.Swerve.dumpAngle.minus(robotAngle);
         }
     }
 

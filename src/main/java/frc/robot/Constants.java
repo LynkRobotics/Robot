@@ -274,9 +274,10 @@ public final class Constants {
             new Rotation3d(0, Units.degreesToRadians(-31.7), Math.PI));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactor =  0.981; // Lynk HQ = 72 / (113 - 39.6) was .981
-        public static final double calibrationOffset = -Units.inchesToMeters(4); // Lynk HQ
-        //public static final double calibrationOffset = -0.05; // NCASH
+        public static final double calibrationFactorRed  =  0.981; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945
+        public static final double calibrationOffsetRed  = -Units.inchesToMeters(2.2); // Lynk HQ = 2.2, NCMEC = 4.0
+        public static final double calibrationFactorBlue =  0.981; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945
+        public static final double calibrationOffsetBlue = -Units.inchesToMeters(2.2); // Lynk HQ = 2.2, NCMEC = 3.25
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

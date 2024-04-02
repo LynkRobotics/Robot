@@ -141,21 +141,13 @@ public class VisionSubsystem extends SubsystemBase {
     double distance = distanceToSpeakerFromCenter();
 
     // Fudge factor based on calibration between two points
-    if (isRed) {
-      distance *= Constants.Vision.calibrationFactorRed;
-    } else {
-      distance *= Constants.Vision.calibrationFactorBlue;
-    }
+    distance *= isRed ? Constants.Vision.calibrationFactorRed : Constants.Vision.calibrationFactorBlue;
 
     // Distance from center of robot to reference point
     distance -= Constants.Vision.centerToReferenceOffset;
 
     // Fudge amount based on calibration after factor is applied
-    if (isRed) {
-      distance += Constants.Vision.calibrationOffsetRed;
-    } else {
-      distance += Constants.Vision.calibrationOffsetBlue;
-    }
+    distance += isRed ? Constants.Vision.calibrationOffsetRed : Constants.Vision.calibrationOffsetBlue;
 
     return distance;
   }

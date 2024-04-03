@@ -97,7 +97,6 @@ public class ShootCommand extends Command {
     }
     if (!feeding && shooter.isReady()) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
-
       if (!shooterReady) {
         // System.out.println("Shooter is ready");
         shooterReady = true;

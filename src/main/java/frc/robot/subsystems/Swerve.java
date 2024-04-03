@@ -16,7 +16,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -32,7 +31,6 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    private static PIDController rotationPID = new PIDController(0.013, 0.0, 0.0); // TODO Constants
     private final Field2d field = new Field2d();
 
     public Swerve() {
@@ -40,7 +38,9 @@ public class Swerve extends SubsystemBase {
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
 
-        rotationPID.enableContinuousInput(-180.0, 180.0);
+        Constants.Swerve.rotationPID.enableContinuousInput(-180.0, 180.0);
+        Constants.Swerve.rotationPID.setIZone(Constants.Swerve.rotationIZone); // Only use Integral term within this range
+        Constants.Swerve.rotationPID.reset();
 
         SmartDashboard.putData("swerve/Field", field);
         
@@ -166,7 +166,7 @@ public class Swerve extends SubsystemBase {
 
     public boolean dumpShotAligned() {
         if (Math.abs(dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError) {
-            if (Math.abs(rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
+            if (Math.abs(Constants.Swerve.rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -181,7 +181,7 @@ public class Swerve extends SubsystemBase {
 
     public boolean slideShotAligned() {
         if (Math.abs(slideShotError().getDegrees()) < Constants.Swerve.maxSlideError) {
-            if (Math.abs(rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
+            if (Math.abs(Constants.Swerve.rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -191,13 +191,13 @@ public class Swerve extends SubsystemBase {
     }
 
     public static void angleErrorReset() {
-        rotationPID.reset();
+        Constants.Swerve.rotationPID.reset();
     }
 
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
 
-        return MathUtil.clamp(-rotationPID.calculate(angleErrorDeg), -1.0, 1.0);
+        return MathUtil.clamp(-Constants.Swerve.rotationPID.calculate(angleErrorDeg), -1.0, 1.0);
     }
 
     public void enableSpeedLimit() {

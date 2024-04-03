@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -30,6 +32,7 @@ public class PoseSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field;
     private static PIDController rotationPID = new PIDController(0.013, 0.0, 0.0); // TODO Constants
+    private final Pigeon2 gyro;
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
         assert(instance == null);
@@ -38,9 +41,13 @@ public class PoseSubsystem extends SubsystemBase {
         this.s_Swerve = s_Swerve;
         this.s_Vision = s_Vision;
 
+        gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
+        gyro.getConfigurator().apply(new Pigeon2Configuration());
+        gyro.setYaw(0);        
+
         rotationPID.enableContinuousInput(-180.0, 180.0);
 
-        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, s_Swerve.getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
+        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
         field = new Field2d();
         SmartDashboard.putData("pose/Field", field);
@@ -68,12 +75,24 @@ public class PoseSubsystem extends SubsystemBase {
         return instance;
     }
     
+    public Rotation2d getGyroYaw() {
+        return Rotation2d.fromDegrees(gyro.getYaw().getValue());
+    }
+
+    public void zeroGyro() {
+        gyro.setYaw(0);
+    }
+
+    public void hack() {
+        gyro.setYaw(gyro.getYaw().getValue() + 180.0);
+    }
+
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
     public void setPose(Pose2d pose) {
-        poseEstimator.resetPosition(s_Swerve.getGyroYaw(), s_Swerve.getModulePositions(), pose);
+        poseEstimator.resetPosition(getGyroYaw(), s_Swerve.getModulePositions(), pose);
     }
 
     public Rotation2d getHeading() {
@@ -81,7 +100,7 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public void setHeading(Rotation2d heading) {
-        poseEstimator.resetPosition(s_Swerve.getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
+        poseEstimator.resetPosition(getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
     public void zeroHeading() {
@@ -161,7 +180,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        poseEstimator.update(s_Swerve.getGyroYaw(), s_Swerve.getModulePositions());
+        poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
         if (DriverStation.isTeleop() || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("Use Vision Pose in Auto", false))) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {

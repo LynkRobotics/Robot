@@ -207,7 +207,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
       shooterSpeed = speedFromDistance(distance);
       if (shooterSpeed == null) {
-        System.out.println("ShooterSubsystem::setCurrentSpeed: distance too far");
+        System.out.printf("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance));
         return false;
       }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);

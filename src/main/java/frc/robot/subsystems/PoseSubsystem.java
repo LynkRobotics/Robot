@@ -45,7 +45,9 @@ public class PoseSubsystem extends SubsystemBase {
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);        
 
-        rotationPID.enableContinuousInput(-180.0, 180.0);
+        Constants.Swerve.rotationPID.enableContinuousInput(-180.0, 180.0);
+        Constants.Swerve.rotationPID.setIZone(Constants.Swerve.rotationIZone); // Only use Integral term within this range
+        Constants.Swerve.rotationPID.reset();
 
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
@@ -129,7 +131,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public boolean dumpShotAligned() {
         if (Math.abs(dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError) {
-            if (Math.abs(rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
+            if (Math.abs(Constants.Swerve.rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -144,7 +146,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public boolean slideShotAligned() {
         if (Math.abs(slideShotError().getDegrees()) < Constants.Swerve.maxSlideError) {
-            if (Math.abs(rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
+            if (Math.abs(Constants.Swerve.rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -154,7 +156,7 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public static void angleErrorReset() {
-        rotationPID.reset();
+        Constants.Swerve.rotationPID.reset();
     }
 
     private Translation2d speakerOffset() {

@@ -4,6 +4,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -38,6 +39,8 @@ public final class Constants {
         public static final double maxDumpError = 1.5; // degrees
         public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
         public static final double maxSlideError = 3.0; // degrees
+        public static final PIDController rotationPID = new PIDController(0.013, 0.02, 0.0);
+        public static final double rotationIZone = 2.5; // degrees
 
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(21.75); 

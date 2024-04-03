@@ -25,7 +25,6 @@ public final class Constants {
     public static final boolean tuningMode = true;
 
     public static final class Swerve {
-        public static final int pigeonID = 1;
         public static final String swerveCanBus = "lynk";
 
         // Multipliers when speed limit is in effect;
@@ -33,14 +32,6 @@ public final class Constants {
 
         public static final COTSTalonFXSwerveConstants chosenModule =  
             COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2_5);
-
-        public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
-        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
-        public static final double maxDumpError = 1.5; // degrees
-        public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
-        public static final double maxSlideError = 3.0; // degrees
-        public static final PIDController rotationPID = new PIDController(0.013, 0.02, 0.0);
-        public static final double rotationIZone = 2.5; // degrees
 
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(21.75); 
@@ -170,6 +161,21 @@ public final class Constants {
         }
     }
 
+    public class Pose {
+        public static final int pigeonID = 1;
+
+        public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
+        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
+        public static final double maxDumpError = 1.5; // degrees
+        public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
+        public static final double maxSlideError = 3.0; // degrees
+        public static final PIDController rotationPID = new PIDController(0.013, 0.02, 0.0);
+        public static final double rotationIZone = 2.5; // degrees
+
+        public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
+        public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
+    }
+
     public class Intake {
         /* IDs */
         public static final int intakeMotorID = 3;
@@ -270,8 +276,6 @@ public final class Constants {
 
     public static final class Vision {
         public static final String cameraName = "Arducam_OV2311_USB_Camera";
-        public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
-        public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
         public static final Transform3d robotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(-6.0), 0.0, Units.inchesToMeters(13.5)),
             new Rotation3d(0, Units.degreesToRadians(-31.7), Math.PI));

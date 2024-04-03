@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Pose;
 import frc.robot.Robot;
 
 public class PoseSubsystem extends SubsystemBase {
@@ -41,13 +42,13 @@ public class PoseSubsystem extends SubsystemBase {
         this.s_Swerve = s_Swerve;
         this.s_Vision = s_Vision;
 
-        gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);
+        gyro = new Pigeon2(Pose.pigeonID, Constants.Swerve.swerveCanBus);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);        
 
-        Constants.Swerve.rotationPID.enableContinuousInput(-180.0, 180.0);
-        Constants.Swerve.rotationPID.setIZone(Constants.Swerve.rotationIZone); // Only use Integral term within this range
-        Constants.Swerve.rotationPID.reset();
+        Pose.rotationPID.enableContinuousInput(-180.0, 180.0);
+        Pose.rotationPID.setIZone(Pose.rotationIZone); // Only use Integral term within this range
+        Pose.rotationPID.reset();
 
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
@@ -110,7 +111,7 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public Translation2d speakerLocation() {
-        return (Robot.isRed() ? Constants.Vision.redSpeakerLocation : Constants.Vision.blueSpeakerLocation);
+        return (Robot.isRed() ? Pose.redSpeakerLocation : Pose.blueSpeakerLocation);
     }
 
     public double distanceToSpeaker() {
@@ -123,15 +124,15 @@ public class PoseSubsystem extends SubsystemBase {
     public Rotation2d dumpShotError() {
         Rotation2d robotAngle = getPose().getRotation();
         if (Robot.isRed()){
-            return Constants.Swerve.redDumpAngle.minus(robotAngle);
+            return Pose.redDumpAngle.minus(robotAngle);
         } else {
-            return Constants.Swerve.dumpAngle.minus(robotAngle);
+            return Pose.dumpAngle.minus(robotAngle);
         }
     }
 
     public boolean dumpShotAligned() {
-        if (Math.abs(dumpShotError().getDegrees()) < Constants.Swerve.maxDumpError) {
-            if (Math.abs(Constants.Swerve.rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
+        if (Math.abs(dumpShotError().getDegrees()) < Pose.maxDumpError) {
+            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -141,12 +142,12 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public Rotation2d slideShotError() {
-        return Constants.Swerve.slideAngle.minus(getPose().getRotation());
+        return Pose.slideAngle.minus(getPose().getRotation());
     }
 
     public boolean slideShotAligned() {
-        if (Math.abs(slideShotError().getDegrees()) < Constants.Swerve.maxSlideError) {
-            if (Math.abs(Constants.Swerve.rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
+        if (Math.abs(slideShotError().getDegrees()) < Pose.maxSlideError) {
+            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -156,7 +157,7 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public static void angleErrorReset() {
-        Constants.Swerve.rotationPID.reset();
+        Pose.rotationPID.reset();
     }
 
     private Translation2d speakerOffset() {

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 5.58
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.4118040963354654,
-        "y": 4.974906597085922
+        "y": 4.934906597085922
       },
       "isLocked": false,
       "linkedName": "Straight shot"

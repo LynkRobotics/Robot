@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 6.68
+      "x": 0.69,
+      "y": 4.42
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -18,19 +18,20 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer to B"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Source-side OTF to H"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -39,6 +40,6 @@
       ]
     }
   },
-  "folder": "Testing",
+  "folder": "Partial",
   "choreoAuto": false
 }

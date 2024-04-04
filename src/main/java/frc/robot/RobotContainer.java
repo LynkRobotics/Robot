@@ -97,9 +97,7 @@ public class RobotContainer {
 
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
-        NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
-            .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()))
-            .andThen(Commands.print("End startup delay")));
+        NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
             Commands.print("Named 'Shoot' command starting")
             .andThen(
@@ -141,6 +139,26 @@ public class RobotContainer {
             //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
             .andThen(Commands.print("Idling again"))
             
+        );
+        NamedCommands.registerCommand("Amp-side OTF Shot",
+            Commands.print("Begin Amp-side OTF Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDEOTF); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Amp-side OTF Shot complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
+        );
+        NamedCommands.registerCommand("Source-side OTF Shot",
+            Commands.print("Begin Source-side OTF Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SOURCESIDEOTF); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Source-side OTF Shot complete"))
+            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
+            .andThen(Commands.print("Idling again"))
         );
         NamedCommands.registerCommand("Intake note",
             Commands.print("Beginning intake")
@@ -283,6 +301,17 @@ public class RobotContainer {
             ).withName("Smart HG");
         chooser.addOption("Smart HG", smartHG);
 
+        Command smartOTFHG =
+            Commands.sequence(
+                new PathPlannerAuto("Source-side OTF to H"),
+                Commands.either(
+                    Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
+                    Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
+                    s_Index::haveNote
+                )
+            ).withName("Smart OTF HG");
+        chooser.addOption("Smart OTF HG", smartOTFHG);
+
         Command smartADEClose =
             Commands.sequence(
                 new PathPlannerAuto("Amp-side score + AD"),
@@ -308,6 +337,17 @@ public class RobotContainer {
                 Commands.print("Conditional part over")
             ).withName("Smart ADE");
         chooser.addOption("Smart ADE", smartADE);
+
+        Command smartADEOTF =
+            Commands.sequence(
+                new PathPlannerAuto("Amp-side OTF + AD"),
+                Commands.either(
+                    new PathPlannerAuto("DE from A"),
+                    new PathPlannerAuto("D-E-Shoot"),
+                    s_Index::haveNote
+                )
+            ).withName("Smart ADE OTF");
+        chooser.addOption("Smart ADE OTF", smartADEOTF);
     }
 
     public void teleopInit() {

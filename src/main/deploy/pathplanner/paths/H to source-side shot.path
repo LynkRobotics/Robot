@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.3,
-        "y": 0.8
+        "y": 0.67
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.603992426166672,
-        "y": 0.9492599348835068
+        "y": 0.8192599348835068
       },
       "isLocked": false,
       "linkedName": "H Note"
@@ -30,35 +30,17 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Override rotation"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.8,
+    "maxAcceleration": 3.4,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0,
-    "rotateFast": true
+    "rotation": -37.0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,

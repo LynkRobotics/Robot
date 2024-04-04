@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.2,
-        "y": 7.45
+        "y": 7.59
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.535786559465711,
-        "y": 7.45
+        "y": 7.59
       },
       "isLocked": false,
       "linkedName": "D Note"
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.5,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.35,
-        "y": 2.5
+        "y": 2.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.435196288051971,
-        "y": 2.5523602186986074
+        "x": 7.132149537026346,
+        "y": -0.2332186482554776
       },
       "isLocked": false,
       "linkedName": "G Note"
@@ -20,8 +20,8 @@
         "y": 3.610224674994805
       },
       "prevControl": {
-        "x": 5.257071605052301,
-        "y": 0.41979356685986224
+        "x": 3.7831297480776778,
+        "y": 0.29851986976701333
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,34 +30,16 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.6,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Override rotation"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.4,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0,
+    "rotation": -36.0,
     "rotateFast": false
   },
   "reversed": false,

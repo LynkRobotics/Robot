@@ -6,6 +6,18 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "D to A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -18,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "H to G"
+                  "pathName": "A to E"
                 }
               }
             ]
@@ -27,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G to source-side shot"
+            "pathName": "E to A"
           }
         },
         {
@@ -39,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source-side shot to H"
+            "pathName": "A to E"
           }
         }
       ]

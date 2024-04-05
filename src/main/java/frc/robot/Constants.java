@@ -198,8 +198,10 @@ public final class Constants {
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
         public static final double maxRPMError = 60.0;
+        public static final double maxRPMErrorLong = 30.0;
         public static final double slideShotVelocityErrorMax = 100.0;
         public static final double dumpShotVelocityErrorMax = 60.0;
+        public static final double farDistance = Units.inchesToMeters(114.0); // when more precision is required
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
         public static final double peakReverseVoltage = -12.0;
@@ -277,10 +279,10 @@ public final class Constants {
             new Rotation3d(0, Units.degreesToRadians(-31.7), Math.PI));
         public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactorRed  =  0.981; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945
-        public static final double calibrationOffsetRed  = -Units.inchesToMeters(2.2); // Lynk HQ = 2.2, NCMEC = 4.0
-        public static final double calibrationFactorBlue =  0.981; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945
-        public static final double calibrationOffsetBlue = -Units.inchesToMeters(2.2); // Lynk HQ = 2.2, NCMEC = 3.25
+        public static final double calibrationFactorRed  =  0.965; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945, new HQ = 0.965
+        public static final double calibrationOffsetRed  = -Units.inchesToMeters(1.1); // Lynk HQ = 2.2, NCMEC = 4.0; new HQ = 1.1
+        public static final double calibrationFactorBlue =  0.965; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945, new HQ = 0.965
+        public static final double calibrationOffsetBlue = -Units.inchesToMeters(1.1); // Lynk HQ = 2.2, NCMEC = 3.25; new HQ = 1.1
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

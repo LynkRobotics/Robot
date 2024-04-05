@@ -96,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
     new ShooterCalibration(83.5, new ShooterSpeed(3000, 1900)),
     new ShooterCalibration(95.7, new ShooterSpeed(2900, 1700)),
     new ShooterCalibration(108.1, new ShooterSpeed(2800, 1550)),
-    new ShooterCalibration(120.9, new ShooterSpeed(2800, 1450)),
+    new ShooterCalibration(120.9, new ShooterSpeed(2800, 1425)),
     new ShooterCalibration(132.0, new ShooterSpeed(2700, 1400))
   };
 
@@ -260,9 +260,9 @@ public class ShooterSubsystem extends SubsystemBase {
     setCurrentSpeed(Speed.STOP);
   }
 
-  public boolean isReady() {
-    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < Constants.Shooter.maxRPMError &&
-      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < Constants.Shooter.maxRPMError);
+  public boolean isReady(boolean precise) {
+    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError) &&
+      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError));
   }
 
   public boolean usingVision() {
@@ -289,7 +289,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Bottom RPM tgt", bottomCurrentTarget);
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
-    SmartDashboard.putBoolean("shooter/ready", isReady());
+    SmartDashboard.putBoolean("shooter/ready", isReady(false));
     SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
   }

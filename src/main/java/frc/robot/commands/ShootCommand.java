@@ -95,7 +95,8 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (!feeding && shooter.isReady()) {
+    boolean precise = shooter.usingVision() && vision.distanceToSpeaker() > Constants.Shooter.farDistance;
+    if (!feeding && shooter.isReady(precise)) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
       if (!shooterReady) {
         // System.out.println("Shooter is ready");

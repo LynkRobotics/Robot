@@ -223,6 +223,7 @@ public class Swerve extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
+        SmartDashboard.putNumber("Gyro Yaw", getGyroYaw().getDegrees());
         // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());
         SmartDashboard.putString("swerve/Pose", getPose().toString());
         field.setRobotPose(getPose());

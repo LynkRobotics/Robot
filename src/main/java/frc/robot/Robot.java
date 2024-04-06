@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
+import monologue.Logged;
+import monologue.Monologue;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,11 +22,12 @@ import frc.robot.subsystems.LEDSubsystem.BaseState;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot implements Logged {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
+  // private VisionSubsystem m_VisionSubsystem;
+  private Swerve m_Swerve;
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -33,7 +38,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    m_Swerve = new Swerve();
     LEDSubsystem.setBaseState(BaseState.READY);
+    boolean fileOnly = false;
+    boolean lazyLogging = false;
+    Monologue.setupMonologue(this, "Robot", false, false);
   }
 
   /**
@@ -52,6 +61,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+
+    // setFileOnly is used to shut off NetworkTables broadcasting for most logging calls.
+     // Basing this condition on the connected state of the FMS is a suggestion only.
+    //  Monologue.setFileOnly(DriverStation.isFMSConnected());
+     // This method needs to be called periodically, or no logging annotations will process properly.
+     Monologue.updateAll();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

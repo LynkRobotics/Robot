@@ -122,6 +122,7 @@ public class Robot extends TimedRobot {
     if (alliance.isPresent()) {
         return alliance.get() == DriverStation.Alliance.Red;
     }
+    System.out.print("Driver Station not Connected, Defaulting to Blue");
     return false;
   }
 }

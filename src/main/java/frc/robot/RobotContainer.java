@@ -338,6 +338,32 @@ public class RobotContainer {
             ).withName("Smart ADE");
         chooser.addOption("Smart ADE", smartADE);
 
+        Command smartBCAD =
+        Commands.sequence(
+            new PathPlannerAuto("BCAD start"),
+            Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+            Commands.either(
+                Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
+                Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                s_Index::haveNote
+            ),
+            Commands.print("Conditional part over")
+        ).withName("Smart BCAD");
+        chooser.addOption("Smart BCAD", smartBCAD);
+
+        Command smartBCdirectAD =
+        Commands.sequence(
+            new PathPlannerAuto("BC-direct-AD start"),
+            Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+            Commands.either(
+                Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
+                Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                s_Index::haveNote
+            ),
+            Commands.print("Conditional part over")
+        ).withName("Smart BC-direct-AD");
+        chooser.addOption("Smart BC-direct-AD", smartBCdirectAD);
+
         Command smartADEOTF =
             Commands.sequence(
                 new PathPlannerAuto("Amp-side OTF + AD"),

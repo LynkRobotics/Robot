@@ -132,7 +132,7 @@ public class VisionSubsystem extends SubsystemBase {
   // Distance from edge of robot to speaker 
   public double distanceToSpeakerRaw() {
     double distance = distanceToSpeakerFromCenter();
-    distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+    distance += Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
     return distance;
   }
 
@@ -144,7 +144,7 @@ public class VisionSubsystem extends SubsystemBase {
     distance *= isRed ? Constants.Vision.calibrationFactorRed : Constants.Vision.calibrationFactorBlue;
 
     // Distance from center of robot to reference point
-    distance -= Constants.Vision.centerToReferenceOffset;
+    distance += Constants.Vision.centerToReferenceOffset;
 
     // Fudge amount based on calibration after factor is applied
     distance += isRed ? Constants.Vision.calibrationOffsetRed : Constants.Vision.calibrationOffsetBlue;

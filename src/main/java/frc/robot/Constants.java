@@ -275,14 +275,14 @@ public final class Constants {
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
         public static final Transform3d robotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-6.0), 0.0, Units.inchesToMeters(13.5)),
-            new Rotation3d(0, Units.degreesToRadians(-31.7), Math.PI));
-        public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
+            new Translation3d(Units.inchesToMeters(-6.5), 0.0, Units.inchesToMeters(13.25)), // Camera mounted 6.5 inches behind center of robot, and 13.25 inches above the floor
+            new Rotation3d(0, Units.degreesToRadians(-30), Math.PI)); // Camera pointed backwards and angled 30 degrees into the air
+        public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactorRed  =  0.915; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945, new HQ = 0.965
-        public static final double calibrationOffsetRed  = -Units.inchesToMeters(2.5); // Lynk HQ = 2.2, NCMEC = 4.0; new HQ = 1.1
-        public static final double calibrationFactorBlue =  0.949; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945, new HQ = 0.965
-        public static final double calibrationOffsetBlue = -Units.inchesToMeters(2.5); // Lynk HQ = 2.2, NCMEC = 3.25; new HQ = 1.1
+        public static final double calibrationFactorRed  =  0.955;
+        public static final double calibrationOffsetRed  = Units.inchesToMeters(2.3);
+        public static final double calibrationFactorBlue =  0.955;
+        public static final double calibrationOffsetBlue = Units.inchesToMeters(2.3);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

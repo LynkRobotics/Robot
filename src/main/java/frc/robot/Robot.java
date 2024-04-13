@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
@@ -28,6 +30,8 @@ public class Robot extends TimedRobot implements Logged {
   private RobotContainer m_robotContainer;
   private Swerve m_Swerve;
   private VisionSubsystem m_Vision;
+  private ShooterSubsystem m_Shooter;
+  private IndexSubsystem m_Index;
 
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   /**
@@ -41,7 +45,8 @@ public class Robot extends TimedRobot implements Logged {
     m_robotContainer = new RobotContainer();
     m_Swerve = new Swerve();
     m_Vision = new VisionSubsystem();
-
+    m_Shooter = new ShooterSubsystem();
+    m_Index = new IndexSubsystem();
 
     LEDSubsystem.setBaseState(BaseState.READY);
     

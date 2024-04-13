@@ -201,7 +201,8 @@ public class Swerve extends SubsystemBase {
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
 
-        return MathUtil.clamp(-Constants.Swerve.rotationPID.calculate(angleErrorDeg), -1.0, 1.0);
+        // System.out.printf("Angle error %01.1f => %01.4f , %01.4f => %01.4f\n", angleErrorDeg, Constants.Swerve.rotationPID.calculate(angleErrorDeg), Constants.Swerve.rotationKS * Math.signum(angleErrorDeg), MathUtil.clamp(-Constants.Swerve.rotationPID.calculate(angleErrorDeg) + -Constants.Swerve.rotationKS * Math.signum(angleErrorDeg), -1.0, 1.0));
+        return MathUtil.clamp(-Constants.Swerve.rotationPID.calculate(angleErrorDeg) + Constants.Swerve.rotationKS * Math.signum(angleErrorDeg), -1.0, 1.0);
     }
 
     public void enableSpeedLimit() {

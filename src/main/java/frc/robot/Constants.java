@@ -39,7 +39,8 @@ public final class Constants {
         public static final double maxDumpError = 1.5; // degrees
         public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
         public static final double maxSlideError = 2.0; // degrees
-        public static final PIDController rotationPID = new PIDController(0.0095, 0.050, 0.0);
+        public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
+        public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
         /* Drivetrain Constants */

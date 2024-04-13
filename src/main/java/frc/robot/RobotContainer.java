@@ -231,6 +231,12 @@ public class RobotContainer {
         // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
         // SmartDashboard.putData("Amp Path Command", ampPathCommand());
         
+        // SmartDashboard.putNumber("Rotation value", 0.0);
+        // SmartDashboard.putData("Test Rotation", Commands.startEnd(
+        //     () -> { s_Swerve.drive(new Translation2d(0, 0), SmartDashboard.getNumber("Rotation value", 0) * Constants.Swerve.maxAngularVelocity, true); },
+        //     () -> { s_Swerve.drive(new Translation2d(0, 0), 0.0, true); },
+        //     s_Swerve).withName("Test Rotation").withTimeout(3.0));
+
         // Configure the button bindings
         configureButtonBindings();
     }

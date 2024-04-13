@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.3,
-        "y": 0.8
+        "x": 8.5,
+        "y": 0.75
       },
       "prevControl": {
-        "x": 8.200662546849722,
-        "y": 0.8114921887217541
+        "x": 8.400662546849722,
+        "y": 0.7614921887217541
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "H Note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 5.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

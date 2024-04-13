@@ -67,7 +67,8 @@ public class ShooterSubsystem extends SubsystemBase {
     OTF,
     SLIDE,
     DUMP,
-    EJECT
+    EJECT,
+    BLOOP
   };
 
   private Speed nextShot = null;
@@ -86,7 +87,8 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.AMPSIDEOTF, new ShooterSpeed(2950, 1800)),
       Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
       Map.entry(Speed.DUMP, new ShooterSpeed(2700, 2700)),
-      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
+      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800)),
+      Map.entry(Speed.BLOOP, new ShooterSpeed(400, 400))
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
@@ -286,7 +288,6 @@ public class ShooterSubsystem extends SubsystemBase {
     double bottomVel = toRPM(bottom.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("shooter/Top RPM", topVel);
     SmartDashboard.putNumber("shooter/Bottom RPM", bottomVel);
-    if (DriverStation.isEnabled()) { System.out.println("RPM targets = " + topCurrentTarget + ", " + bottomCurrentTarget); }
     SmartDashboard.putNumber("shooter/Top RPM tgt", topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM tgt", bottomCurrentTarget);
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);

@@ -51,6 +51,11 @@ public class ShootCommand extends Command {
     this.autoAim = autoAim;
   }
 
+  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve, boolean autoAim) {
+    this(shooter, index, swerve);
+    this.autoAim = autoAim;
+  }
+
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, DoubleSupplier topSupplier, DoubleSupplier bottomSupplier) {
     this(shooter, index);
     this.topSupplier = topSupplier;
@@ -131,8 +136,12 @@ public class ShootCommand extends Command {
         System.out.printf("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker()));
         if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
           Pose2d pose = vision.lastPose();
-          System.out.println("Setting pose based on vision: " + pose);
-          swerve.setPose(pose);
+          if (swerve == null) {
+            System.out.println("Unable to set pose due to lack of Swerve subsystem");
+          } else {
+            System.out.println("Setting pose based on vision: " + pose);
+            swerve.setPose(pose);
+          }
         }
       }
     }

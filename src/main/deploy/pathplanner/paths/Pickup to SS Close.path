@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0,
-        "y": 1.5485718244163769
+        "x": 0.65,
+        "y": 1.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0,
-        "y": 1.648571824416377
+        "x": 0.65,
+        "y": 1.6500000000000001
       },
       "isLocked": false,
       "linkedName": "SS Pickup"

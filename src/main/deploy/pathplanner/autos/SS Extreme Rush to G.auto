@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Extreme to H"
+                        "pathName": "SS Extreme to G"
                       }
                     },
                     {
@@ -58,7 +58,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to close shot"
+            "pathName": "G to close shot"
           }
         },
         {

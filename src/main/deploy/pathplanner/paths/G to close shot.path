@@ -3,56 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
-        "y": 3.9
+        "x": 8.35,
+        "y": 2.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6500000000000002,
-        "y": 3.9
+        "x": 5.098482924238575,
+        "y": 0.11194495116263059
       },
       "isLocked": false,
-      "linkedName": "Source-side close shot"
+      "linkedName": "G Note"
     },
     {
       "anchor": {
-        "x": 0.65,
-        "y": 1.55
+        "x": 1.35,
+        "y": 3.9
       },
       "prevControl": {
-        "x": 0.6499999999999999,
-        "y": 2.8113127624419745
+        "x": 1.3499999999999999,
+        "y": 2.078432604085395
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Pickup"
+      "linkedName": "Source-side close shot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": -90.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.4,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": -45.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Side",
   "previewStartingState": {
-    "rotation": -45.0,
-    "velocity": 0.0
+    "rotation": 30.0,
+    "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

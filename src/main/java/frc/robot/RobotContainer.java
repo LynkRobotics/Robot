@@ -106,17 +106,14 @@ public class RobotContainer {
                  .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
                  .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
             .andThen(Commands.print("After race group"))
-            //.andThen(Commands.print("Before idle").andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)).andThen(Commands.print("After idle")))
             .andThen(Commands.print("Named 'Shoot' command ending"))
         );
         NamedCommands.registerCommand("Shoot without aiming",
             Commands.print("Begin shot w/o aim")
             .andThen(
-                (new ShootCommand(s_Shooter, s_Index, false)
+                (new ShootCommand(s_Shooter, s_Index, s_Swerve, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("Shot w/o aim complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
             
         );
         NamedCommands.registerCommand("Fixed SW shot",
@@ -126,8 +123,6 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("SW shot complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
             
         );
         NamedCommands.registerCommand("Shoot OTF",
@@ -137,8 +132,6 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("Shot OTF complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
             
         );
         NamedCommands.registerCommand("Amp-side OTF Shot",
@@ -148,8 +141,6 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Amp-side OTF Shot complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
         );
         NamedCommands.registerCommand("Source-side OTF Shot",
             Commands.print("Begin Source-side OTF Shot")
@@ -158,23 +149,27 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Source-side OTF Shot complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
         );
         NamedCommands.registerCommand("Intake note",
             Commands.print("Beginning intake")
             .andThen(new IntakeCommand(s_Intake, s_Index, driver.getHID()))
             .andThen(Commands.print("Intake complete")));
 
-        NamedCommands.registerCommand("Amp shot",
-            Commands.print("Begin Amp shot")
+        NamedCommands.registerCommand("Amp Shot",
+            Commands.print("Begin Amp Shot")
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Amp shot complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
+        );
+        NamedCommands.registerCommand("Bloop Shot",
+            Commands.print("Begin Bloop Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.BLOOP); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Bloop shot complete"))
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));

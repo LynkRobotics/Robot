@@ -8,44 +8,44 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6500000000000002,
-        "y": 3.9
+        "x": 1.35,
+        "y": 0.8999999999999999
       },
       "isLocked": false,
       "linkedName": "Source-side close shot"
     },
     {
       "anchor": {
-        "x": 0.65,
-        "y": 1.55
+        "x": 8.3,
+        "y": 0.8
       },
       "prevControl": {
-        "x": 0.6499999999999999,
-        "y": 2.8113127624419745
+        "x": 3.300062580506829,
+        "y": 0.774983982092417
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Pickup"
+      "linkedName": "H Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": -90.0,
-      "rotateFast": false
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 90.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": 90.0,
     "rotateFast": false
   },
   "reversed": false,
@@ -54,5 +54,5 @@
     "rotation": -45.0,
     "velocity": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     LEDSubsystem.setBaseState(BaseState.READY);
-    DriverStation.silenceJoystickConnectionWarning(true);
+    // DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   /**

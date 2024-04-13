@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.3,
-        "y": 0.9
+        "y": 0.8
       },
       "prevControl": null,
       "nextControl": {
         "x": 8.3,
-        "y": 1.2000000000000002
+        "y": 1.1
       },
       "isLocked": false,
       "linkedName": "H Note"
@@ -43,7 +43,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Note to Note",
   "previewStartingState": {
     "rotation": -15.0,
     "velocity": 0

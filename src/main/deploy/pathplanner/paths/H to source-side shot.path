@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.3,
-        "y": 0.9
+        "y": 0.8
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.603992426166672,
-        "y": 1.0492599348835068
+        "y": 0.9492599348835068
       },
       "isLocked": false,
       "linkedName": "H Note"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Side",
   "previewStartingState": {
     "rotation": -15.0,
     "velocity": 0

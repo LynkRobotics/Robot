@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -76,7 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.INTAKE, new ShooterSpeed(Constants.Shooter.intakeSpeed, Constants.Shooter.intakeSpeed)),
       Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
       Map.entry(Speed.AMP, new ShooterSpeed(350, 950)),
-      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1300, 3100)),
+      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1360, 2830)),
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
@@ -285,6 +286,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double bottomVel = toRPM(bottom.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("shooter/Top RPM", topVel);
     SmartDashboard.putNumber("shooter/Bottom RPM", bottomVel);
+    if (DriverStation.isEnabled()) { System.out.println("RPM targets = " + topCurrentTarget + ", " + bottomCurrentTarget); }
     SmartDashboard.putNumber("shooter/Top RPM tgt", topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM tgt", bottomCurrentTarget);
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);

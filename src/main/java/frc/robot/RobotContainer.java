@@ -291,19 +291,6 @@ public class RobotContainer {
     private void buildAutos(SendableChooser<Command> chooser) {
         Command smartHG =
             Commands.sequence(
-                new PathPlannerAuto("Source-side to H"),
-                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
-                Commands.either(
-                    Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
-                    Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
-                    s_Index::haveNote
-                ),
-                Commands.print("Conditional part over")
-            ).withName("Smart HG Old");
-        chooser.addOption("Smart HG Old", smartHG);
-
-        Command smartHGNew =
-            Commands.sequence(
                 new PathPlannerAuto("SS Angled Start to H"),
                 Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
                 Commands.either(
@@ -312,23 +299,23 @@ public class RobotContainer {
                     s_Index::haveNote
                 ),
                 Commands.print("Conditional part over")
-            ).withName("Smart HG New");
-        chooser.addOption("Smart HG New", smartHGNew);
+            ).withName("Smart HG");
+        chooser.addOption("Smart HG", smartHG);
 
-        Command smartOTFHG =
-            Commands.sequence(
-                new PathPlannerAuto("Source-side OTF to H"),
-                Commands.either(
-                    Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
-                    Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
-                    s_Index::haveNote
-                )
-            ).withName("Smart OTF HG");
-        chooser.addOption("Smart OTF HG", smartOTFHG);
+        // Command smartOTFHG =
+        //     Commands.sequence(
+        //         new PathPlannerAuto("Source-side OTF to H"),
+        //         Commands.either(
+        //             Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
+        //             Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
+        //             s_Index::haveNote
+        //         )
+        //     ).withName("Smart OTF HG");
+        // chooser.addOption("Smart OTF HG", smartOTFHG);
 
         Command smartADEClose =
             Commands.sequence(
-                new PathPlannerAuto("Amp-side score + AD"),
+                new PathPlannerAuto("AS Angled + AD"),
                 Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
                 Commands.either(
                     Commands.print("Running DE from close").andThen(new PathPlannerAuto("DE from close")),
@@ -341,7 +328,7 @@ public class RobotContainer {
 
         Command smartADE =
             Commands.sequence(
-                new PathPlannerAuto("Amp-side score + AD"),
+                new PathPlannerAuto("AS Angled + AD"),
                 Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
                 Commands.either(
                     Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
@@ -351,19 +338,6 @@ public class RobotContainer {
                 Commands.print("Conditional part over")
             ).withName("Smart ADE");
         chooser.addOption("Smart ADE", smartADE);
-
-        Command smartADENew =
-            Commands.sequence(
-                new PathPlannerAuto("AS Angled + AD"),
-                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
-                Commands.either(
-                    Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
-                    Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
-                    s_Index::haveNote
-                ),
-                Commands.print("Conditional part over")
-            ).withName("Smart ADE New");
-        chooser.addOption("Smart ADE New", smartADENew);
 
         Command smartBCAD =
         Commands.sequence(

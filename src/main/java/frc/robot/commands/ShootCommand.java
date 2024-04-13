@@ -33,6 +33,7 @@ public class ShootCommand extends Command {
   private Timer postShotTimer = new Timer();
   private boolean autoAim = true;
   private boolean shooterReady = false;
+  private boolean seenTarget = false;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -70,18 +71,13 @@ public class ShootCommand extends Command {
     shooterReady = false;
     LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
+    seenTarget = false;
     feeding = false;
     gone = false;
 
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (!DriverStation.isAutonomous() && shooter.usingVision()) {
-        cancelled = !vision.haveSpeakerTarget(); // TODO Consider removing this vision is integrated into poses
-        if (cancelled) {
-          System.out.println("Cancelling ShootCommand due to lack of target");
-        }
-      }
       if (!cancelled) {
         if (!shooter.shoot()) {
           System.out.println("Cancelling ShootCommand due to shoot() failure");
@@ -100,6 +96,13 @@ public class ShootCommand extends Command {
   public void execute() {
     if (cancelled) {
       return;
+    }
+    if (shooter.usingVision() && !seenTarget) {
+      seenTarget = vision.haveSpeakerTarget();
+      if (!seenTarget) {
+        System.out.println("Shoot Command waiting for speaker target");
+        return;
+      }
     }
     boolean precise = shooter.usingVision() && vision.distanceToSpeaker() > Constants.Shooter.farDistance;
     if (!feeding && shooter.isReady(precise)) {

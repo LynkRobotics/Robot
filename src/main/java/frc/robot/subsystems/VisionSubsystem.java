@@ -34,7 +34,7 @@ public class VisionSubsystem extends SubsystemBase implements Logged {
   private final PhotonCamera camera;
   private final PhotonPoseEstimator photonEstimator;
   private final AprilTagFieldLayout kTagLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  private final Field2d field = new Field2d();
+  @Log.File private final Field2d field = new Field2d();
   private double lastEstTimestamp = 0.0;
   private boolean haveTarget = false;
   private boolean haveSpeakerTarget = false;

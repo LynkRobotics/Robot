@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -128,6 +129,11 @@ public class ShootCommand extends Command {
         index.feed();
         feeding = true;
         System.out.printf("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker()));
+        if (DriverStation.isAutonomousEnabled()) {
+          Pose2d pose = vision.lastPose();
+          System.out.println("Setting pose based on vision: " + pose);
+          swerve.setPose(pose);
+        }
       }
     }
     if (topSupplier == null || bottomSupplier == null) {

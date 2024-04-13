@@ -262,7 +262,7 @@ public class ShooterSubsystem extends SubsystemBase implements Logged {
     setCurrentSpeed(Speed.STOP);
   }
 
-  @Log.File
+  
   public boolean isReady(boolean precise) {
     return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError) &&
       Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError));

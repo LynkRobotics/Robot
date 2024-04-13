@@ -24,14 +24,11 @@ import monologue.Monologue;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot implements Logged {
+public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private Swerve m_Swerve;
-  private VisionSubsystem m_Vision;
-  private ShooterSubsystem m_Shooter;
-  private IndexSubsystem m_Index;
+
 
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   /**
@@ -43,16 +40,12 @@ public class Robot extends TimedRobot implements Logged {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_Swerve = new Swerve();
-    m_Vision = new VisionSubsystem();
-    m_Shooter = new ShooterSubsystem();
-    m_Index = new IndexSubsystem();
+    
 
     LEDSubsystem.setBaseState(BaseState.READY);
     
-    boolean fileOnly = false;
-    boolean lazyLogging = false;
-    Monologue.setupMonologue(this, "Robot", fileOnly, lazyLogging);
+   
+    
   }
 
   /**
@@ -72,7 +65,6 @@ public class Robot extends TimedRobot implements Logged {
 
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
     // This method needs to be called periodically, or no logging annotations will process properly.
-    Monologue.updateAll();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

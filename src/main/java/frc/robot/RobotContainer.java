@@ -27,6 +27,8 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 // import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
 import frc.robot.subsystems.ShooterSubsystem.Speed;
+import monologue.Logged;
+import monologue.Monologue;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,7 +39,7 @@ import frc.robot.subsystems.ShooterSubsystem.Speed;
  * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer implements Logged {
     /* Controllers */
     //private final Joystick driver = new Joystick(0);
     private final CommandXboxController driver = new CommandXboxController(0);
@@ -217,7 +219,7 @@ public class RobotContainer {
         // Testing...
         // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
         // SmartDashboard.putData("Amp Path Command", ampPathCommand());
-        
+        Monologue.setupMonologue(this, "Robot", false, false);
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -285,6 +287,10 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+    }
+
+    public void periodic() {
+        Monologue.updateAll();
     }
 
     private void buildAutos(SendableChooser<Command> chooser) {

@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
-import monologue.Logged;
-import monologue.Annotations.Log;
 
-public class IndexSubsystem extends SubsystemBase implements Logged {
+public class IndexSubsystem extends SubsystemBase {
   private static IndexSubsystem instance = null;
   private final TalonFX indexMotor;
   private final DutyCycleOut indexSpeedDutyCycleOut;
@@ -41,7 +39,7 @@ public class IndexSubsystem extends SubsystemBase implements Logged {
     return instance;
   }
 
-  @Log.File
+ 
   public boolean haveNote() {
     return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
       (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());

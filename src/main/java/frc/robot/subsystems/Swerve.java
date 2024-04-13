@@ -137,6 +137,14 @@ public class Swerve extends SubsystemBase {
         setHeading(new Rotation2d());
     }
 
+    public void resetHeading() {
+        if (Robot.isRed()) {
+            setHeading(new Rotation2d(Math.PI));
+        } else {
+            setHeading(new Rotation2d());
+        }
+    }
+
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
@@ -149,10 +157,6 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
-    }
-
-    public void hack(){
-        gyro.setYaw(gyro.getYaw().getValue() + 180.0);
     }
 
     public Rotation2d dumpShotError() {

@@ -205,8 +205,9 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter top RPM", 1000.0);
         SmartDashboard.putNumber("Shooter bottom RPM", 1000.0);
         SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
-        SmartDashboard.putData("Zero Gyro", Commands.print("Zeroing gyro").andThen(Commands.runOnce(s_Swerve::zeroGyro, s_Swerve)).andThen(Commands.print("Gyro zeroed"))); //TODO: Test
-        SmartDashboard.putData("Zero heading", Commands.print("Zeroing heading").andThen(Commands.runOnce(s_Swerve::zeroHeading, s_Swerve)).andThen(Commands.print("Heading zeroed"))); //TODO: Test
+        SmartDashboard.putData("Zero Gyro", Commands.print("Zeroing gyro").andThen(Commands.runOnce(s_Swerve::zeroGyro, s_Swerve)).andThen(Commands.print("Gyro zeroed")));
+        SmartDashboard.putData("Zero heading", Commands.print("Zeroing heading").andThen(Commands.runOnce(s_Swerve::zeroHeading, s_Swerve)).andThen(Commands.print("Heading zeroed")));
+        SmartDashboard.putData("Reset heading", Commands.print("Resetting heading").andThen(Commands.runOnce(s_Swerve::resetHeading, s_Swerve)).andThen(Commands.print("Heading reset")));
 
         // Allow for direct climber control
         // SmartDashboard.putData("Stop climbers", Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber));
@@ -284,10 +285,6 @@ public class RobotContainer {
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
-    }
-
-    public void hack(){
-        s_Swerve.hack();
     }
 
     /**

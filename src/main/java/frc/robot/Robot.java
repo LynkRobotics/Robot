@@ -87,9 +87,6 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-      if (isRed()) {
-        m_robotContainer.hack();
-      }
       m_robotContainer.teleopInit();
     } else {
       LEDSubsystem.setBaseState(BaseState.READY);

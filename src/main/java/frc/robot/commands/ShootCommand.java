@@ -129,7 +129,7 @@ public class ShootCommand extends Command {
         index.feed();
         feeding = true;
         System.out.printf("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker()));
-        if (DriverStation.isAutonomousEnabled()) {
+        if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
           Pose2d pose = vision.lastPose();
           System.out.println("Setting pose based on vision: " + pose);
           swerve.setPose(pose);

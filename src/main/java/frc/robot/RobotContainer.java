@@ -171,6 +171,22 @@ public class RobotContainer {
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Bloop shot complete"))
         );
+        NamedCommands.registerCommand("Slide Shot",
+            Commands.print("Begin Slide Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Slide shot complete"))
+        );
+        NamedCommands.registerCommand("Short Slide Shot",
+            Commands.print("Begin Short Slide Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SHORTSLIDE); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Short Slide shot complete"))
+        );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
 

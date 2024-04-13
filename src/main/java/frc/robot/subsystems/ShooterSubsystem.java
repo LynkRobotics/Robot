@@ -14,7 +14,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -65,6 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SOURCESIDEOTF,
     AMPSIDEOTF,
     OTF,
+    SHORTSLIDE,
     SLIDE,
     DUMP,
     EJECT,
@@ -86,6 +86,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.SOURCESIDEOTF, new ShooterSpeed(2950, 1925)),
       Map.entry(Speed.AMPSIDEOTF, new ShooterSpeed(2950, 1800)),
       Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
+      Map.entry(Speed.SHORTSLIDE, new ShooterSpeed(2250, 900)),
       Map.entry(Speed.DUMP, new ShooterSpeed(2700, 2700)),
       Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800)),
       Map.entry(Speed.BLOOP, new ShooterSpeed(400, 400))

@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import monologue.Logged;
+import monologue.Annotations.Log;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,7 +29,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-public class VisionSubsystem extends SubsystemBase {
+public class VisionSubsystem extends SubsystemBase implements Logged {
   private static VisionSubsystem instance;
   private final PhotonCamera camera;
   private final PhotonPoseEstimator photonEstimator;
@@ -88,26 +90,32 @@ public class VisionSubsystem extends SubsystemBase {
     return instance;
   }
 
+  @Log.File
   public boolean haveTarget() {
     return haveTarget;
   }
-
+  
+  @Log.File
   public boolean haveSpeakerTarget() {
     return haveSpeakerTarget;
   }
 
+  @Log.File
   public boolean haveAmpTarget() {
     return haveAmpTarget;
   }
 
+  @Log.File
   private Translation2d speakerOffset() {
     return lastPose.getTranslation().minus(speakerLocation());
   }
 
+  @Log.File
   public Rotation2d angleToSpeaker() {
     return speakerOffset().getAngle();
   }
 
+  @Log.File
   public Rotation2d angleError() {
     if (!haveSpeakerTarget) {
       return new Rotation2d(0.0);
@@ -125,17 +133,20 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   // Distance from center of robot to speaker
+  @Log.File
   public double distanceToSpeakerFromCenter() {
     return lastPose.getTranslation().getDistance(speakerLocation());
   }
 
   // Distance from edge of robot to speaker 
+  @Log.File
   public double distanceToSpeakerRaw() {
     double distance = distanceToSpeakerFromCenter();
     distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
     return distance;
   }
 
+  @Log.File
   public double distanceToSpeaker() {
     boolean isRed = Robot.isRed();
     double distance = distanceToSpeakerFromCenter();
@@ -168,6 +179,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
   }
 
+  @Log.File
   public Pose2d lastPose() {
     return lastPose;
   }

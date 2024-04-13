@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
 import monologue.Logged;
 import monologue.Monologue;
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot implements Logged {
 
   private RobotContainer m_robotContainer;
   private Swerve m_Swerve;
+  private VisionSubsystem m_Vision;
 
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   /**
@@ -38,6 +40,7 @@ public class Robot extends TimedRobot implements Logged {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_Swerve = new Swerve();
+    m_Vision = new VisionSubsystem();
 
 
     LEDSubsystem.setBaseState(BaseState.READY);

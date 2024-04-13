@@ -33,7 +33,7 @@ public class Swerve extends SubsystemBase implements Logged {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    private final Field2d field = new Field2d();
+    @Log.File private final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.swerveCanBus);

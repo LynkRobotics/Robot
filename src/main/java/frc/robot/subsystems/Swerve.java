@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
+import monologue.Logged;
+import monologue.Annotations.Log;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Swerve extends SubsystemBase {
+public class Swerve extends SubsystemBase implements Logged {
     private boolean speedLimit = false;
 
     public SwerveDriveOdometry swerveOdometry;
@@ -117,6 +119,7 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
+    @Log.File
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
@@ -125,6 +128,7 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
+    @Log.File
     public Rotation2d getHeading() {
         return getPose().getRotation();
     }
@@ -137,6 +141,7 @@ public class Swerve extends SubsystemBase {
         setHeading(new Rotation2d());
     }
 
+    @Log.File
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }

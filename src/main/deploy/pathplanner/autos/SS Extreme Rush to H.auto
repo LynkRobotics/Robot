@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Eject"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Eject"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
+                }
+              }
+            ]
           }
         },
         {

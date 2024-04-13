@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 6.68
+      "x": 1.3,
+      "y": 7.16
     },
-    "rotation": 60.0
+    "rotation": 45.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Fixed SW shot"
+            "name": "Shoot"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp-side SW to A"
+                  "pathName": "AS Angled to A"
                 }
               },
               {

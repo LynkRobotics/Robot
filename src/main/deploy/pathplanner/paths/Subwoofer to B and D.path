@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.33,
+        "x": 1.48,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4300000000000002,
+        "x": 1.58,
         "y": 5.54
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Straight Auto Line"
     },
     {
       "anchor": {

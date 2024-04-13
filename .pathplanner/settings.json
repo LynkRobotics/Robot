@@ -4,12 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "Amp Side",
-    "Other",
     "Note to Note",
+    "Other",
     "Source Side",
     "Subwoofer",
-    "Testing",
-    "VABLA"
+    "Testing"
   ],
   "autoFolders": [
     "Amp-side",

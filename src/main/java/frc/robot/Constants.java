@@ -251,21 +251,21 @@ public final class Constants {
         public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
 
-        public static final double extendedPosition = -875.0;
-        public static final double midPosition = -450.0;  
+        public static final double extendedPosition = -230.0;
+        // public static final double midPosition = -100.0; //-450.0;  
         public static final double retractedPosition = -15.0;
-        public static final double positionError = 1.5;
-        public static final double slowVoltage = 2.75;
+        public static final double positionError = 1.0;
+        public static final double slowVoltage = 1.5;
 
-        public static final double RPSperVolt = 8.5; // RPS increase with every volt
+        public static final double RPSperVolt = 7.9; // RPS increase with every volt
         public static final double kP = 0.50; // output per unit of error in position (output/rotation)
         public static final double kI = 0.0; // output per unit of integrated error in position (output/(rotation*s))
         public static final double kD = 0.0; // output per unit of error in velocity (output/rps)
-        public static final double kS = 0.25; // output to overcome static friction (output)
+        public static final double kS = 0.22; // output to overcome static friction (output)
         public static final double kV = 1.0 / RPSperVolt; // output per unit of target velocity (output/rps)
         public static final double kA = 0.0; // output per unit of target acceleration (output/(rps/s))
         public static final double kG = 0.0; // do not factory in gravity
-        public static final double cruiseVelocity = 125.0; // RPS
+        public static final double cruiseVelocity = 120.0; // RPS
         public static final double acceleration = cruiseVelocity * 0.5; // Accelerate in 0.5 seconds
         
         public static final double timeCutOff = 25.0;

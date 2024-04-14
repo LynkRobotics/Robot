@@ -54,10 +54,10 @@ public class ClimberSubsystem extends SubsystemBase {
     var motionMagicConfigs = m_ClimberMotorsConfiguration.MotionMagic;
     motionMagicConfigs.MotionMagicCruiseVelocity = Constants.Climber.cruiseVelocity;
     motionMagicConfigs.MotionMagicAcceleration = Constants.Climber.acceleration;
-    //motionMagicConfigs.MotionMagicJerk = Constants.Climber.jerk;
+    // motionMagicConfigs.MotionMagicJerk = Constants.Climber.jerk;
 
     /* Apply Shooters Motor Configs */
-    // motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
+    motor.getConfigurator().apply(m_ClimberMotorsConfiguration);
   }
 
   public void applyVoltage(double voltage) {
@@ -73,11 +73,11 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    // motor.setControl(voltageOut.withOutput(0.0));
+    motor.setControl(voltageOut.withOutput(0.0));
   }
 
   public void zero() {
-    // motor.setPosition(0.0);
+    motor.setPosition(0.0);
   }
 
   @Override

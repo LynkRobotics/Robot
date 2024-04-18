@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Startup delay"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Fixed SW shot"
           }
         },
@@ -49,13 +43,26 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "B to C"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "B to C"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               },
               {

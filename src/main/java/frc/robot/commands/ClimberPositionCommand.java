@@ -68,9 +68,9 @@ public class ClimberPositionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if (cancelled) {
-      // return true;
-    // }
+    if (cancelled) {
+      return true;
+    }
     // return Math.abs(s_Climber.getPosition() - position) < Constants.Climber.positionError;
     return false;
   }

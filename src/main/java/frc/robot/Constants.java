@@ -280,10 +280,10 @@ public final class Constants {
             new Rotation3d(0, Units.degreesToRadians(-30), Math.PI)); // Camera pointed backwards and angled 30 degrees into the air
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactorRed  =  0.955;
-        public static final double calibrationOffsetRed  = Units.inchesToMeters(2.3);
-        public static final double calibrationFactorBlue =  0.955;
-        public static final double calibrationOffsetBlue = Units.inchesToMeters(2.3);
+        public static final double calibrationFactorRed  =  0.930;
+        public static final double calibrationOffsetRed  = Units.inchesToMeters(-1.3);
+        public static final double calibrationFactorBlue =  0.941; 
+        public static final double calibrationOffsetBlue = Units.inchesToMeters(0.2);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

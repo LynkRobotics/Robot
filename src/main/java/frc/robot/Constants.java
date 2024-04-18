@@ -34,10 +34,11 @@ public final class Constants {
         public static final COTSTalonFXSwerveConstants chosenModule =  
             COTSTalonFXSwerveConstants.SDS.MK4i.KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2_5);
 
-        public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
-        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
+        public static final Rotation2d blueDumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
+        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(-142.0));
         public static final double maxDumpError = 1.5; // degrees
-        public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
+        public static final Rotation2d blueSlideAngle = new Rotation2d(Units.degreesToRadians(0.0));
+        public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
         public static final double maxSlideError = 2.0; // degrees
         public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
         public static final double rotationKS = 0.015;

@@ -269,8 +269,13 @@ public class RobotContainer {
             () -> SmartDashboard.getBoolean("Direct set RPM", false))
             .withName("Shoot"));
         climberExtendButton.onTrue(
-            new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
-            .alongWith(new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)));
+            Commands.sequence(
+                Commands.runOnce(s_Swerve::enableSpeedLimit),
+                Commands.parallel(
+                    new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber),
+                    new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)))
+            .withName("Extend Climbers"));
+        SmartDashboard.putData("Disable speed limit", Commands.runOnce(s_Swerve::disableSpeedLimit));
         // climberExtendButton.onTrue(
         //     Commands.either(
         //         new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)

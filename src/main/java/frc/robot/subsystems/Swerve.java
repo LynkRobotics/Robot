@@ -164,7 +164,7 @@ public class Swerve extends SubsystemBase {
         if (Robot.isRed()){
             return Constants.Swerve.redDumpAngle.minus(robotAngle);
         } else {
-            return Constants.Swerve.dumpAngle.minus(robotAngle);
+            return Constants.Swerve.blueDumpAngle.minus(robotAngle);
         }
     }
 
@@ -180,7 +180,12 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d slideShotError() {
-        return Constants.Swerve.slideAngle.minus(getPose().getRotation());
+        Rotation2d robotAngle = getPose().getRotation();
+        if (Robot.isRed()){
+            return Constants.Swerve.redSlideAngle.minus(robotAngle);
+        } else {
+            return Constants.Swerve.blueSlideAngle.minus(robotAngle);
+        }
     }
 
     public boolean slideShotAligned() {

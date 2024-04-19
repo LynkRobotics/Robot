@@ -37,9 +37,11 @@ public class VisionSubsystem extends SubsystemBase {
   private boolean haveTarget = false;
   private boolean haveSpeakerTarget = false;
   private boolean haveAmpTarget = false;
+  private boolean haveSourceTarget = false;
   private Pose2d lastPose  = new Pose2d();
   private boolean overrideRotation = false;
   private boolean overrideAmpRotation = false;
+  private boolean overrideSourceRotation = false;
 
   public VisionSubsystem() {
     assert(instance == null);
@@ -63,6 +65,9 @@ public class VisionSubsystem extends SubsystemBase {
   public void enableRotationAmpOverride() { overrideAmpRotation = true; }
   public void disableRotationAmpOverride() { overrideAmpRotation = false; }
 
+  public void enableRotationSourceOverride() { overrideSourceRotation = true; }
+  public void disableRotationSourceOverride() { overrideSourceRotation = false; }
+
   public Optional<Rotation2d> getRotationTargetOverride() {
       if (!overrideRotation || !haveSpeakerTarget()) {
           return Optional.empty();
@@ -76,6 +81,16 @@ public class VisionSubsystem extends SubsystemBase {
 
   public Optional<Rotation2d> getRotationAmpOverride() {
       if (!overrideAmpRotation || !haveAmpTarget()) {
+          return Optional.empty();
+      }
+      Rotation2d adjustment = new Rotation2d(); //Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
+      Rotation2d rotation = angleToSpeaker().plus(adjustment); // Adjust angle to PathPlanner coordinates
+      // System.out.println("Overriding amp rotation target to be " + rotation.getDegrees());
+      return Optional.of(rotation);
+  }
+
+  public Optional<Rotation2d> getRotationSpeakerOverride() {
+      if (!overrideSourceRotation || !haveSourceTarget()) {
           return Optional.empty();
       }
       Rotation2d adjustment = new Rotation2d(); //Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
@@ -98,6 +113,10 @@ public class VisionSubsystem extends SubsystemBase {
 
   public boolean haveAmpTarget() {
     return haveAmpTarget;
+  }
+
+  public boolean haveSourceTarget() {
+    return haveSourceTarget;
   }
 
   private Translation2d speakerOffset() {
@@ -168,6 +187,14 @@ public class VisionSubsystem extends SubsystemBase {
     }
   }
 
+  private boolean isSourceId(int id) {
+    if (Robot.isRed()) {
+      return (id == 9 || id == 10);
+    } else {
+      return (id == 1 || id == 2);
+    }
+  }
+
   public Pose2d lastPose() {
     return lastPose;
   }
@@ -204,16 +231,19 @@ public class VisionSubsystem extends SubsystemBase {
       haveTarget = result.hasTargets();
       haveSpeakerTarget = false;
       haveAmpTarget = false;
+      haveSourceTarget = false;
       if (haveTarget) {
         result.getTargets().forEach((t) -> {
           haveSpeakerTarget = haveSpeakerTarget || isSpeakerId(t.getFiducialId());
           haveAmpTarget = haveAmpTarget || isAmpId(t.getFiducialId());
+          haveSourceTarget = haveSourceTarget || isSourceId(t.getFiducialId());
         } );
       }
       if (updateDashboard) {
         SmartDashboard.putBoolean("vision/Have target(s)", haveTarget);
         SmartDashboard.putBoolean("vision/Have speaker target", haveSpeakerTarget);
         SmartDashboard.putBoolean("vision/Have amp target", haveAmpTarget);
+        SmartDashboard.putBoolean("vision/Have source target", haveSourceTarget);
       }
     }
   }

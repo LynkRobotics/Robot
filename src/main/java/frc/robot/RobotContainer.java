@@ -61,6 +61,7 @@ public class RobotContainer {
     private final Trigger slideShotButton = driver.x();
     private final Trigger climberExtendButton = driver.y();
     private final Trigger ampShotButton = driver.povDown();
+    private final Trigger sourceAlignButton = driver.povUp();
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -297,6 +298,7 @@ public class RobotContainer {
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
+        sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
     }
 
     /**
@@ -414,6 +416,19 @@ public class RobotContainer {
         return pose;
     }
 
+    private Pose2d getSourcePose() {
+        // Get pose from Vision
+        if (!s_Vision.haveSourceTarget()) {
+            return s_Swerve.getPose();
+        }
+        Pose2d pose = s_Vision.lastPose();
+
+        // Update pose in case we lose the source target
+        s_Swerve.setPose(pose);
+
+        return pose;
+    }
+
     private Command ampPathCommand() {
         PathPlannerPath path = PathPlannerPath.fromPathFile("To Amp");
 
@@ -438,5 +453,29 @@ public class RobotContainer {
             Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }),
             new ShootCommand(s_Shooter, s_Index, false)
         ).handleInterrupt(s_Vision::disableRotationAmpOverride);
+    }
+
+    private Command sourcePathCommand() {
+        PathPlannerPath path = PathPlannerPath.fromPathFile("To Source");
+
+        return Commands.sequence(
+            Commands.runOnce(s_Vision::enableRotationSourceOverride),
+            new FollowPathHolonomic(
+                path,
+                this::getSourcePose, // Robot pose supplier
+                s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2.0, 0.0, 0.0), // Rotation PID constants
+                    Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                    Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                Robot::isRed,
+                s_Swerve // Reference to this subsystem to set requirements
+            ),
+            Commands.runOnce(s_Vision::disableRotationSourceOverride)
+        ).handleInterrupt(s_Vision::disableRotationSourceOverride);
     }
 }

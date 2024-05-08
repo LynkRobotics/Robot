@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.17,
-        "y": 5.95
+        "x": 8.27,
+        "y": 5.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.265111644768745,
-        "y": 6.453752280231834
+        "x": 7.365111644768745,
+        "y": 6.3037522802318335
       },
       "isLocked": false,
       "linkedName": "E Note"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Note to Note",
   "previewStartingState": {
     "rotation": -30.0,
     "velocity": 0

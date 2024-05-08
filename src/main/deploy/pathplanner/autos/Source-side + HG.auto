@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 4.44
+      "x": 1.31,
+      "y": 4.05
     },
-    "rotation": -60.0
+    "rotation": -45.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Fixed SW shot"
+            "name": "Shoot"
           }
         },
         {
@@ -28,9 +28,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Source-side SW to H"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "SS Angled Line to H"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -46,12 +59,6 @@
           "type": "path",
           "data": {
             "pathName": "H to source-side shot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Restore rotation"
           }
         },
         {
@@ -83,12 +90,6 @@
           "type": "path",
           "data": {
             "pathName": "G to source-side shot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Restore rotation"
           }
         },
         {

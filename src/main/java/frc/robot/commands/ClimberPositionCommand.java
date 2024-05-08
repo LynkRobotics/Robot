@@ -30,6 +30,7 @@ public class ClimberPositionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    cancelled = false;
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
       System.out.println("ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
@@ -67,9 +68,9 @@ public class ClimberPositionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if (cancelled) {
-      // return true;
-    // }
+    if (cancelled) {
+      return true;
+    }
     // return Math.abs(s_Climber.getPosition() - position) < Constants.Climber.positionError;
     return false;
   }

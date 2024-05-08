@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
+      "x": 1.48,
       "y": 5.54
     },
     "rotation": 0.0
@@ -117,7 +117,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A to D"
+                  "pathName": "A to D Real"
                 }
               }
             ]
@@ -126,7 +126,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to A"
+            "pathName": "D Real to A"
           }
         },
         {

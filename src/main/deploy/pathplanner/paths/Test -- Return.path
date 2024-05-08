@@ -3,56 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.68,
-        "y": 6.68
+        "x": 4.33,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1140123225380707,
-        "y": 7.114012322538071
+        "x": 4.23,
+        "y": 5.54
       },
       "isLocked": false,
-      "linkedName": "Amp-side SW"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 6.9872307017341315
+        "x": 1.33,
+        "y": 5.54
       },
       "prevControl": {
-        "x": 1.60068811046713,
-        "y": 6.949915718013254
+        "x": 1.4299999999999995,
+        "y": 5.54
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.7,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Testing",
   "previewStartingState": {
-    "rotation": 60.0,
+    "rotation": 180.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

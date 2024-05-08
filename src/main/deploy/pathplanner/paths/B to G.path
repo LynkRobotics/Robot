@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 5.58
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.6857373176726376,
-        "y": 4.811436369415953
+        "y": 4.771436369415953
       },
       "isLocked": false,
       "linkedName": "Straight shot"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 8.35,
-        "y": 2.5
+        "y": 2.55
       },
       "prevControl": {
         "x": 6.540223289537487,
-        "y": 1.7537003255824701
+        "y": 1.80370032558247
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Note to Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

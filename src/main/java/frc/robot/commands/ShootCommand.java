@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -33,6 +34,7 @@ public class ShootCommand extends Command {
   private Timer postShotTimer = new Timer();
   private boolean autoAim = true;
   private boolean shooterReady = false;
+  private boolean seenTarget = false;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -51,6 +53,11 @@ public class ShootCommand extends Command {
     this.autoAim = autoAim;
   }
 
+  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve, boolean autoAim) {
+    this(shooter, index, swerve);
+    this.autoAim = autoAim;
+  }
+
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, DoubleSupplier topSupplier, DoubleSupplier bottomSupplier) {
     this(shooter, index);
     this.topSupplier = topSupplier;
@@ -65,18 +72,13 @@ public class ShootCommand extends Command {
     shooterReady = false;
     LEDSubsystem.setTempState(TempState.SHOOTING);
     cancelled = false;
+    seenTarget = false;
     feeding = false;
     gone = false;
 
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (!DriverStation.isAutonomous() && shooter.usingVision()) {
-        cancelled = !vision.haveSpeakerTarget(); // TODO Consider removing this vision is integrated into poses
-        if (cancelled) {
-          System.out.println("Cancelling ShootCommand due to lack of target");
-        }
-      }
       if (!cancelled) {
         if (!shooter.shoot()) {
           System.out.println("Cancelling ShootCommand due to shoot() failure");
@@ -96,7 +98,15 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (!feeding && shooter.isReady()) {
+    if (shooter.usingVision() && !seenTarget) {
+      seenTarget = vision.haveSpeakerTarget();
+      if (!seenTarget) {
+        System.out.println("Shoot Command waiting for speaker target");
+        return;
+      }
+    }
+    boolean precise = shooter.usingVision() && vision.distanceToSpeaker() > Constants.Shooter.farDistance;
+    if (!feeding && shooter.isReady(precise)) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
       if (!shooterReady) {
         // System.out.println("Shooter is ready");
@@ -128,6 +138,15 @@ public class ShootCommand extends Command {
         index.feed();
         feeding = true;
         System.out.printf("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker()));
+        if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
+          Pose2d pose = vision.lastPose();
+          if (swerve == null) {
+            System.out.println("Unable to set pose due to lack of Swerve subsystem");
+          } else {
+            System.out.println("Setting pose based on vision: " + pose);
+            PoseSubsystem.getInstance().setPose(pose);
+          }
+        }
       }
     }
     if (topSupplier == null || bottomSupplier == null) {

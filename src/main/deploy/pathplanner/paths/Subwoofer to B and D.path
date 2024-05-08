@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.33,
+        "x": 1.48,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4300000000000002,
+        "x": 1.58,
         "y": 5.54
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Straight Auto Line"
     },
     {
       "anchor": {
@@ -32,11 +32,11 @@
     },
     {
       "anchor": {
-        "x": 8.2,
+        "x": 8.3,
         "y": 7.45
       },
       "prevControl": {
-        "x": 4.999999999999999,
+        "x": 5.1000000000000005,
         "y": 7.45
       },
       "nextControl": null,
@@ -123,7 +123,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Subwoofer",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

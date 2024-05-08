@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
+      "x": 1.48,
       "y": 5.54
     },
     "rotation": 0.0
@@ -11,12 +11,6 @@
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Startup delay"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -49,13 +43,26 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "B to C"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "B to C"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               },
               {

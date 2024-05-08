@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.17,
-        "y": 5.95
+        "x": 8.27,
+        "y": 5.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.265111644768745,
-        "y": 6.453752280231834
+        "x": 6.709739764934074,
+        "y": 7.059106841850046
       },
       "isLocked": false,
       "linkedName": "E Note"
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.5,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Amp Side",
   "previewStartingState": {
     "rotation": -30.0,
     "velocity": 0

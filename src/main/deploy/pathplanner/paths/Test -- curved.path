@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5,
+        "x": 1.33,
         "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6,
+        "x": 2.33,
         "y": 5.54
       },
       "isLocked": false,
@@ -16,32 +16,32 @@
     },
     {
       "anchor": {
-        "x": 3.2,
-        "y": 5.54
+        "x": 2.905,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 3.1,
-        "y": 5.54
+        "x": 1.9049999999999998,
+        "y": 6.5
       },
       "nextControl": {
-        "x": 3.2999999999999994,
-        "y": 5.54
+        "x": 3.905,
+        "y": 6.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0852979887777954,
+        "x": 4.33,
         "y": 5.54
       },
       "prevControl": {
-        "x": 2.185297836469124,
-        "y": 5.539825467163411
+        "x": 3.33,
+        "y": 5.54
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "VABLA -- Straight shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -60,21 +60,21 @@
   ],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.8,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0,
+    "velocity": 0.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Testing",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

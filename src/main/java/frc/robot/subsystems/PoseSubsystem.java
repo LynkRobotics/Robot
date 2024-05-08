@@ -12,7 +12,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,7 +31,6 @@ public class PoseSubsystem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field;
-    private static PIDController rotationPID = new PIDController(0.013, 0.0, 0.0); // TODO Constants
     private final Pigeon2 gyro;
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
@@ -110,6 +108,14 @@ public class PoseSubsystem extends SubsystemBase {
         setHeading(new Rotation2d());
     }
 
+    public void resetHeading() {
+        if (Robot.isRed()) {
+            setHeading(new Rotation2d(Math.PI));
+        } else {
+            setHeading(new Rotation2d());
+        }
+    }
+
     public Translation2d speakerLocation() {
         return (Robot.isRed() ? Pose.redSpeakerLocation : Pose.blueSpeakerLocation);
     }
@@ -126,7 +132,7 @@ public class PoseSubsystem extends SubsystemBase {
         if (Robot.isRed()){
             return Pose.redDumpAngle.minus(robotAngle);
         } else {
-            return Pose.dumpAngle.minus(robotAngle);
+            return Pose.blueDumpAngle.minus(robotAngle);
         }
     }
 
@@ -142,7 +148,12 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public Rotation2d slideShotError() {
-        return Pose.slideAngle.minus(getPose().getRotation());
+        Rotation2d robotAngle = getPose().getRotation();
+        if (Robot.isRed()){
+            return Pose.redSlideAngle.minus(robotAngle);
+        } else {
+            return Pose.blueSlideAngle.minus(robotAngle);
+        }
     }
 
     public boolean slideShotAligned() {
@@ -178,7 +189,8 @@ public class PoseSubsystem extends SubsystemBase {
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
 
-        return MathUtil.clamp(-rotationPID.calculate(angleErrorDeg), -1.0, 1.0);
+        // System.out.printf("Angle error %01.1f => %01.4f , %01.4f => %01.4f\n", angleErrorDeg, Pose.rotationPID.calculate(angleErrorDeg), Pose.rotationKS * Math.signum(angleErrorDeg), MathUtil.clamp(-Pose.rotationPID.calculate(angleErrorDeg) + -Pose.rotationKS * Math.signum(angleErrorDeg), -1.0, 1.0));
+        return MathUtil.clamp(-Pose.rotationPID.calculate(angleErrorDeg) + Pose.rotationKS * Math.signum(angleErrorDeg), -1.0, 1.0);
     }
 
     @Override

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 5.58
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.6814456129910167,
-        "y": 4.580172147456013
+        "y": 4.540172147456013
       },
       "isLocked": false,
       "linkedName": "Straight shot"
@@ -59,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Note to Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

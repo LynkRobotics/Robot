@@ -38,7 +38,7 @@ public final class Constants {
         /* Center to Center distance of left and right modules in meters. */
         public static final double wheelBase = Units.inchesToMeters(15.75); 
         /* Center to Center distance of front and rear module wheels in meters. */
-        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.93; // testing
+        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.955; // testing
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -122,7 +122,7 @@ public final class Constants {
             public static final int angleMotorID = 1;
             public static final int canCoderID = 0;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(33.83);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(33.39);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -133,7 +133,7 @@ public final class Constants {
             public static final int angleMotorID = 19;
             public static final int canCoderID = 1;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-71.63);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-70.83);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -144,7 +144,7 @@ public final class Constants {
             public static final int angleMotorID = 9;
             public static final int canCoderID = 2;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(163.56);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(163.82);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -155,7 +155,7 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 3;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-25.83);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-25.13);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -164,12 +164,14 @@ public final class Constants {
     public class Pose {
         public static final int pigeonID = 1;
 
-        public static final Rotation2d dumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
-        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(38.0));
+        public static final Rotation2d blueDumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
+        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(-142.0));
         public static final double maxDumpError = 1.5; // degrees
-        public static final Rotation2d slideAngle = new Rotation2d(Units.degreesToRadians(0.0));
-        public static final double maxSlideError = 3.0; // degrees
-        public static final PIDController rotationPID = new PIDController(0.013, 0.02, 0.0);
+        public static final Rotation2d blueSlideAngle = new Rotation2d(Units.degreesToRadians(0.0));
+        public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
+        public static final double maxSlideError = 2.0; // degrees
+        public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
+        public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
@@ -204,8 +206,10 @@ public final class Constants {
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
         public static final double maxRPMError = 60.0;
+        public static final double maxRPMErrorLong = 30.0;
         public static final double slideShotVelocityErrorMax = 100.0;
         public static final double dumpShotVelocityErrorMax = 60.0;
+        public static final double farDistance = Units.inchesToMeters(114.0); // when more precision is required
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
         public static final double peakReverseVoltage = -12.0;
@@ -254,21 +258,21 @@ public final class Constants {
         public static final InvertedValue motorOutputInverted = InvertedValue.Clockwise_Positive;
         public static final NeutralModeValue motorNeutralValue = NeutralModeValue.Brake;
 
-        public static final double extendedPosition = -875.0;
-        public static final double midPosition = -450.0;  
+        public static final double extendedPosition = -230.0;
+        // public static final double midPosition = -100.0; //-450.0;  
         public static final double retractedPosition = -15.0;
-        public static final double positionError = 1.5;
-        public static final double slowVoltage = 2.75;
+        public static final double positionError = 1.0;
+        public static final double slowVoltage = 1.5;
 
-        public static final double RPSperVolt = 8.5; // RPS increase with every volt
+        public static final double RPSperVolt = 7.9; // RPS increase with every volt
         public static final double kP = 0.50; // output per unit of error in position (output/rotation)
         public static final double kI = 0.0; // output per unit of integrated error in position (output/(rotation*s))
         public static final double kD = 0.0; // output per unit of error in velocity (output/rps)
-        public static final double kS = 0.25; // output to overcome static friction (output)
+        public static final double kS = 0.22; // output to overcome static friction (output)
         public static final double kV = 1.0 / RPSperVolt; // output per unit of target velocity (output/rps)
         public static final double kA = 0.0; // output per unit of target acceleration (output/(rps/s))
         public static final double kG = 0.0; // do not factory in gravity
-        public static final double cruiseVelocity = 125.0; // RPS
+        public static final double cruiseVelocity = 120.0; // RPS
         public static final double acceleration = cruiseVelocity * 0.5; // Accelerate in 0.5 seconds
         
         public static final double timeCutOff = 25.0;
@@ -277,14 +281,14 @@ public final class Constants {
     public static final class Vision {
         public static final String cameraName = "Arducam_OV2311_USB_Camera";
         public static final Transform3d robotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-6.0), 0.0, Units.inchesToMeters(13.5)),
-            new Rotation3d(0, Units.degreesToRadians(-31.7), Math.PI));
-        public static final double centerToReferenceOffset = Units.inchesToMeters(13.5);
+            new Translation3d(Units.inchesToMeters(-6.5), 0.0, Units.inchesToMeters(13.25)), // Camera mounted 6.5 inches behind center of robot, and 13.25 inches above the floor
+            new Rotation3d(0, Units.degreesToRadians(-30), Math.PI)); // Camera pointed backwards and angled 30 degrees into the air
+        public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactorRed  =  0.981; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945
-        public static final double calibrationOffsetRed  = -Units.inchesToMeters(2.2); // Lynk HQ = 2.2, NCMEC = 4.0
-        public static final double calibrationFactorBlue =  0.981; // Lynk HQ = 72 / (113 - 39.6) = .981, NCMEC = 0.945
-        public static final double calibrationOffsetBlue = -Units.inchesToMeters(2.2); // Lynk HQ = 2.2, NCMEC = 3.25
+        public static final double calibrationFactorRed  =  0.930;
+        public static final double calibrationOffsetRed  = Units.inchesToMeters(-1.3);
+        public static final double calibrationFactorBlue =  0.941; 
+        public static final double calibrationOffsetBlue = Units.inchesToMeters(0.2);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

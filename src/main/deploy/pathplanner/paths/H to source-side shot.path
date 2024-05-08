@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.178585448079987,
+        "x": 2.0,
         "y": 3.610224674994805
       },
       "prevControl": {
-        "x": 3.316692451566721,
+        "x": 3.138107003486734,
         "y": 2.341515228485004
       },
       "nextControl": null,
@@ -30,38 +30,20 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Override rotation"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.8,
+    "maxAcceleration": 3.4,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.0,
-    "rotateFast": true
+    "rotation": -50.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Side",
   "previewStartingState": {
     "rotation": -15.0,
     "velocity": 0

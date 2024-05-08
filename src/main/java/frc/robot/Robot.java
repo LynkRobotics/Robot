@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     LEDSubsystem.setBaseState(BaseState.READY);
+    // DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   /**
@@ -86,9 +87,6 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-      if (isRed()) {
-        m_robotContainer.hack();
-      }
       m_robotContainer.teleopInit();
     } else {
       LEDSubsystem.setBaseState(BaseState.READY);
@@ -122,6 +120,7 @@ public class Robot extends TimedRobot {
     if (alliance.isPresent()) {
         return alliance.get() == DriverStation.Alliance.Red;
     }
+    System.out.print("Driver Station not Connected, Defaulting to Blue");
     return false;
   }
 }

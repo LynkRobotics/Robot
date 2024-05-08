@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
+      "x": 1.48,
       "y": 5.54
     },
     "rotation": 0.0
@@ -53,15 +53,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "A to D"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "A to D"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]

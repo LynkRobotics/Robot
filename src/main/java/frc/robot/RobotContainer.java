@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-// import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
+import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
 import frc.robot.subsystems.ShooterSubsystem.Speed;
 
 /**
@@ -50,24 +50,25 @@ public class RobotContainer {
     private final Trigger intakeButton = driver.leftBumper();
     private final Trigger shooterButton = driver.rightBumper();
     private final Trigger ejectButton = driver.start();
-    // private final Trigger leftClimberButton = driver.leftTrigger();
-    // private final Trigger rightClimberButton = driver.rightTrigger();
+    private final Trigger leftClimberButton = driver.leftTrigger();
+    private final Trigger rightClimberButton = driver.rightTrigger();
     
     /* Different Position Test Buttons */
     private final Trigger ampButton = driver.a();
     private final Trigger dumpShotButton = driver.b();
     private final Trigger defaultShotButton = driver.back();
     private final Trigger slideShotButton = driver.x();
-    // private final Trigger climberExtendButton = driver.y();
+    private final Trigger climberExtendButton = driver.y();
     private final Trigger ampShotButton = driver.povDown();
+    private final Trigger sourceAlignButton = driver.povUp();
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
     private final ShooterSubsystem s_Shooter = new ShooterSubsystem();
     private final IndexSubsystem s_Index = new IndexSubsystem();
-    // private final ClimberSubsystem s_LeftClimber = new ClimberSubsystem(ClimberSelection.LEFT);
-    // private final ClimberSubsystem s_RightClimber = new ClimberSubsystem(ClimberSelection.RIGHT);
+    private final ClimberSubsystem s_LeftClimber = new ClimberSubsystem(ClimberSelection.LEFT);
+    private final ClimberSubsystem s_RightClimber = new ClimberSubsystem(ClimberSelection.RIGHT);
     @SuppressWarnings ("unused")
     private final LEDSubsystem s_Led = new LEDSubsystem();
     private final VisionSubsystem s_Vision = new VisionSubsystem();
@@ -95,12 +96,11 @@ public class RobotContainer {
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index).withName("Index Stop"));
 
         SmartDashboard.putData("Command scheduler", CommandScheduler.getInstance());
+        SmartDashboard.putData("Shoot Command", new ShootCommand(s_Shooter, s_Index, s_Swerve).withTimeout(3.0));
 
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
-        NamedCommands.registerCommand("Startup delay", Commands.print("Begin startup delay")
-            .andThen(new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()))
-            .andThen(Commands.print("End startup delay")));
+        NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
             Commands.print("Named 'Shoot' command starting")
             .andThen(
@@ -108,17 +108,14 @@ public class RobotContainer {
                  .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
                  .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
             .andThen(Commands.print("After race group"))
-            //.andThen(Commands.print("Before idle").andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter)).andThen(Commands.print("After idle")))
             .andThen(Commands.print("Named 'Shoot' command ending"))
         );
         NamedCommands.registerCommand("Shoot without aiming",
             Commands.print("Begin shot w/o aim")
             .andThen(
-                (new ShootCommand(s_Shooter, s_Index, false)
+                (new ShootCommand(s_Shooter, s_Index, s_Swerve, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("Shot w/o aim complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
             
         );
         NamedCommands.registerCommand("Fixed SW shot",
@@ -128,8 +125,6 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("SW shot complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
             
         );
         NamedCommands.registerCommand("Shoot OTF",
@@ -139,24 +134,60 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("Shot OTF complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
             
+        );
+        NamedCommands.registerCommand("Amp-side OTF Shot",
+            Commands.print("Begin Amp-side OTF Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDEOTF); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Amp-side OTF Shot complete"))
+        );
+        NamedCommands.registerCommand("Source-side OTF Shot",
+            Commands.print("Begin Source-side OTF Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SOURCESIDEOTF); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Source-side OTF Shot complete"))
         );
         NamedCommands.registerCommand("Intake note",
             Commands.print("Beginning intake")
             .andThen(new IntakeCommand(s_Intake, s_Index, driver.getHID()))
             .andThen(Commands.print("Intake complete")));
 
-        NamedCommands.registerCommand("Amp shot",
-            Commands.print("Begin Amp shot")
+        NamedCommands.registerCommand("Amp Shot",
+            Commands.print("Begin Amp Shot")
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Amp shot complete"))
-            //.andThen(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter))
-            .andThen(Commands.print("Idling again"))
+        );
+        NamedCommands.registerCommand("Bloop Shot",
+            Commands.print("Begin Bloop Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.BLOOP); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Bloop shot complete"))
+        );
+        NamedCommands.registerCommand("Slide Shot",
+            Commands.print("Begin Slide Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Slide shot complete"))
+        );
+        NamedCommands.registerCommand("Short Slide Shot",
+            Commands.print("Begin Short Slide Shot")
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SHORTSLIDE); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.print("Short Slide shot complete"))
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
@@ -178,24 +209,23 @@ public class RobotContainer {
         SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
         SmartDashboard.putData("Zero Gyro", Commands.print("Zeroing gyro").andThen(Commands.runOnce(s_Pose::zeroGyro, s_Swerve)).andThen(Commands.print("Gyro zeroed")).withName("Zero Gyro")); //TODO: Test
         SmartDashboard.putData("Zero heading", Commands.print("Zeroing heading").andThen(Commands.runOnce(s_Pose::zeroHeading, s_Swerve)).andThen(Commands.print("Heading zeroed")).withName("Zero heading")); //TODO: Test
+        SmartDashboard.putData("Reset heading", Commands.print("Resetting heading").andThen(Commands.runOnce(s_Pose::resetHeading, s_Swerve)).andThen(Commands.print("Heading reset")).withName("Reset heading"));
 
         // Allow for direct climber control
-        // SmartDashboard.putData("Stop climbers", Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber));
-        // SmartDashboard.putData("Left down slow", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_LeftClimber));
-        // SmartDashboard.putData("Right down slow", Commands.runOnce(() -> { s_RightClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_RightClimber));
+        SmartDashboard.putData("Stop climbers", Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber));
+        SmartDashboard.putData("Left down slow", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_LeftClimber));
+        SmartDashboard.putData("Right down slow", Commands.runOnce(() -> { s_RightClimber.applyVoltage(Constants.Climber.slowVoltage); }, s_RightClimber));
 
-        // SmartDashboard.putNumber("Left climber voltage", 0.0);
-        // SmartDashboard.putNumber("Right climber voltage", 0.0);
-        // SmartDashboard.putData("Set climber voltage", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber));
-        // SmartDashboard.putData("Zero climbers", Commands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber));
-        // SmartDashboard.putBoolean("climber/Climbers enabled", true);
+        SmartDashboard.putNumber("Left climber voltage", 0.0);
+        SmartDashboard.putNumber("Right climber voltage", 0.0);
+        SmartDashboard.putData("Set climber voltage", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber));
+        SmartDashboard.putData("Zero climbers", Commands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber));
+        SmartDashboard.putBoolean("climber/Climbers enabled", true);
 
-/*
         SmartDashboard.putNumber("Left climber target position", 0.0);
-        SmartDashboard.putData("Set left climber position", Commands.runOnce(() -> { s_Climber.setPositionLeft(SmartDashboard.getNumber("Left climber target position", 0.0));}, s_Climber));
+        SmartDashboard.putData("Set left climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Left climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
         SmartDashboard.putNumber("Right climber target position", 0.0);
-        SmartDashboard.putData("Set right climber position", Commands.runOnce(() -> { s_Climber.setPositionRight(SmartDashboard.getNumber("Right climber target position", 0.0));}, s_Climber));
-*/
+        SmartDashboard.putData("Set right climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
         // Testing...
         SmartDashboard.putBoolean("Shoot with Vision", true);
@@ -234,17 +264,25 @@ public class RobotContainer {
             new ShootCommand(s_Shooter, s_Index, s_Swerve),
             () -> SmartDashboard.getBoolean("Direct set RPM", false))
             .withName("Shoot"));
+        climberExtendButton.onTrue(
+            Commands.sequence(
+                Commands.runOnce(s_Swerve::enableSpeedLimit),
+                Commands.parallel(
+                    new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber),
+                    new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)))
+            .withName("Extend Climbers"));
+        SmartDashboard.putData("Disable speed limit", Commands.runOnce(s_Swerve::disableSpeedLimit));
         // climberExtendButton.onTrue(
-            // Commands.either(
-                // new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
-                // .alongWith(new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)),
-                // new ClimberPositionCommand(Constants.Climber.midPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
-                // .alongWith(new ClimberPositionCommand(Constants.Climber.midPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)),
-                // () -> s_LeftClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError ||
-                    //   s_RightClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError));
+        //     Commands.either(
+        //         new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
+        //         .alongWith(new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)),
+        //         new ClimberPositionCommand(Constants.Climber.midPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber)
+        //         .alongWith(new ClimberPositionCommand(Constants.Climber.midPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber)),
+        //         () -> s_LeftClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError ||
+        //               s_RightClimber.getPosition() < Constants.Climber.midPosition + 2 * Constants.Climber.positionError));
 
-        // leftClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
-        // rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
+        leftClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
+        rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
         /* Buttons to set the next shot */
         ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }).withName("Set amp shot"));
@@ -255,10 +293,7 @@ public class RobotContainer {
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
-    }
-
-    public void hack(){
-        s_Pose.hack();
+        sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
     }
 
     /**
@@ -273,7 +308,7 @@ public class RobotContainer {
     private void buildAutos(SendableChooser<Command> chooser) {
         Command smartHG =
             Commands.sequence(
-                new PathPlannerAuto("Source-side to H"),
+                new PathPlannerAuto("SS Angled Start to H"),
                 Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
                 Commands.either(
                     Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
@@ -284,9 +319,20 @@ public class RobotContainer {
             ).withName("Smart HG");
         chooser.addOption("Smart HG", smartHG);
 
-        Command smartADE =
+        // Command smartOTFHG =
+        //     Commands.sequence(
+        //         new PathPlannerAuto("Source-side OTF to H"),
+        //         Commands.either(
+        //             Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
+        //             Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
+        //             s_Index::haveNote
+        //         )
+        //     ).withName("Smart OTF HG");
+        // chooser.addOption("Smart OTF HG", smartOTFHG);
+
+        Command smartADEClose =
             Commands.sequence(
-                new PathPlannerAuto("Amp-side score + AD"),
+                new PathPlannerAuto("AS Angled + AD"),
                 Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
                 Commands.either(
                     Commands.print("Running DE from close").andThen(new PathPlannerAuto("DE from close")),
@@ -294,8 +340,58 @@ public class RobotContainer {
                     s_Index::haveNote
                 ),
                 Commands.print("Conditional part over")
+            ).withName("Smart ADE from Close");
+        chooser.addOption("Smart ADE from Close", smartADEClose);
+
+        Command smartADE =
+            Commands.sequence(
+                new PathPlannerAuto("AS Angled + AD"),
+                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+                Commands.either(
+                    Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
+                    Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                    s_Index::haveNote
+                ),
+                Commands.print("Conditional part over")
             ).withName("Smart ADE");
         chooser.addOption("Smart ADE", smartADE);
+
+        Command smartBCAD =
+        Commands.sequence(
+            new PathPlannerAuto("BCAD start"),
+            Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+            Commands.either(
+                Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
+                Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                s_Index::haveNote
+            ),
+            Commands.print("Conditional part over")
+        ).withName("Smart BCAD");
+        chooser.addOption("Smart BCAD", smartBCAD);
+
+        Command smartBCdirectAD =
+        Commands.sequence(
+            new PathPlannerAuto("BC-direct-AD start"),
+            Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+            Commands.either(
+                Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
+                Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                s_Index::haveNote
+            ),
+            Commands.print("Conditional part over")
+        ).withName("Smart BC-direct-AD");
+        chooser.addOption("Smart BC-direct-AD", smartBCdirectAD);
+
+        Command smartADEOTF =
+            Commands.sequence(
+                new PathPlannerAuto("Amp-side OTF + AD"),
+                Commands.either(
+                    new PathPlannerAuto("DE from A"),
+                    new PathPlannerAuto("D-E-Shoot"),
+                    s_Index::haveNote
+                )
+            ).withName("Smart ADE OTF");
+        chooser.addOption("Smart ADE OTF", smartADEOTF);
     }
 
     public void teleopInit() {
@@ -326,5 +422,29 @@ public class RobotContainer {
             Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }),
             new ShootCommand(s_Shooter, s_Index, false)
         ).handleInterrupt(s_Vision::disableRotationAmpOverride);
+    }
+
+    private Command sourcePathCommand() {
+        PathPlannerPath path = PathPlannerPath.fromPathFile("To Source");
+
+        return Commands.sequence(
+            Commands.runOnce(s_Vision::enableRotationSourceOverride),
+            new FollowPathHolonomic(
+                path,
+                s_Pose::getPose, // Robot pose supplier
+                s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2.0, 0.0, 0.0), // Rotation PID constants
+                    Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                    Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                Robot::isRed,
+                s_Swerve // Reference to this subsystem to set requirements
+            ),
+            Commands.runOnce(s_Vision::disableRotationSourceOverride)
+        ).handleInterrupt(s_Vision::disableRotationSourceOverride);
     }
 }

@@ -35,6 +35,12 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-side shot to H"
+          }
         }
       ]
     }

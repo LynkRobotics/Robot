@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.33,
+      "x": 1.48,
       "y": 5.54
     },
     "rotation": 0.0
@@ -127,6 +127,12 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A to E"
           }
         }
       ]

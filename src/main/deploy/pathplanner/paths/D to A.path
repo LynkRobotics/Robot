@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.2,
+        "x": 8.3,
         "y": 7.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.02202877133027,
+        "x": 6.122028771330271,
         "y": 7.297695522663774
       },
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 25.0,
+    "rotation": 27.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Note to Note",
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

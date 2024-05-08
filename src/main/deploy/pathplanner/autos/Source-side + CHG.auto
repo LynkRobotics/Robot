@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 4.44
+      "x": 1.31,
+      "y": 4.05
     },
-    "rotation": -60.0
+    "rotation": -45.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Fixed SW shot"
+            "name": "Shoot"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source-side SW to C"
+                  "pathName": "SS Angled Line to C"
                 }
               },
               {
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to G"
+            "pathName": "H to source-side shot"
           }
         },
         {

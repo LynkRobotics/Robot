@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 5.58
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.201683330639389,
-        "y": 2.110981596508648
+        "y": 2.070981596508648
       },
       "isLocked": false,
       "linkedName": "Straight shot"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Side",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

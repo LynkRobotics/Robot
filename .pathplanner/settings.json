@@ -2,7 +2,14 @@
   "robotWidth": 0.85,
   "robotLength": 0.85,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Amp Side",
+    "Note to Note",
+    "Other",
+    "Source Side",
+    "Subwoofer",
+    "Testing"
+  ],
   "autoFolders": [
     "Amp-side",
     "Partial",

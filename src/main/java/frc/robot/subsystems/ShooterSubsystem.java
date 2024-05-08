@@ -61,10 +61,14 @@ public class ShooterSubsystem extends SubsystemBase {
     PODIUM,
     FULL,
     VISION,
+    SOURCESIDEOTF,
+    AMPSIDEOTF,
     OTF,
+    SHORTSLIDE,
     SLIDE,
     DUMP,
-    EJECT
+    EJECT,
+    BLOOP
   };
 
   private Speed nextShot = null;
@@ -73,15 +77,19 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
       Map.entry(Speed.INTAKE, new ShooterSpeed(Constants.Shooter.intakeSpeed, Constants.Shooter.intakeSpeed)),
       Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
-      Map.entry(Speed.AMP, new ShooterSpeed(300, 900)),
-      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1300, 3100)),
+      Map.entry(Speed.AMP, new ShooterSpeed(350, 950)),
+      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1360, 2830)),
       Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
       Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
       Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
       Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
+      Map.entry(Speed.SOURCESIDEOTF, new ShooterSpeed(2950, 1925)),
+      Map.entry(Speed.AMPSIDEOTF, new ShooterSpeed(2950, 1800)),
       Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
-      Map.entry(Speed.DUMP, new ShooterSpeed(2700, 2700)),
-      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800))
+      Map.entry(Speed.SHORTSLIDE, new ShooterSpeed(2250, 900)),
+      Map.entry(Speed.DUMP, new ShooterSpeed(2650, 2650)),
+      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800)),
+      Map.entry(Speed.BLOOP, new ShooterSpeed(400, 400))
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
@@ -92,7 +100,7 @@ public class ShooterSubsystem extends SubsystemBase {
     new ShooterCalibration(83.5, new ShooterSpeed(3000, 1900)),
     new ShooterCalibration(95.7, new ShooterSpeed(2900, 1700)),
     new ShooterCalibration(108.1, new ShooterSpeed(2800, 1550)),
-    new ShooterCalibration(120.9, new ShooterSpeed(2800, 1450)),
+    new ShooterCalibration(120.9, new ShooterSpeed(2800, 1425)),
     new ShooterCalibration(132.0, new ShooterSpeed(2700, 1400))
   };
 
@@ -261,9 +269,9 @@ public class ShooterSubsystem extends SubsystemBase {
     setCurrentSpeed(Speed.STOP);
   }
 
-  public boolean isReady() {
-    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < Constants.Shooter.maxRPMError &&
-      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < Constants.Shooter.maxRPMError);
+  public boolean isReady(boolean precise) {
+    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError) &&
+      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError));
   }
 
   public boolean usingVision() {
@@ -290,7 +298,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Bottom RPM tgt", bottomCurrentTarget);
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
-    SmartDashboard.putBoolean("shooter/ready", isReady());
+    SmartDashboard.putBoolean("shooter/ready", isReady(false));
     SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
   }

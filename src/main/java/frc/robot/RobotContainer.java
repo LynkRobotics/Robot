@@ -230,7 +230,8 @@ public class RobotContainer {
         // Testing...
         SmartDashboard.putBoolean("Shoot with Vision", true);
         SmartDashboard.getBoolean("Use Vision Pose in Auto", false);
-
+        SmartDashboard.getBoolean("Disable Vision Pose in Teleop", false);
+        
         // Configure the button bindings
         configureButtonBindings();
     }

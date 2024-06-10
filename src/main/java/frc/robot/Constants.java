@@ -18,7 +18,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-    public static final double driveStickSensitivity = 1.00;
+    public static final double driveStickSensitivity = 1.00; 
     public static final double turnStickSensitivity = 1.00;
     public static final double aimingOverride = 0.25;
 
@@ -49,7 +49,7 @@ public final class Constants {
         /* Center to Center distance of left and right modules in meters. */
         public static final double wheelBase = Units.inchesToMeters(15.75); 
         /* Center to Center distance of front and rear module wheels in meters. */
-        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.955; // testing
+        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.945; // testing
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -195,7 +195,7 @@ public final class Constants {
         /* CANBus */
         public static final String shooterMotorCanBus = "rio";
         /* Motor Speed Values */
-        public static final double idleSpeed = 2500;
+        public static final double idleSpeed = 2500; 
         public static final double intakeSpeed = -800;
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;

@@ -304,7 +304,7 @@ public class RobotContainer {
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
-        speakerAlignButton.whileTrue(speakerPathCommand());
+        // speakerAlignButton.whileTrue(speakerPathCommand());
         
     }
 

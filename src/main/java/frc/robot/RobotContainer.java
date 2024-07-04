@@ -304,6 +304,7 @@ public class RobotContainer {
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
+        SmartDashboard.putData("Speaker align", speakerPathCommand());
         // speakerAlignButton.whileTrue(speakerPathCommand());
         
     }
@@ -436,6 +437,19 @@ public class RobotContainer {
         return pose;
     }
 
+    private Pose2d getSpeakerPose() {
+        // Get pose from Vision
+        if (!s_Vision.haveSpeakerTarget()) {
+            return s_Swerve.getPose();
+        }
+        Pose2d pose = s_Vision.lastPose();
+
+        // Update pose in case we lose the speaker target
+        s_Swerve.setPose(pose);
+
+        return pose;
+    }
+
     private Command ampPathCommand() {
         PathPlannerPath path = PathPlannerPath.fromPathFile("To Amp");
 
@@ -491,10 +505,10 @@ public class RobotContainer {
         PathPlannerPath path = PathPlannerPath.fromPathFile("To Speaker");
 
         return Commands.sequence(
-            Commands.runOnce(s_Vision::enableRotationSourceOverride),
+            Commands.runOnce(s_Vision::enableRotationTargetOverride),
             new FollowPathHolonomic(
                 path,
-                this::getSourcePose, // Robot pose supplier
+                this::getSpeakerPose, // Robot pose supplier
                 s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
@@ -507,7 +521,8 @@ public class RobotContainer {
                 Robot::isRed,
                 s_Swerve // Reference to this subsystem to set requirements
             ),
-            Commands.runOnce(s_Vision::disableRotationSourceOverride)
-        ).handleInterrupt(s_Vision::disableRotationSourceOverride);
+            Commands.runOnce(s_Vision::disableRotationTargetOverride)
+        ).handleInterrupt(s_Vision::disableRotationTargetOverride)
+        .withName("Speaker align");
     }
 }

@@ -8,12 +8,14 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
   private final TalonFX intakeMotor;
   private final DutyCycleOut intakeSpeedDutyCycleOut;
+  static boolean intaking = false;
 
   public IntakeSubsystem() {
     intakeMotor = new TalonFX(Constants.Intake.intakeMotorID, Constants.Intake.intakeMotorCanBus);
@@ -51,5 +53,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    double current = intakeMotor.getTorqueCurrent().getValueAsDouble();
+    boolean active = (current > 20.0);
+
+    if (active && !intaking) {
+      System.out.println("DEBUG: Intaking note detected");
+    }
+    SmartDashboard.putNumber("intake/torqueCurrent", current);
   }
 }

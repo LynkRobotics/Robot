@@ -3,35 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
-        "y": 3.9
+        "x": 2.83,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6500000000000002,
-        "y": 3.9
+        "x": 2.83,
+        "y": 6.04
       },
       "isLocked": false,
-      "linkedName": "Source-side close shot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.65,
-        "y": 1.55
+        "x": 2.83,
+        "y": 6.85
       },
       "prevControl": {
-        "x": 0.6499999999999999,
-        "y": 2.8113127624419745
+        "x": 2.83,
+        "y": 6.35
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Pickup"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
-      "rotationDegrees": -90.0,
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 45.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 45.0,
       "rotateFast": false
     }
   ],
@@ -45,14 +50,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
-    "rotateFast": false
+    "rotation": 25.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Source Side",
+  "folder": "Testing",
   "previewStartingState": {
-    "rotation": -45.0,
-    "velocity": 0.0
+    "rotation": 0,
+    "velocity": 0
   },
   "useDefaultConstraints": true
 }

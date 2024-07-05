@@ -156,7 +156,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Intake note",
             Commands.print("Beginning intake")
-            .andThen(new IntakeCommand(s_Intake, s_Index, driver.getHID()))
+            .andThen(new StartIntakeCommand(s_Intake, s_Index, s_Shooter, driver.getHID()))
             .andThen(Commands.print("Intake complete")));
 
         NamedCommands.registerCommand("Amp Shot",
@@ -260,7 +260,7 @@ public class RobotContainer {
                 Commands.runOnce(s_Swerve::enableSpeedLimit),
                 Commands.either(
                     new ShooterIntakeCommand(s_Shooter, s_Index, driver.getHID()),
-                    new IntakeCommand(s_Intake, s_Index, driver.getHID()),
+                    new StartIntakeCommand(s_Intake, s_Index, s_Shooter,driver.getHID()),
                     () -> SmartDashboard.getBoolean("Shooter intake", false)),
                 Commands.runOnce(s_Swerve::disableSpeedLimit))
             .handleInterrupt(s_Swerve::disableSpeedLimit)

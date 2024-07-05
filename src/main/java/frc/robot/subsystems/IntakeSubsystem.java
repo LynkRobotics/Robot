@@ -15,7 +15,10 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   private final TalonFX intakeMotor;
   private final DutyCycleOut intakeSpeedDutyCycleOut;
+  static boolean starting = false;
   static boolean intaking = false;
+  static boolean haveNote = false;
+  static boolean isStuck = false;
 
   public IntakeSubsystem() {
     intakeMotor = new TalonFX(Constants.Intake.intakeMotorID, Constants.Intake.intakeMotorCanBus);
@@ -39,26 +42,43 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intake() {
+    starting = true;
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.intakingSpeed));
   }
 
   public void eject() {
+    starting = false;
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.ejectingSpeed));
   }
 
   public void stop() {
+    starting = false;
     intakeMotor.setControl(intakeSpeedDutyCycleOut.withOutput(Constants.Intake.stoppingSpeed));
   }
 
+  public boolean haveNote() { return haveNote; }
+
+  public boolean isStuck() { return isStuck; }
 
   @Override
   public void periodic() {
     double current = intakeMotor.getTorqueCurrent().getValueAsDouble();
     boolean active = (current > 20.0);
+    boolean stuck = (current > 100.0);
 
-    if (active && !intaking) {
-      System.out.println("DEBUG: Intaking note detected");
+    if (active) {
+      if (!starting && !haveNote) {
+        haveNote = true;
+        System.out.println("DEBUG: Intaking note detected");
+      }
+      if (stuck && !isStuck) {
+        isStuck = true;
+        System.out.println("DEBUG: Intake is stuck");
+      }
+    } else if (starting) {
+      starting = false;
     }
+    
     SmartDashboard.putNumber("intake/torqueCurrent", current);
   }
 }

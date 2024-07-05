@@ -44,6 +44,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public enum TempState {
     INTAKING,
+    INTAKING2,
     SHINTAKING,
     SHOOTING,
     EXTENDING,
@@ -57,6 +58,7 @@ public class LEDSubsystem extends SubsystemBase {
     public static final Color green = new LEDSubsystem.Color(0, 255, 0);
     public static final Color blue = new LEDSubsystem.Color(0, 0, 255);
     public static final Color cyan = new LEDSubsystem.Color(0, 255, 255);
+    public static final Color violet = new LEDSubsystem.Color(128, 0, 255);
     public static final Color magenta = new LEDSubsystem.Color(255, 0, 255);
     public static final Color yellow = new LEDSubsystem.Color(255, 255, 0);
     public static final Color white = new LEDSubsystem.Color(255, 255, 255);
@@ -97,6 +99,8 @@ public class LEDSubsystem extends SubsystemBase {
   private Color tempStateColor(TempState state) {
     if (state == TempState.INTAKING) {
       return Colors.blue;
+    } else if (state == TempState.INTAKING2) {
+      return Colors.violet;
     } else if (state == TempState.SHINTAKING) {
       return Colors.cyan;
     } else if (state == TempState.SHOOTING) {

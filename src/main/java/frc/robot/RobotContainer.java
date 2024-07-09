@@ -64,8 +64,6 @@ public class RobotContainer {
     private final Trigger ampShotButton = driver.povDown();
     private final Trigger sourceAlignButton = driver.povUp();
 
-    private final Trigger speakerAlignButton = driver.povLeft();
-
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final IntakeSubsystem s_Intake = new IntakeSubsystem();
@@ -304,9 +302,7 @@ public class RobotContainer {
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
-        SmartDashboard.putData("Speaker align", speakerPathCommand());
-        // speakerAlignButton.whileTrue(speakerPathCommand());
-        
+        SmartDashboard.putData("Speaker align", speakerPathCommand());        
     }
 
     /**

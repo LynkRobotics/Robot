@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7,
-        "y": 6.04
+        "x": 2.314327434188076,
+        "y": 5.999626665871387
       },
       "isLocked": false,
       "linkedName": "Straight shot"
@@ -20,31 +20,20 @@
         "y": 6.85
       },
       "prevControl": {
-        "x": 2.7,
-        "y": 6.35
+        "x": 2.3143274341880766,
+        "y": 6.390373334128613
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "A Note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 45.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": 45.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.2,
-    "maxAcceleration": 9.0,
+    "maxAcceleration": 12.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

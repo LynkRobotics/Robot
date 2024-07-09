@@ -142,8 +142,9 @@ public class ShootCommand extends Command {
           if (swerve == null) {
             System.out.println("Unable to set pose due to lack of Swerve subsystem");
           } else {
-            System.out.println("Setting pose based on vision: " + pose);
-            swerve.setPose(pose);
+            // TODO Re-enable when vision is working more reliably
+            // System.out.println("Setting pose based on vision: " + pose);
+            // swerve.setPose(pose);
           }
         }
       }

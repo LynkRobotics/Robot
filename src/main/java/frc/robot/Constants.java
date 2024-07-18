@@ -273,7 +273,7 @@ public final class Constants {
     }
 
     public static final class Vision {
-        public static final String cameraName = "Arducam_OV2311_USB_Camera";
+        public static final String cameraName = "AprilTagCam";
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
         public static final Transform3d robotToCam = new Transform3d(

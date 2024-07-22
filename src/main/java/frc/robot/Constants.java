@@ -282,8 +282,8 @@ public final class Constants {
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
         public static final boolean atHQ = true;
-        public static final double calibrationFactorBlue = atHQ ? 1.02 : 1.0;
-        public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(1.9) : Units.inchesToMeters(0.0);
+        public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
+        public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
         public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;
         public static final double calibrationOffsetRed  = atHQ ? calibrationFactorBlue : Units.inchesToMeters(0.0);
     }

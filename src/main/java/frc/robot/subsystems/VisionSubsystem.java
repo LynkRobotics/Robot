@@ -15,9 +15,11 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -32,7 +34,7 @@ public class VisionSubsystem extends SubsystemBase {
   private static VisionSubsystem instance;
   private final PhotonCamera camera;
   private final PhotonPoseEstimator photonEstimator;
-  private final AprilTagFieldLayout kTagLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  private AprilTagFieldLayout kTagLayout;
   private final Field2d field = new Field2d();
   private double lastEstTimestamp = 0.0;
   private boolean haveTarget = false;
@@ -53,6 +55,17 @@ public class VisionSubsystem extends SubsystemBase {
     instance = this;
 
     camera = new PhotonCamera(Constants.Vision.cameraName);
+
+    if (Constants.Vision.atHQ) {
+      try {
+        kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory().toPath().resolve("2024-crescendo-hq.json"));
+      } catch (IOException e) {
+        e.printStackTrace();
+        System.exit(1);
+      }
+    } else {
+      kTagLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    }
 
     photonEstimator = new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.robotToCam);
     photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -277,6 +290,7 @@ public class VisionSubsystem extends SubsystemBase {
 
 /* 
  * Calibration procedure:
+ *   0. Ensure that the atHQ flag is set properly
  *   1. Place the robot, with bumpers, against the subwoofer.  This puts the robot bumper outside edge 36.125 inches from the alliance wall
  *   2. Run the "Calibrate Vision" command and record the "Raw average" distance as measured by vision to speaker in inches as data point (A)
  *   3. Move the robot back 6 feet (72 inches), putting the robot bumper outside edge 108.125 inches from the alliance wall

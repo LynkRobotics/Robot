@@ -222,6 +222,18 @@ public class Swerve extends SubsystemBase {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
+    public void setMotorsToCoast(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setCoastMode();  
+        }
+    }
+
+    public void setMotorsToBrake(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setCoastMode();  
+        }
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());

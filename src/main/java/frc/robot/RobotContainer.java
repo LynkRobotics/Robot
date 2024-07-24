@@ -233,7 +233,13 @@ public class RobotContainer {
         SmartDashboard.putData("Set right climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
 
-        DogLog.setOptions(new DogLogOptions().withNtPublish(false));
+        DogLog.setOptions(new DogLogOptions(
+            false, //Whether logged values should be published to NetworkTables
+            false, //Whether all NetworkTables fields should be saved to the log file.
+            true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
+            true, //Whether to log extra data, like PDH currents, CAN usage, etc.
+            1000 //The size of the log message queue to use
+            ));
         // Testing...
         // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
         // SmartDashboard.putData("Amp Path Command", ampPathCommand());

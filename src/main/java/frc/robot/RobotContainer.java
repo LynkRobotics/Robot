@@ -12,6 +12,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -194,6 +196,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
 
+
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("auto/Auto Chooser", autoChooser);
@@ -229,6 +232,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Right climber target position", 0.0);
         SmartDashboard.putData("Set right climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
+
+        DogLog.setOptions(new DogLogOptions().withNtPublish(false));
         // Testing...
         // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
         // SmartDashboard.putData("Amp Path Command", ampPathCommand());

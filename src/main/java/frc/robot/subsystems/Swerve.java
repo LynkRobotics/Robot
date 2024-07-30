@@ -227,6 +227,20 @@ public class Swerve extends SubsystemBase {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
+    public void setMotorsToCoast(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setCoastMode();  
+        }
+        DogLog.log("Swerve/Status", "Coasted Swerve Motors");
+    }
+
+    public void setMotorsToBrake(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setBrakeMode();  
+        }
+        DogLog.log("Swerve/Status", "Braked Swerve Motors");
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
@@ -238,8 +252,8 @@ public class Swerve extends SubsystemBase {
         }
         
         DogLog.log("Swerve/Pose", getPose());
-        DogLog.log("Swerve/Gyro Heading", getHeading().getDegrees());
-        DogLog.log("Swerve/Gyro Raw Yaw", getGyroYaw());
+        DogLog.log("Swerve/Gyro/Heading", getHeading().getDegrees());
+        DogLog.log("Swerve/Gyro/Raw Yaw", getGyroYaw());
 
         for(SwerveModule mod : mSwerveMods){
             DogLog.log("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

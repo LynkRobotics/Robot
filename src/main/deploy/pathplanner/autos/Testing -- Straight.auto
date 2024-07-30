@@ -18,9 +18,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Start"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Test -- straight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Done"
           }
         },
         {

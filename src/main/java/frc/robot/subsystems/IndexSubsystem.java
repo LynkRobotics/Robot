@@ -83,6 +83,9 @@ public class IndexSubsystem extends SubsystemBase {
     boolean currentVal = haveNote();
 
     if (currentVal != haveNote) {
+      if (currentVal) {
+        System.out.println("DEBUG: Note presence detected");
+      }
       haveNote = currentVal;
       LEDSubsystem.setBaseState(haveNote ? BaseState.NOTE : BaseState.EMPTY);
     }

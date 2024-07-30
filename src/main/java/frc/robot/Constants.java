@@ -18,7 +18,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-    public static final double driveStickSensitivity = 1.00;
+    public static final double driveStickSensitivity = 1.00; 
     public static final double turnStickSensitivity = 1.00;
     public static final double aimingOverride = 0.25;
 
@@ -38,7 +38,7 @@ public final class Constants {
         /* Center to Center distance of left and right modules in meters. */
         public static final double wheelBase = Units.inchesToMeters(15.75); 
         /* Center to Center distance of front and rear module wheels in meters. */
-        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.955; // testing
+        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.965; // testing
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -201,7 +201,7 @@ public final class Constants {
         /* CANBus */
         public static final String shooterMotorCanBus = "rio";
         /* Motor Speed Values */
-        public static final double idleSpeed = 2500;
+        public static final double idleSpeed = 2500; 
         public static final double intakeSpeed = -800;
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
@@ -279,16 +279,17 @@ public final class Constants {
     }
 
     public static final class Vision {
-        public static final String cameraName = "Arducam_OV2311_USB_Camera";
+        public static final String cameraName = "AprilTagCam";
         public static final Transform3d robotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-6.5), 0.0, Units.inchesToMeters(13.25)), // Camera mounted 6.5 inches behind center of robot, and 13.25 inches above the floor
-            new Rotation3d(0, Units.degreesToRadians(-30), Math.PI)); // Camera pointed backwards and angled 30 degrees into the air
+            new Translation3d(-0.148, 0.005, 0.325),
+            new Rotation3d(Units.degreesToRadians(1.2), Units.degreesToRadians(-30.7), Math.PI)); // As measured by PhotonVision
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactorRed  =  0.930;
-        public static final double calibrationOffsetRed  = Units.inchesToMeters(-1.3);
-        public static final double calibrationFactorBlue =  0.941; 
-        public static final double calibrationOffsetBlue = Units.inchesToMeters(0.2);
+        public static final boolean atHQ = true;
+        public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
+        public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
+        public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;
+        public static final double calibrationOffsetRed  = atHQ ? calibrationFactorBlue : Units.inchesToMeters(0.0);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

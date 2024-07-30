@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -100,6 +101,8 @@ public class RobotContainer {
 
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
+        NamedCommands.registerCommand("Done", new PrintCommand("Done"));
+        NamedCommands.registerCommand("Start", new PrintCommand("Hello World"));
         NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
             Commands.print("Named 'Shoot' command starting")
@@ -295,6 +298,7 @@ public class RobotContainer {
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
+        SmartDashboard.putData("Speaker align", speakerPathCommand());        
     }
 
     /**
@@ -447,5 +451,31 @@ public class RobotContainer {
             ),
             Commands.runOnce(s_Vision::disableRotationSourceOverride)
         ).handleInterrupt(s_Vision::disableRotationSourceOverride);
+    }
+
+
+    private Command speakerPathCommand() {
+        PathPlannerPath path = PathPlannerPath.fromPathFile("To Speaker");
+
+        return Commands.sequence(
+            Commands.runOnce(s_Vision::enableRotationTargetOverride),
+            new FollowPathHolonomic(
+                path,
+                s_Pose::getPose, // Robot pose supplier
+                s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2.0, 0.0, 0.0), // Rotation PID constants
+                    Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                    Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                Robot::isRed,
+                s_Swerve // Reference to this subsystem to set requirements
+            ),
+            Commands.runOnce(s_Vision::disableRotationTargetOverride)
+        ).handleInterrupt(s_Vision::disableRotationTargetOverride)
+        .withName("Speaker align");
     }
 }

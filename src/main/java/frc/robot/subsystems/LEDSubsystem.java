@@ -8,6 +8,7 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -108,7 +109,8 @@ public class LEDSubsystem extends SubsystemBase {
     } else if (state == TempState.ERROR) {
       return Colors.red;
     } else {
-      System.out.println("tempStateColor: Unknown state: " + state);
+      System.out.println("tempStateColor: Unknown state: " + state); //TODO: Do we keep these prints along with the logs?
+      DogLog.log("LED/Error", "tempStateColor: Unknown state: " + state);
       return Colors.off;
     }
   }

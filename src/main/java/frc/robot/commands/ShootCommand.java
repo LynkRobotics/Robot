@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -80,7 +81,8 @@ public class ShootCommand extends Command {
     } else {
       if (!cancelled) {
         if (!shooter.shoot()) {
-          System.out.println("Cancelling ShootCommand due to shoot() failure");
+          System.out.println("Cancelling ShootCommand due to shoot() failure"); //TODO: Do we keep these prints along with the logs?
+          DogLog.log("Shooter/Error", "Cancelling ShootCommand due to shoot() failure");
           cancelled = true;
         }
       }

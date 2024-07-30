@@ -136,6 +136,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -152,6 +153,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void resetModulesToAbsolute(){
@@ -213,26 +215,16 @@ public class Swerve extends SubsystemBase {
 
     public void enableSpeedLimit() {
         speedLimit = true;
+        DogLog.log("Swerve/SpeedLimit", speedLimit);
     }
 
     public void disableSpeedLimit() {
         speedLimit = false;
+        DogLog.log("Swerve/SpeedLimit", speedLimit);
     }
 
     public double getSpeedLimitRot() {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
-    }
-
-    public void setMotorsToCoast(){
-        for(SwerveModule mod : mSwerveMods){
-            mod.setCoastMode();  
-        }
-    }
-
-    public void setMotorsToBrake(){
-        for(SwerveModule mod : mSwerveMods){
-            mod.setBrakeMode();  
-        }
     }
 
     @Override
@@ -246,7 +238,18 @@ public class Swerve extends SubsystemBase {
         }
         
         DogLog.log("Swerve/Pose", getPose());
-        DogLog.log("Swerve/GyroYawHeading", getHeading().getDegrees());
+        DogLog.log("Swerve/Gyro Heading", getHeading().getDegrees());
+        DogLog.log("Swerve/Gyro Raw Yaw", getGyroYaw());
+
+        for(SwerveModule mod : mSwerveMods){
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+        }
+
+        DogLog.log("Swerve/Module States", getModuleStates());
+
+        
 
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
         // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());

@@ -133,65 +133,81 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Shoot OTF",
             Commands.print("Begin OTF")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin OTF");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.print("Shot OTF complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Shot OTF complete");}))
         );
         NamedCommands.registerCommand("Amp-side OTF Shot",
             Commands.print("Begin Amp-side OTF Shot")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin Amp-side OTF Shot");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Amp-side OTF Shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Amp-side OTF Shot complete");}))
         );
         NamedCommands.registerCommand("Source-side OTF Shot",
             Commands.print("Begin Source-side OTF Shot")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin Source-side OTF Shot");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SOURCESIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Source-side OTF Shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Source-side OTF Shot complete");}))
         );
         NamedCommands.registerCommand("Intake note",
             Commands.print("Beginning intake")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Beginning Intake");}))
             .andThen(new IntakeCommand(s_Intake, s_Index, driver.getHID()))
-            .andThen(Commands.print("Intake complete")));
+            .andThen(Commands.print("Intake complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Intake Complete");}))
+            );
 
         NamedCommands.registerCommand("Amp Shot",
             Commands.print("Begin Amp Shot")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin Amp Shot");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Amp shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Amp Shot complete");}))
         );
         NamedCommands.registerCommand("Bloop Shot",
             Commands.print("Begin Bloop Shot")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin Bloop Shot");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.BLOOP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Bloop shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Bloop Shot complete");}))
         );
         NamedCommands.registerCommand("Slide Shot",
             Commands.print("Begin Slide Shot")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin Slide shot");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Slide shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Slide shot complete");}))
         );
         NamedCommands.registerCommand("Short Slide Shot",
             Commands.print("Begin Short Slide Shot")
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Begin Short Slide shot");}))
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SHORTSLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.print("Short Slide shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug/", "Short Slide shot complete");}))
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
@@ -242,7 +258,7 @@ public class RobotContainer {
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
-            ));
+            ).withCaptureDs(true));
 
         // Testing...
         // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));

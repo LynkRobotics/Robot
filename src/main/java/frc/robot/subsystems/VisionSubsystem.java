@@ -240,11 +240,12 @@ public class VisionSubsystem extends SubsystemBase {
         lastPose = estPose3d.toPose2d();
         field.setRobotPose(lastPose);
     }
+
     DogLog.log("Vision/Pose", lastPose);
     DogLog.log("Vision/Result", result.toString());
     DogLog.log("Vision/New result", newResult);
     DogLog.log("Vision/Result hasTargets", result.hasTargets());
-    DogLog.log("Vision/distance", Units.metersToInches(distanceToSpeaker()));
+    DogLog.log("Vision/Distance", Units.metersToInches(distanceToSpeaker()));
     DogLog.log("Vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
     DogLog.log("Vision/speakerOffset", speakerOffset().toString());
     DogLog.log("Vision/speakerOffset angle", angleToSpeaker().getDegrees());
@@ -295,6 +296,12 @@ public class VisionSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("vision/Have amp target", haveAmpTarget);
         SmartDashboard.putBoolean("vision/Have source target", haveSourceTarget);
       }
+
+      DogLog.log("Vision/Have target(s)", haveTarget);
+      DogLog.log("Vision/Have speaker target", haveSpeakerTarget);
+      DogLog.log("Vision/Have amp target", haveAmpTarget);
+      DogLog.log("Vision/Have source target", haveSourceTarget);
+      
     }
   }
 }

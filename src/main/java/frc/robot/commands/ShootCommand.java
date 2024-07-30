@@ -143,7 +143,7 @@ public class ShootCommand extends Command {
           if (swerve == null) {
             System.out.println("Unable to set pose due to lack of Swerve subsystem");
           } else {
-            Pose2d oldPose = swerve.getPose();
+            Pose2d oldPose = PoseSubsystem.getInstance().getPose();
             System.out.printf("Setting pose based on vision to (%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)\n",
               pose.getX(), pose.getY(), pose.getRotation().getDegrees(), oldPose.getX(), oldPose.getY(), oldPose.getRotation().getDegrees());
             PoseSubsystem.getInstance().setPose(pose);

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -60,5 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
       System.out.println("DEBUG: Intaking note detected");
     }
     SmartDashboard.putNumber("intake/torqueCurrent", current);
+
+    DogLog.log("Intake/TorqueCurrent", current);
   }
 }

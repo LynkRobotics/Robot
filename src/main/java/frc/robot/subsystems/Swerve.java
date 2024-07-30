@@ -230,7 +230,7 @@ public class Swerve extends SubsystemBase {
 
     public void setMotorsToBrake(){
         for(SwerveModule mod : mSwerveMods){
-            mod.setCoastMode();  
+            mod.setBrakeMode();  
         }
     }
 

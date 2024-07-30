@@ -245,7 +245,7 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("vision/Result hasTargets", result.hasTargets());
       SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
       SmartDashboard.putNumber("vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
-      SmartDashboard.putString("vision/Last pose", lastPose.toString());
+      SmartDashboard.putString("vision/Last pose", String.format("%01.2f, %01.2f @ %01.1f", lastPose.getX(), lastPose.getY(), lastPose.getRotation().getDegrees()));
       SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());

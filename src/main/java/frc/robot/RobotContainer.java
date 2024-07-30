@@ -232,6 +232,9 @@ public class RobotContainer {
         SmartDashboard.putNumber("Right climber target position", 0.0);
         SmartDashboard.putData("Set right climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
+        SmartDashboard.putData("autoSetup/SetSwerveCoast", Commands.print("Coasting Swerve").andThen(Commands.runOnce(s_Swerve::setMotorsToCoast, s_Swerve)).andThen(Commands.print("Motors Coasting")).ignoringDisable(true));
+        SmartDashboard.putData("autoSetup/SetSwerveBrake", Commands.print("Braking Swerve").andThen(Commands.runOnce(s_Swerve::setMotorsToBrake, s_Swerve)).andThen(Commands.print("Motors Braking")).ignoringDisable(true));
+
 
         DogLog.setOptions(new DogLogOptions(
             false, //Whether logged values should be published to NetworkTables
@@ -240,6 +243,7 @@ public class RobotContainer {
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
             ));
+
         // Testing...
         // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
         // SmartDashboard.putData("Amp Path Command", ampPathCommand());

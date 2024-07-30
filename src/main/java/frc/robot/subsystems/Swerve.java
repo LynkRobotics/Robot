@@ -233,7 +233,8 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
         
-        DogLog.log("SwervePose", getPose());
+        DogLog.log("Swerve/Pose", getPose());
+        DogLog.log("Swerve/GyroYawHeading", getHeading().getDegrees());
 
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
         // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());

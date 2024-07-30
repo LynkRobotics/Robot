@@ -30,6 +30,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import dev.doglog.DogLog;
+
 public class VisionSubsystem extends SubsystemBase {
   private static VisionSubsystem instance;
   private final PhotonCamera camera;
@@ -238,6 +240,15 @@ public class VisionSubsystem extends SubsystemBase {
         lastPose = estPose3d.toPose2d();
         field.setRobotPose(lastPose);
     }
+    DogLog.log("Vision/Pose", lastPose);
+    DogLog.log("Vision/Result", result.toString());
+    DogLog.log("Vision/New result", newResult);
+    DogLog.log("Vision/Result hasTargets", result.hasTargets());
+    DogLog.log("Vision/distance", Units.metersToInches(distanceToSpeaker()));
+    DogLog.log("Vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
+    DogLog.log("Vision/speakerOffset", speakerOffset().toString());
+    DogLog.log("Vision/speakerOffset angle", angleToSpeaker().getDegrees());
+    DogLog.log("Vision/Angle error", angleError().getDegrees());
 
     if (updateDashboard) {
       SmartDashboard.putString("vision/Result", result.toString());

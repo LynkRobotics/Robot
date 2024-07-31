@@ -86,7 +86,7 @@ public class IndexSubsystem extends SubsystemBase {
 
     if (currentVal != haveNote) {
       if (currentVal) {
-        System.out.println("DEBUG: Note presence detected");
+        DogLog.log("Index/Status", "DEBUG: Note presence detected");
       }
       haveNote = currentVal;
       LEDSubsystem.setBaseState(haveNote ? BaseState.NOTE : BaseState.EMPTY);

@@ -109,8 +109,7 @@ public class LEDSubsystem extends SubsystemBase {
     } else if (state == TempState.ERROR) {
       return Colors.red;
     } else {
-      System.out.println("tempStateColor: Unknown state: " + state); //TODO: Do we keep these prints along with the logs?
-      DogLog.log("LED/Error", "tempStateColor: Unknown state: " + state);
+      DogLog.log("LED/Status", "tempStateColor: Unknown state: " + state);
       return Colors.off;
     }
   }
@@ -127,7 +126,7 @@ public class LEDSubsystem extends SubsystemBase {
     } else if (state == BaseState.SHOOTABLE) {
       return Colors.green;
     } else {
-      System.out.println("baseStateColor: Unknown state: " + state);
+      DogLog.log("LED/Status", "baseStateColor: Unknown state: " + state);
       return Colors.off;
     }
   }
@@ -176,7 +175,7 @@ public class LEDSubsystem extends SubsystemBase {
     if (tempState == null) {
       // Check for possible temporary startup condition, and skip it
       if (baseState == null) {
-        System.out.println("LEDSubsystem::periodic: Base State NULL");
+        DogLog.log("LED/Status", "LEDSubsystem::periodic: Base State NULL");
       } else {
         if (baseState != lastBaseState || lastTempState != null) {
           setColor(baseStateColor(baseState));

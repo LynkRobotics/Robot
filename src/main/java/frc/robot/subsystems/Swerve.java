@@ -137,7 +137,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
-        DogLog.log("Swerve/Status/Gyro", "Zeroed Gyro Heading");
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -154,7 +154,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
-        DogLog.log("Swerve/Status/Gyro", "Zeroed Gyro Yaw");
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void resetModulesToAbsolute(){
@@ -216,12 +216,12 @@ public class Swerve extends SubsystemBase {
 
     public void enableSpeedLimit() {
         speedLimit = true;
-        DogLog.log("Swerve/Status/", "Swerve Speed Limit Enabled");
+        DogLog.log("Swerve/Status", "Swerve Speed Limit Enabled");
     }
 
     public void disableSpeedLimit() {
         speedLimit = false;
-        DogLog.log("Swerve/Status/", "Swerve Speed Limit Disabled");
+        DogLog.log("Swerve/Status", "Swerve Speed Limit Disabled");
     }
 
     public double getSpeedLimitRot() {
@@ -263,9 +263,7 @@ public class Swerve extends SubsystemBase {
         }
 
         DogLog.log("Swerve/Module States", getModuleStates());
-
         
-
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
         // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());
         SmartDashboard.putString("swerve/Pose", getPose().toString());

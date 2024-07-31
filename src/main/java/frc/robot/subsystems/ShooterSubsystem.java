@@ -211,8 +211,7 @@ public class ShooterSubsystem extends SubsystemBase {
       double distance = VisionSubsystem.getInstance().distanceToSpeaker();
       shooterSpeed = speedFromDistance(distance);
       if (shooterSpeed == null) {
-        System.out.printf("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance));
-        // DogLog.log("Shooter/", "ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance)); //TODO: Find a way to do this properly :)
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance))); 
         return false;
       }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
@@ -307,6 +306,6 @@ public class ShooterSubsystem extends SubsystemBase {
     DogLog.log("Shooter/Top RPM err", topVel - topCurrentTarget);
     DogLog.log("Shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
     DogLog.log("Shooter/Ready", isReady(false));
-    DogLog.log("shooter/usingVision", usingVision());
+    DogLog.log("Shooter/usingVision", usingVision());
   }
 }

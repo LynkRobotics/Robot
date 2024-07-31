@@ -58,7 +58,7 @@ public class IntakeSubsystem extends SubsystemBase {
     boolean active = (current > 20.0);
 
     if (active && !intaking) {
-      System.out.println("DEBUG: Intaking note detected");
+      DogLog.log("Intake/Status", "DEBUG: Intaking note detected");
     }
     SmartDashboard.putNumber("intake/torqueCurrent", current);
 

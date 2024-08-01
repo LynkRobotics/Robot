@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     LEDSubsystem.setBaseState(BaseState.READY);
     // DriverStation.silenceJoystickConnectionWarning(true);
+    DogLog.log("Misc/Robot Status", "Robot has Started");
   }
 
   /**
@@ -54,11 +55,15 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+    DogLog.log("Robot Enabled", DriverStation.isEnabled());
+    DogLog.log("Match Time", DriverStation.getMatchTime());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    DogLog.log("Misc/Robot Status", "Robot has been disabled");
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -66,6 +71,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DogLog.log("Misc/Robot Status", "Auto has begun");
     LEDSubsystem.setBaseState(BaseState.READY);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -92,6 +98,7 @@ public class Robot extends TimedRobot {
     } else {
       LEDSubsystem.setBaseState(BaseState.READY);
     }
+    DogLog.log("Misc/Robot Status", "Tele-Op has begun");
   }
 
   /** This function is called periodically during operator control. */

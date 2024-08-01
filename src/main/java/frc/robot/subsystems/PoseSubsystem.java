@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -82,6 +83,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroGyro() {
         gyro.setYaw(0);
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void hack() {
@@ -94,6 +96,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(getGyroYaw(), s_Swerve.getModulePositions(), pose);
+        DogLog.log("Swerve/Status/Setting Pose", pose);
     }
 
     public Rotation2d getHeading() {
@@ -106,6 +109,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -206,5 +210,9 @@ public class PoseSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
         SmartDashboard.putString("pose/Pose", getPose().toString());
+
+        DogLog.log("Pose/Pose", getPose());
+        DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
+        DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
     if (alliance.isPresent()) {
         return alliance.get() == DriverStation.Alliance.Red;
     }
-    System.out.print("Driver Station not Connected, Defaulting to Blue");
+    DogLog.log("DriverStation/Status", "Driver Station not Connected, Defaulting to Blue");
     return false;
   }
 }

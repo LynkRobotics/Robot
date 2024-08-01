@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -81,7 +82,7 @@ public class ShootCommand extends Command {
     } else {
       if (!cancelled) {
         if (!shooter.shoot()) {
-          System.out.println("Cancelling ShootCommand due to shoot() failure");
+          DogLog.log("Shooter/Error", "Cancelling ShootCommand due to shoot() failure");
           cancelled = true;
         }
       }
@@ -101,7 +102,7 @@ public class ShootCommand extends Command {
     if (shooter.usingVision() && !seenTarget) {
       seenTarget = vision.haveSpeakerTarget();
       if (!seenTarget) {
-        System.out.println("Shoot Command waiting for speaker target");
+        DogLog.log("Shooter/Status", "Shoot Command waiting for speaker target");
         return;
       }
     }
@@ -119,13 +120,13 @@ public class ShootCommand extends Command {
           aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
         } else if (shooter.dumping()) {
           if (swerve == null) {
-            System.out.println("ERROR: Cannot aim for dumping without swerve object");
+            DogLog.log("Shooter/Status", "ERROR: Cannot aim for dumping without swerve object");
           } else {
             aligned = PoseSubsystem.getInstance().dumpShotAligned();
           }
         } else if (shooter.sliding()) {
           if (swerve == null) {
-            System.out.println("ERROR: Cannot aim for sliding without swerve object");
+            DogLog.log("Shooter/Status", "ERROR: Cannot aim for sliding without swerve object");
           } else {
             aligned = PoseSubsystem.getInstance().slideShotAligned();
           }
@@ -137,13 +138,13 @@ public class ShootCommand extends Command {
       if (aligned) {
         index.feed();
         feeding = true;
-        System.out.printf("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker()));
+        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker())));
         if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
           Pose2d pose = vision.lastPose();
           if (swerve == null) {
-            System.out.println("Unable to set pose due to lack of Swerve subsystem");
+            DogLog.log("Shooter/Status", "Unable to set pose due to lack of Swerve subsystem");
           } else {
-            System.out.println("Setting pose based on vision: " + pose);
+            DogLog.log("Shooter/Status", "Setting pose based on vision: " + pose);
             PoseSubsystem.getInstance().setPose(pose);
           }
         }
@@ -152,7 +153,7 @@ public class ShootCommand extends Command {
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
       if (!shooter.shoot()) {
-        System.out.println("Cancelling ShootCommand due to shoot() failure [2]");
+        DogLog.log("Shooter/Status", "Cancelling ShootCommand due to shoot() failure [2]");
         cancelled = true;
         cancel();
         LEDSubsystem.setTempState(TempState.ERROR);

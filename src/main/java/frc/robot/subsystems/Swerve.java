@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -79,22 +80,43 @@ public class Swerve extends SubsystemBase {
 
     public void enableSpeedLimit() {
         speedLimit = true;
+        DogLog.log("Swerve/Status", "Swerve Speed Limit Enabled");
     }
 
     public void disableSpeedLimit() {
         speedLimit = false;
+        DogLog.log("Swerve/Status", "Swerve Speed Limit Disabled");
     }
 
     public double getSpeedLimitRot() {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
+    public void setMotorsToCoast(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setCoastMode();  
+        }
+        DogLog.log("Swerve/Status", "Coasted Swerve Motors");
+    }
+
+    public void setMotorsToBrake(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setBrakeMode();  
+        }
+        DogLog.log("Swerve/Status", "Braked Swerve Motors");
+    }
+
     @Override
     public void periodic(){
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
+
+        DogLog.log("Swerve/Module States", getModuleStates());        
     }
 }

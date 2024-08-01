@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,10 +33,10 @@ public class ClimberPositionCommand extends Command {
   public void initialize() {
     cancelled = false;
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
-      System.out.println("ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
+      DogLog.log("Climber/Error", "ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
     } else if (!SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
-      System.out.println("ERROR: Attempt to use climbers, but they are disabled");
+      DogLog.log("Climber/Error", "ERROR: Attempt to use climbers, but they are disabled");
       cancelled = true;
     } else {
       cancelled = false;

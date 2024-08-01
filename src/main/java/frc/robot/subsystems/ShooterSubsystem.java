@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -210,7 +211,7 @@ public class ShooterSubsystem extends SubsystemBase {
       double distance = VisionSubsystem.getInstance().distanceToSpeaker();
       shooterSpeed = speedFromDistance(distance);
       if (shooterSpeed == null) {
-        System.out.printf("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance));
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance))); 
         return false;
       }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
@@ -296,5 +297,15 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("shooter/ready", isReady(false));
     SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
+
+
+    DogLog.log("Shooter/Top RPM", topVel);
+    DogLog.log("Shooter/Bottom RPM", bottomVel);
+    DogLog.log("Shooter/Top RPM tgt", topCurrentTarget);
+    DogLog.log("Shooter/Bottom RPM tgt", bottomCurrentTarget);
+    DogLog.log("Shooter/Top RPM err", topVel - topCurrentTarget);
+    DogLog.log("Shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
+    DogLog.log("Shooter/Ready", isReady(false));
+    DogLog.log("Shooter/usingVision", usingVision());
   }
 }

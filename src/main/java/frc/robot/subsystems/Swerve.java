@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -123,6 +124,7 @@ public class Swerve extends SubsystemBase {
 
     public void setPose(Pose2d pose) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        DogLog.log("Swerve/Status/Setting Pose", pose);
     }
 
     public Rotation2d getHeading() {
@@ -135,6 +137,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -151,6 +154,7 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void resetModulesToAbsolute(){
@@ -212,14 +216,30 @@ public class Swerve extends SubsystemBase {
 
     public void enableSpeedLimit() {
         speedLimit = true;
+        DogLog.log("Swerve/Status", "Swerve Speed Limit Enabled");
     }
 
     public void disableSpeedLimit() {
         speedLimit = false;
+        DogLog.log("Swerve/Status", "Swerve Speed Limit Disabled");
     }
 
     public double getSpeedLimitRot() {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
+    }
+
+    public void setMotorsToCoast(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setCoastMode();  
+        }
+        DogLog.log("Swerve/Status", "Coasted Swerve Motors");
+    }
+
+    public void setMotorsToBrake(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setBrakeMode();  
+        }
+        DogLog.log("Swerve/Status", "Braked Swerve Motors");
     }
 
     @Override
@@ -231,7 +251,19 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
+        
+        DogLog.log("Swerve/Pose", getPose());
+        DogLog.log("Swerve/Gyro/Heading", getHeading().getDegrees());
+        DogLog.log("Swerve/Gyro/Raw Yaw", getGyroYaw());
 
+        for(SwerveModule mod : mSwerveMods){
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+            DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+        }
+
+        DogLog.log("Swerve/Module States", getModuleStates());
+        
         SmartDashboard.putNumber("Gyro", getHeading().getDegrees());
         // System.out.println("Swerve: Heading @ " + getHeading().getDegrees());
         SmartDashboard.putString("swerve/Pose", getPose().toString());

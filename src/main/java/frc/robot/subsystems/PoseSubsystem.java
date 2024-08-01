@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -53,6 +54,9 @@ public class PoseSubsystem extends SubsystemBase {
         field = new Field2d();
         SmartDashboard.putData("pose/Field", field);
 
+        SmartDashboard.putBoolean("pose/Update from vision in Teleop", true);
+        SmartDashboard.putBoolean("pose/Update from vision in Auto", false);
+
         AutoBuilder.configureHolonomic(
             this::getPose,
             this::setPose,
@@ -82,6 +86,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroGyro() {
         gyro.setYaw(0);
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void hack() {
@@ -94,6 +99,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(getGyroYaw(), s_Swerve.getModulePositions(), pose);
+        DogLog.log("Swerve/Status/Setting Pose", pose);
     }
 
     public Rotation2d getHeading() {
@@ -106,6 +112,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
+        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -196,8 +203,8 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
-        if ((DriverStation.isTeleop() && !SmartDashboard.getBoolean("Disable Vision Pose in Teleop", false))
-            || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("Use Vision Pose in Auto", false))) {
+        if ((DriverStation.isTeleop() && SmartDashboard.getBoolean("pose/Update from vision in Teleop", true))
+            || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("pose/Update from vision in Auto", false))) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {
             s_Vision.updatePoseEstimate(null);
@@ -206,5 +213,9 @@ public class PoseSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
         SmartDashboard.putString("pose/Pose", getPose().toString());
+
+        DogLog.log("Pose/Pose", getPose());
+        DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
+        DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }
 }

@@ -12,6 +12,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -105,95 +107,94 @@ public class RobotContainer {
         NamedCommands.registerCommand("Start", new PrintCommand("Hello World"));
         NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
-            Commands.print("Named 'Shoot' command starting")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Named 'Shoot' command starting");})
             .andThen(
                 (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.print("After ShootCommand")))
                  .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
                  .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
-            .andThen(Commands.print("After race group"))
-            .andThen(Commands.print("Named 'Shoot' command ending"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "After race group");}))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Named 'Shoot' command ending");}))
         );
         NamedCommands.registerCommand("Shoot without aiming",
-            Commands.print("Begin shot w/o aim")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin shot w/o aim");})
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, s_Swerve, false)
                 .raceWith(Commands.waitSeconds(1.50))))
-            .andThen(Commands.print("Shot w/o aim complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Shot w/o aim complete");}))  
         );
         NamedCommands.registerCommand("Fixed SW shot",
-            Commands.print("Begin SW shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin SW shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SUBWOOFER); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
-            .andThen(Commands.print("SW shot complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "SW complete");}))
         );
         NamedCommands.registerCommand("Shoot OTF",
-            Commands.print("Begin OTF")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin OTF");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
-            .andThen(Commands.print("Shot OTF complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Shot OTF complete");}))
         );
         NamedCommands.registerCommand("Amp-side OTF Shot",
-            Commands.print("Begin Amp-side OTF Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin Amp-side OTF Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Amp-side OTF Shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Amp-side OTF Shot complete");}))
         );
         NamedCommands.registerCommand("Source-side OTF Shot",
-            Commands.print("Begin Source-side OTF Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin Source-side OTF Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SOURCESIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Source-side OTF Shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Source-side OTF Shot complete");}))
         );
         NamedCommands.registerCommand("Intake note",
-            Commands.print("Beginning intake")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Beginning Intake");})
             .andThen(new IntakeCommand(s_Intake, s_Index, driver.getHID()))
-            .andThen(Commands.print("Intake complete")));
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Intake Complete");}))
+            );
 
         NamedCommands.registerCommand("Amp Shot",
-            Commands.print("Begin Amp Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin Amp Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Amp shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Amp Shot complete");}))
         );
         NamedCommands.registerCommand("Bloop Shot",
-            Commands.print("Begin Bloop Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin Bloop Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.BLOOP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Bloop shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Bloop Shot complete");}))
         );
         NamedCommands.registerCommand("Slide Shot",
-            Commands.print("Begin Slide Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin Slide shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Slide shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Slide shot complete");}))
         );
         NamedCommands.registerCommand("Short Slide Shot",
-            Commands.print("Begin Short Slide Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Begin Short Slide shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SHORTSLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Short Slide shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Debug", "Short Slide shot complete");}))
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
+
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -229,6 +230,18 @@ public class RobotContainer {
         SmartDashboard.putData("Set left climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Left climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
         SmartDashboard.putNumber("Right climber target position", 0.0);
         SmartDashboard.putData("Set right climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber));
+
+        SmartDashboard.putData("autoSetup/SetSwerveCoast", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Coasting Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToCoast, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Coasted");})).ignoringDisable(true));
+        SmartDashboard.putData("autoSetup/SetSwerveBrake", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Braking Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToBrake, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Braked");})).ignoringDisable(true));
+
+
+        DogLog.setOptions(new DogLogOptions(
+            false, //Whether logged values should be published to NetworkTables
+            false, //Whether all NetworkTables fields should be saved to the log file.
+            true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
+            true, //Whether to log extra data, like PDH currents, CAN usage, etc.
+            1000 //The size of the log message queue to use
+            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
 
         // Testing...
         SmartDashboard.putBoolean("Shoot with Vision", true);

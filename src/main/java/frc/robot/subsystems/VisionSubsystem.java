@@ -31,6 +31,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import dev.doglog.DogLog;
+
 public class VisionSubsystem extends SubsystemBase {
   private static VisionSubsystem instance;
   private final PhotonCamera camera;
@@ -278,6 +280,19 @@ public class VisionSubsystem extends SubsystemBase {
       }
     }
 
+    DogLog.log("Vision/Result", result.toString());
+    DogLog.log("Vision/Have target(s)", haveTarget);
+    DogLog.log("Vision/Have speaker target", haveSpeakerTarget);
+    DogLog.log("Vision/Have amp target", haveAmpTarget);
+    DogLog.log("Vision/Have source target", haveSourceTarget);
+    DogLog.log("Vision/Result hasTargets", result.hasTargets());
+    DogLog.log("Vision/Distance", Units.metersToInches(distanceToSpeaker()));
+    DogLog.log("Vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
+    DogLog.log("Vision/Pose", lastPose);
+    DogLog.log("Vision/speakerOffset", speakerOffset().toString());
+    DogLog.log("Vision/speakerOffset angle", angleToSpeaker().getDegrees());
+    DogLog.log("Vision/Angle error", angleError().getDegrees());
+
     updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
     if (updateDashboard) {
       SmartDashboard.putString("vision/Result", result.toString());
@@ -291,7 +306,6 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
-      // System.out.println("Vision(" + newResult + "," + result.hasTargets() + "): Angle error between speaker @ " + angleToSpeaker().getDegrees() + " and robot @ " + lastPose.getRotation().getDegrees());
     }
   }
 }

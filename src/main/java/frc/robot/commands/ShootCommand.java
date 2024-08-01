@@ -138,13 +138,14 @@ public class ShootCommand extends Command {
       if (aligned) {
         index.feed();
         feeding = true;
-        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker())));
+        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker())));
         if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
           Pose2d pose = vision.lastPose();
           if (swerve == null) {
             DogLog.log("Shooter/Status", "Unable to set pose due to lack of Swerve subsystem");
           } else {
-            DogLog.log("Shooter/Status", "Setting pose based on vision: " + String.format("%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)\n",
+            Pose2d oldPose = PoseSubsystem.getInstance().getPose();
+            DogLog.log("Shooter/Status", "Setting pose based on vision: " + String.format("%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)",
               pose.getX(), pose.getY(), pose.getRotation().getDegrees(), oldPose.getX(), oldPose.getY(), oldPose.getRotation().getDegrees()));
             PoseSubsystem.getInstance().setPose(pose);
           }

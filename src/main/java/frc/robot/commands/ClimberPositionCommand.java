@@ -33,10 +33,10 @@ public class ClimberPositionCommand extends Command {
   public void initialize() {
     cancelled = false;
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
-      DogLog.log("Climber/Error", "ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
+      DogLog.log("Climber/Status", "ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
     } else if (!SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
-      DogLog.log("Climber/Error", "ERROR: Attempt to use climbers, but they are disabled");
+      DogLog.log("Climber/Status", "ERROR: Attempt to use climbers, but they are disabled");
       cancelled = true;
     } else {
       cancelled = false;

@@ -82,7 +82,7 @@ public class ShootCommand extends Command {
     } else {
       if (!cancelled) {
         if (!shooter.shoot()) {
-          DogLog.log("Shooter/Error", "Cancelling ShootCommand due to shoot() failure");
+          DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
           cancelled = true;
         }
       }

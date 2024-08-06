@@ -33,6 +33,7 @@ public class PoseSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field;
     private final Pigeon2 gyro;
+    private static Rotation2d targetAngle = null;
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
         assert(instance == null);
@@ -191,6 +192,14 @@ public class PoseSubsystem extends SubsystemBase {
         Rotation2d robotAngle = getPose().getRotation();
 
         return speakerAngle.minus(robotAngle);
+    }
+
+    public static void setTargetAngle(Rotation2d angle) {
+        targetAngle = angle;
+    }
+    
+    public static Rotation2d getTargetAngle() {
+        return targetAngle;
     }
     
     public static double angleErrorToSpeed(Rotation2d angleError) {

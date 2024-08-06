@@ -90,6 +90,12 @@ public class TeleopSwerve extends Command {
                     }
                     inProgress = true;
                     rotationVal = PoseSubsystem.angleErrorToSpeed(s_Vision.angleError());
+                } else if (PoseSubsystem.getTargetAngle() != null) {
+                    if (!inProgress) {
+                        PoseSubsystem.angleErrorReset();
+                    }
+                    inProgress = true;
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(PoseSubsystem.getTargetAngle().minus(PoseSubsystem.getInstance().getPose().getRotation()));
                 } else {
                     inProgress = false;
                 }

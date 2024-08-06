@@ -204,9 +204,16 @@ public class PoseSubsystem extends SubsystemBase {
     
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
+        double correction = Pose.rotationPID.calculate(angleErrorDeg);
+        double feedForward = Pose.rotationKS * Math.signum(angleErrorDeg);
+        double output = MathUtil.clamp(correction + feedForward, -1.0, 1.0);
 
-        // System.out.printf("Angle error %01.1f => %01.4f , %01.4f => %01.4f\n", angleErrorDeg, Pose.rotationPID.calculate(angleErrorDeg), Pose.rotationKS * Math.signum(angleErrorDeg), MathUtil.clamp(-Pose.rotationPID.calculate(angleErrorDeg) + -Pose.rotationKS * Math.signum(angleErrorDeg), -1.0, 1.0));
-        return MathUtil.clamp(-Pose.rotationPID.calculate(angleErrorDeg) + Pose.rotationKS * Math.signum(angleErrorDeg), -1.0, 1.0);
+        DogLog.log("Pose/Angle Error", angleErrorDeg);
+        DogLog.log("Pose/Angle PID correction", correction);
+        DogLog.log("Pose/Angle feedforward", feedForward);
+        DogLog.log("Pose/Angle output", output);
+        
+        return output;
     }
 
     @Override

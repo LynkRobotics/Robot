@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     LEDSubsystem.setBaseState(BaseState.READY);
     // DriverStation.silenceJoystickConnectionWarning(true);
+    DogLog.log("Misc/Robot Status", "Robot has Started");
   }
 
   /**
@@ -57,7 +59,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    DogLog.log("Misc/Robot Status", "Robot has been disabled");
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -65,6 +69,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DogLog.log("Misc/Robot Status", "Auto has begun");
     LEDSubsystem.setBaseState(BaseState.READY);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -91,6 +96,7 @@ public class Robot extends TimedRobot {
     } else {
       LEDSubsystem.setBaseState(BaseState.READY);
     }
+    DogLog.log("Misc/Robot Status", "Tele-Op has begun");
   }
 
   /** This function is called periodically during operator control. */
@@ -120,7 +126,7 @@ public class Robot extends TimedRobot {
     if (alliance.isPresent()) {
         return alliance.get() == DriverStation.Alliance.Red;
     }
-    System.out.print("Driver Station not Connected, Defaulting to Blue");
+    DogLog.log("DriverStation/Status", "Driver Station not Connected, Defaulting to Blue");
     return false;
   }
 }

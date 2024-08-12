@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -69,16 +70,18 @@ public class IntakeSubsystem extends SubsystemBase {
     if (active) {
       if (!starting && !haveNote) {
         haveNote = true;
-        System.out.println("DEBUG: Intaking note detected");
+        DogLog.log("Intake/Status", "DEBUG: Intaking note detected");
       }
       if (stuck && !isStuck) {
         isStuck = true;
-        System.out.println("DEBUG: Intake is stuck");
+        DogLog.log("Intake/Status", "DEBUG: Intake is stuck");
       }
     } else if (starting) {
       starting = false;
     }
     
     SmartDashboard.putNumber("intake/torqueCurrent", current);
+
+    DogLog.log("Intake/TorqueCurrent", current);
   }
 }

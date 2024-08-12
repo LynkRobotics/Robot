@@ -12,7 +12,9 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -74,6 +76,8 @@ public class RobotContainer {
     @SuppressWarnings ("unused")
     private final LEDSubsystem s_Led = new LEDSubsystem();
     private final VisionSubsystem s_Vision = new VisionSubsystem();
+    @SuppressWarnings ("unused")
+    private final PoseSubsystem s_Pose = new PoseSubsystem(s_Swerve, s_Vision);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -104,95 +108,94 @@ public class RobotContainer {
         NamedCommands.registerCommand("Start", new PrintCommand("Hello World"));
         NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
-            Commands.print("Named 'Shoot' command starting")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command starting");})
             .andThen(
-                (Commands.print("Before ShootCommand").andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.print("After ShootCommand")))
-                 .raceWith(Commands.print("Before AimCommand").andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.print("After AimCommand")))
-                 .raceWith(Commands.print("Before waitSeconds").andThen(Commands.waitSeconds(2.50)).andThen(Commands.print("After waitSeconds"))))
-            .andThen(Commands.print("After race group"))
-            .andThen(Commands.print("Named 'Shoot' command ending"))
+                (Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before ShootCommand");}).andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After ShootCommand");})))
+                 .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before AimCommand");}).andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After ShootCommand");})))
+                 .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before waitSeconds");}).andThen(Commands.waitSeconds(2.50)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After waitSeconds");}))))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After race group");}))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command ending");}))
         );
         NamedCommands.registerCommand("Shoot without aiming",
-            Commands.print("Begin shot w/o aim")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin shot w/o aim");})
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, s_Swerve, false)
                 .raceWith(Commands.waitSeconds(1.50))))
-            .andThen(Commands.print("Shot w/o aim complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Shot w/o aim complete");}))  
         );
         NamedCommands.registerCommand("Fixed SW shot",
-            Commands.print("Begin SW shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin SW shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SUBWOOFER); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
-            .andThen(Commands.print("SW shot complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "SW complete");}))
         );
         NamedCommands.registerCommand("Shoot OTF",
-            Commands.print("Begin OTF")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin OTF");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
-            .andThen(Commands.print("Shot OTF complete"))
-            
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Shot OTF complete");}))
         );
         NamedCommands.registerCommand("Amp-side OTF Shot",
-            Commands.print("Begin Amp-side OTF Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Amp-side OTF Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Amp-side OTF Shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Amp-side OTF Shot complete");}))
         );
         NamedCommands.registerCommand("Source-side OTF Shot",
-            Commands.print("Begin Source-side OTF Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Source-side OTF Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SOURCESIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Source-side OTF Shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Source-side OTF Shot complete");}))
         );
         NamedCommands.registerCommand("Intake note",
-            Commands.print("Beginning intake")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Beginning Intake");})
             .andThen(new StartIntakeCommand(s_Intake, s_Index, s_Shooter, driver.getHID()))
-            .andThen(Commands.print("Intake complete")));
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Intake Complete");}))
+            );
 
         NamedCommands.registerCommand("Amp Shot",
-            Commands.print("Begin Amp Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Amp Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Amp shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Amp Shot complete");}))
         );
         NamedCommands.registerCommand("Bloop Shot",
-            Commands.print("Begin Bloop Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Bloop Shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.BLOOP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Bloop shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Bloop Shot complete");}))
         );
         NamedCommands.registerCommand("Slide Shot",
-            Commands.print("Begin Slide Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Slide shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Slide shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Slide shot complete");}))
         );
         NamedCommands.registerCommand("Short Slide Shot",
-            Commands.print("Begin Short Slide Shot")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Short Slide shot");})
             .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SHORTSLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
-            .andThen(Commands.print("Short Slide shot complete"))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Short Slide shot complete");}))
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
+
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -209,9 +212,9 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter top RPM", 1000.0);
         SmartDashboard.putNumber("Shooter bottom RPM", 1000.0);
         SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
-        SmartDashboard.putData("Zero Gyro", Commands.print("Zeroing gyro").andThen(Commands.runOnce(s_Swerve::zeroGyro, s_Swerve)).andThen(Commands.print("Gyro zeroed")));
-        SmartDashboard.putData("Zero heading", Commands.print("Zeroing heading").andThen(Commands.runOnce(s_Swerve::zeroHeading, s_Swerve)).andThen(Commands.print("Heading zeroed")));
-        SmartDashboard.putData("Reset heading", Commands.print("Resetting heading").andThen(Commands.runOnce(s_Swerve::resetHeading, s_Swerve)).andThen(Commands.print("Heading reset")));
+        SmartDashboard.putData("Zero Gyro", Commands.print("Zeroing gyro").andThen(Commands.runOnce(s_Pose::zeroGyro, s_Swerve)).andThen(Commands.print("Gyro zeroed")).withName("Zero Gyro")); //TODO: Test
+        SmartDashboard.putData("Zero heading", Commands.print("Zeroing heading").andThen(Commands.runOnce(s_Pose::zeroHeading, s_Swerve)).andThen(Commands.print("Heading zeroed")).withName("Zero heading")); //TODO: Test
+        SmartDashboard.putData("Reset heading", Commands.print("Resetting heading").andThen(Commands.runOnce(s_Pose::resetHeading, s_Swerve)).andThen(Commands.print("Heading reset")).withName("Reset heading"));
 
         // Allow for direct climber control
         SmartDashboard.putData("Stop climbers", Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber));
@@ -229,16 +232,23 @@ public class RobotContainer {
         SmartDashboard.putNumber("Right climber target position", 0.0);
         SmartDashboard.putData("Set right climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
-        // Testing...
-        // SmartDashboard.putData("Score in Amp", new PathPlannerAuto("Score in Amp"));
-        // SmartDashboard.putData("Amp Path Command", ampPathCommand());
-        
-        // SmartDashboard.putNumber("Rotation value", 0.0);
-        // SmartDashboard.putData("Test Rotation", Commands.startEnd(
-        //     () -> { s_Swerve.drive(new Translation2d(0, 0), SmartDashboard.getNumber("Rotation value", 0) * Constants.Swerve.maxAngularVelocity, true); },
-        //     () -> { s_Swerve.drive(new Translation2d(0, 0), 0.0, true); },
-        //     s_Swerve).withName("Test Rotation").withTimeout(3.0));
+        SmartDashboard.putData("autoSetup/SetSwerveCoast", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Coasting Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToCoast, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Coasted");})).ignoringDisable(true));
+        SmartDashboard.putData("autoSetup/SetSwerveBrake", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Braking Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToBrake, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Braked");})).ignoringDisable(true));
 
+
+        DogLog.setOptions(new DogLogOptions(
+            false, //Whether logged values should be published to NetworkTables
+            false, //Whether all NetworkTables fields should be saved to the log file.
+            true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
+            true, //Whether to log extra data, like PDH currents, CAN usage, etc.
+            1000 //The size of the log message queue to use
+            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
+
+        // Testing...
+        SmartDashboard.putBoolean("Shoot with Vision", true);
+        SmartDashboard.getBoolean("Use Vision Pose in Auto", false);
+        SmartDashboard.getBoolean("Disable Vision Pose in Teleop", false);
+        
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -302,7 +312,11 @@ public class RobotContainer {
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
-        SmartDashboard.putData("Speaker align", speakerPathCommand());        
+        SmartDashboard.putData("Speaker align", speakerPathCommand());
+
+        SmartDashboard.putData("pose/Align to zero", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("Align to zero"));
+        SmartDashboard.putData("pose/Align to 90", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("Align to 90"));
+        SmartDashboard.putData("pose/Clear target angle", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(null); }).withName("Clear target angle"));
     }
 
     /**
@@ -318,13 +332,14 @@ public class RobotContainer {
         Command smartHG =
             Commands.sequence(
                 new PathPlannerAuto("SS Angled Start to H"),
-                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Ready for conditional part: " + s_Index.haveNote());}),
                 Commands.either(
-                    Commands.print("Running H-Shoot-G-Shoot").andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
-                    Commands.print("Running H-G-Shoot").andThen(new PathPlannerAuto("H-G-Shoot")),
+                    Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running H-Shoot-G-Shoot");})
+                    .andThen(new PathPlannerAuto("H-Shoot-G-Shoot")),
+                    Commands.runOnce(() -> { DogLog.log("Auto/Status", "H-G-Shoot");}),
                     s_Index::haveNote
                 ),
-                Commands.print("Conditional part over")
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
             ).withName("Smart HG");
         chooser.addOption("Smart HG", smartHG);
 
@@ -342,52 +357,52 @@ public class RobotContainer {
         Command smartADEClose =
             Commands.sequence(
                 new PathPlannerAuto("AS Angled + AD"),
-                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Ready for conditional part: " + s_Index.haveNote());}),
                 Commands.either(
-                    Commands.print("Running DE from close").andThen(new PathPlannerAuto("DE from close")),
-                    Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                    Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running DE from close");}).andThen(new PathPlannerAuto("DE from close")),
+                    Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running D-E-Shoot");}).andThen(new PathPlannerAuto("D-E-Shoot")),
                     s_Index::haveNote
                 ),
-                Commands.print("Conditional part over")
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
             ).withName("Smart ADE from Close");
         chooser.addOption("Smart ADE from Close", smartADEClose);
 
         Command smartADE =
             Commands.sequence(
                 new PathPlannerAuto("AS Angled + AD"),
-                Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Ready for conditional part: " + s_Index.haveNote());}),
                 Commands.either(
-                    Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
-                    Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                    Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running DE from A");}).andThen(new PathPlannerAuto("DE from A")),
+                    Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running D-E-Shoot");}).andThen(new PathPlannerAuto("D-E-Shoot")),
                     s_Index::haveNote
                 ),
-                Commands.print("Conditional part over")
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
             ).withName("Smart ADE");
         chooser.addOption("Smart ADE", smartADE);
 
         Command smartBCAD =
         Commands.sequence(
             new PathPlannerAuto("BCAD start"),
-            Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Ready for conditional part: " + s_Index.haveNote());}),
             Commands.either(
-                Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
-                Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running DE from A");}).andThen(new PathPlannerAuto("DE from A")),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running D-E-Shoot");}).andThen(new PathPlannerAuto("D-E-Shoot")),
                 s_Index::haveNote
             ),
-            Commands.print("Conditional part over")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
         ).withName("Smart BCAD");
         chooser.addOption("Smart BCAD", smartBCAD);
 
         Command smartBCdirectAD =
         Commands.sequence(
             new PathPlannerAuto("BC-direct-AD start"),
-            Commands.runOnce(() -> { System.out.println("Ready for conditional part: " + s_Index.haveNote()); }),
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Ready for conditional part: " + s_Index.haveNote());}),
             Commands.either(
-                Commands.print("Running DE from A").andThen(new PathPlannerAuto("DE from A")),
-                Commands.print("Running D-E-Shoot").andThen(new PathPlannerAuto("D-E-Shoot")),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running DE from A");}).andThen(new PathPlannerAuto("DE from A")),
+                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Running D-E-Shoot");}).andThen(new PathPlannerAuto("D-E-Shoot")),
                 s_Index::haveNote
             ),
-            Commands.print("Conditional part over")
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
         ).withName("Smart BC-direct-AD");
         chooser.addOption("Smart BC-direct-AD", smartBCdirectAD);
 
@@ -407,45 +422,6 @@ public class RobotContainer {
         s_Vision.disableRotationTargetOverride();
     }
 
-    private Pose2d getAmpPose() {
-        // Get pose from Vision
-        if (!s_Vision.haveAmpTarget()) {
-            return s_Swerve.getPose();
-        }
-        Pose2d pose = s_Vision.lastPose();
-
-        // Update pose in case we lose the amp target
-        s_Swerve.setPose(pose);
-
-        return pose;
-    }
-
-    private Pose2d getSourcePose() {
-        // Get pose from Vision
-        if (!s_Vision.haveSourceTarget()) {
-            return s_Swerve.getPose();
-        }
-        Pose2d pose = s_Vision.lastPose();
-
-        // Update pose in case we lose the source target
-        s_Swerve.setPose(pose);
-
-        return pose;
-    }
-
-    private Pose2d getSpeakerPose() {
-        // Get pose from Vision
-        if (!s_Vision.haveSpeakerTarget()) {
-            return s_Swerve.getPose();
-        }
-        Pose2d pose = s_Vision.lastPose();
-
-        // Update pose in case we lose the speaker target
-        s_Swerve.setPose(pose);
-
-        return pose;
-    }
-
     private Command ampPathCommand() {
         PathPlannerPath path = PathPlannerPath.fromPathFile("To Amp");
 
@@ -453,7 +429,7 @@ public class RobotContainer {
             Commands.runOnce(s_Vision::enableRotationAmpOverride),
             new FollowPathHolonomic(
                 path,
-                this::getAmpPose, // Robot pose supplier
+                s_Pose::getPose, // Robot pose supplier
                 s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
@@ -479,7 +455,7 @@ public class RobotContainer {
             Commands.runOnce(s_Vision::enableRotationSourceOverride),
             new FollowPathHolonomic(
                 path,
-                this::getSourcePose, // Robot pose supplier
+                s_Pose::getPose, // Robot pose supplier
                 s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
@@ -504,7 +480,7 @@ public class RobotContainer {
             Commands.runOnce(s_Vision::enableRotationTargetOverride),
             new FollowPathHolonomic(
                 path,
-                this::getSpeakerPose, // Robot pose supplier
+                s_Pose::getPose, // Robot pose supplier
                 s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class

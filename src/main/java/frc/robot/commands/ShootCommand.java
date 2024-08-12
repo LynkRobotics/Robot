@@ -77,6 +77,8 @@ public class ShootCommand extends Command {
     feeding = false;
     gone = false;
 
+    SmartDashboard.putBoolean("pose/Update when shooting", true);
+
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
@@ -145,7 +147,9 @@ public class ShootCommand extends Command {
             DogLog.log("Shooter/Status", "Unable to set pose due to lack of Swerve subsystem");
           } else {
             DogLog.log("Shooter/Status", "Setting pose based on vision: " + pose);
-            PoseSubsystem.getInstance().setPose(pose);
+            if (SmartDashboard.getBoolean("pose/Update when shooting", true)) {
+              PoseSubsystem.getInstance().setPose(pose);
+            }
           }
         }
       }

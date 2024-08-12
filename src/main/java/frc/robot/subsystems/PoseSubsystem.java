@@ -57,6 +57,7 @@ public class PoseSubsystem extends SubsystemBase {
 
         SmartDashboard.putBoolean("pose/Update from vision in Teleop", true);
         SmartDashboard.putBoolean("pose/Update from vision in Auto", false);
+        SmartDashboard.putBoolean("pose/Require target to aim", true);
 
         AutoBuilder.configureHolonomic(
             this::getPose,

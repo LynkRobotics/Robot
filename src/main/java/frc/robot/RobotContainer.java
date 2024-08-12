@@ -96,7 +96,7 @@ public class RobotContainer {
                         s_Swerve::getSpeedLimitRot
                         ));
 
-        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter).withName("Shooter Idle"));
+        // s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter).withName("Shooter Idle"));
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index).withName("Index Stop"));
 
         SmartDashboard.putData("Command scheduler", CommandScheduler.getInstance());
@@ -242,7 +242,7 @@ public class RobotContainer {
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
-            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
+            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(Constants.Vision.atHQ));
 
         // Testing...
         SmartDashboard.putBoolean("Shoot with Vision", true);
@@ -314,8 +314,18 @@ public class RobotContainer {
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
         SmartDashboard.putData("Speaker align", speakerPathCommand());
 
-        SmartDashboard.putData("pose/Align to zero", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("Align to zero"));
-        SmartDashboard.putData("pose/Align to 90", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("Align to 90"));
+        SmartDashboard.putNumber("pose/Angle P-value", 0.005);
+        SmartDashboard.putNumber("pose/Angle D-value", 0.0000);
+        SmartDashboard.putData("pose/Align to zero", Commands.runOnce(() -> {
+            Constants.Pose.rotationPID.setP(SmartDashboard.getNumber("pose/Angle P-value", 0.0));
+            Constants.Pose.rotationPID.setD(SmartDashboard.getNumber("pose/Angle D-value", 0.0));
+            Constants.Pose.rotationPID.reset();
+            PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("Align to zero"));
+        SmartDashboard.putData("pose/Align to 90", Commands.runOnce(() -> {
+            Constants.Pose.rotationPID.setP(SmartDashboard.getNumber("pose/Angle P-value", 0.0));
+            Constants.Pose.rotationPID.setD(SmartDashboard.getNumber("pose/Angle D-value", 0.0));
+            Constants.Pose.rotationPID.reset();
+            PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("Align to 90"));
         SmartDashboard.putData("pose/Clear target angle", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(null); }).withName("Clear target angle"));
     }
 

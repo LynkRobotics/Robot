@@ -192,6 +192,24 @@ public class PoseSubsystem extends SubsystemBase {
         return false;
     }
 
+    public Rotation2d shuttleShotError() {
+        Rotation2d robotAngle = getPose().getRotation();
+        Rotation2d targetAngle = angleToShuttle();
+        return targetAngle.minus(robotAngle);
+    }
+
+    public boolean shuttleShotAligned() {
+        if (Math.abs(shuttleShotError().getDegrees()) < Pose.maxShuttleError) {
+            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.shuttleShotVelocityErrorMax) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
     public static void angleErrorReset() {
         Pose.rotationPID.reset();
     }

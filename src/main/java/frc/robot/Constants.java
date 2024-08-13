@@ -170,6 +170,7 @@ public final class Constants {
         public static final Rotation2d blueSlideAngle = new Rotation2d(Units.degreesToRadians(0.0));
         public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
         public static final double maxSlideError = 2.0; // degrees
+        public static final double maxShuttleError = 1.5; // degrees
         public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
         public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
@@ -216,6 +217,7 @@ public final class Constants {
         public static final double maxRPMErrorLong = 30.0;
         public static final double slideShotVelocityErrorMax = 100.0;
         public static final double dumpShotVelocityErrorMax = 60.0;
+        public static final double shuttleShotVelocityErrorMax = 75.0;
         public static final double farDistance = Units.inchesToMeters(114.0); // when more precision is required
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;

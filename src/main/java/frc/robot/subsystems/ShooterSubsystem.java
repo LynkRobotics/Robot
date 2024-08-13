@@ -166,7 +166,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isAutoAimingActive() {
-    return autoAimingActive || SmartDashboard.getBoolean("pose/Full field aiming", true);
+    return autoAimingActive; // || SmartDashboard.getBoolean("pose/Full field aiming", true);
   }
 
   private ShooterSpeed speedFromDistance(double meters, ShooterCalibration[] calibrationTable) {
@@ -214,7 +214,7 @@ public class ShooterSubsystem extends SubsystemBase {
       speed = defaultSpeed();
     }
 
-    if (speed == Speed.VISION && PoseSubsystem.getZone() != PoseSubsystem.Zone.SPEAKER) {
+    if (speed == Speed.VISION && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER) {
       speed = Speed.SHUTTLE;
     }
 
@@ -294,8 +294,8 @@ public class ShooterSubsystem extends SubsystemBase {
       Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError));
   }
 
-  public boolean usingVision() {
-    return nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION);
+  public boolean usingVision() { 
+    return (nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
   }
 
   public boolean dumping() {
@@ -306,6 +306,9 @@ public class ShooterSubsystem extends SubsystemBase {
     return nextShot == Speed.SLIDE || (nextShot == null && defaultSpeed() == Speed.SLIDE);
   }
 
+  public boolean shuttling() {
+    return nextShot == Speed.SHUTTLE || (nextShot == null && defaultSpeed() == Speed.SHUTTLE);
+  }
 
   @Override
   public void periodic() {

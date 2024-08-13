@@ -122,17 +122,11 @@ public class ShootCommand extends Command {
           // Aligned if vision is aligned with target
           aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
         } else if (shooter.dumping()) {
-          if (swerve == null) {
-            DogLog.log("Shooter/Status", "ERROR: Cannot aim for dumping without swerve object");
-          } else {
-            aligned = PoseSubsystem.getInstance().dumpShotAligned();
-          }
+          aligned = PoseSubsystem.getInstance().dumpShotAligned();
         } else if (shooter.sliding()) {
-          if (swerve == null) {
-            DogLog.log("Shooter/Status", "ERROR: Cannot aim for sliding without swerve object");
-          } else {
-            aligned = PoseSubsystem.getInstance().slideShotAligned();
-          }
+          aligned = PoseSubsystem.getInstance().slideShotAligned();
+        } else if (shooter.shuttling()) {
+          aligned = PoseSubsystem.getInstance().shuttleShotAligned();
         } else {
           // "Aligned" because all other shots don't require alignment
           aligned = true;

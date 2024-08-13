@@ -58,6 +58,7 @@ public class TeleopSwerve extends Command {
             if (s_Shooter.isAutoAimingActive()) {
                 Rotation2d angleError;
                 
+                SmartDashboard.putString("Debug", "autoAimingActive");
                 if (s_Shooter.usingVision()) {
                     if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
                         angleError = s_Vision.angleError();
@@ -68,8 +69,10 @@ public class TeleopSwerve extends Command {
                     angleError = PoseSubsystem.getInstance().dumpShotError();
                 } else if (s_Shooter.sliding()) {
                     angleError = PoseSubsystem.getInstance().slideShotError();
+                } else if (s_Shooter.shuttling()) {
+                    angleError = PoseSubsystem.getInstance().shuttleShotError();
                 } else {
-                    System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding");
+                    System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding nor shuttling");
                     angleError = new Rotation2d();
                 }
                 
@@ -83,6 +86,7 @@ public class TeleopSwerve extends Command {
                     rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
                 }
             } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
+                SmartDashboard.putString("Debug", "auto aiming");
                 boolean haveNote = IndexSubsystem.getInstance().haveNote();
 
                 if (haveNote && SmartDashboard.getBoolean("pose/Full field aiming", true)) {
@@ -115,9 +119,11 @@ public class TeleopSwerve extends Command {
                 }
                 inProgress = false;
             } else {
+                SmartDashboard.putString("Debug", "neither");
                 inProgress = false;
             }
         } else {
+            SmartDashboard.putString("Debug", "none");
             inProgress = false;
         }
 

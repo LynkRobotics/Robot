@@ -42,6 +42,8 @@ public class ShootCommand extends Command {
     this.shooter = shooter;
     this.index = index;
     assert(vision != null);
+
+    SmartDashboard.putBoolean("pose/Update when shooting", true);
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
@@ -77,8 +79,6 @@ public class ShootCommand extends Command {
     feeding = false;
     gone = false;
 
-    SmartDashboard.putBoolean("pose/Update when shooting", true);
-
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
@@ -112,7 +112,7 @@ public class ShootCommand extends Command {
     if (!feeding && shooter.isReady(precise)) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
       if (!shooterReady) {
-        // System.out.println("Shooter is ready");
+        DogLog.log("Shooter/Status", "Shooter is ready");
         shooterReady = true;
       }
 
@@ -140,7 +140,7 @@ public class ShootCommand extends Command {
       if (aligned) {
         index.feed();
         feeding = true;
-        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches\n", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker())));
+        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker())));
         if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
           Pose2d pose = vision.lastPose();
           if (swerve == null) {

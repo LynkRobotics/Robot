@@ -206,7 +206,7 @@ public class PoseSubsystem extends SubsystemBase {
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
         double correction = Pose.rotationPID.calculate(angleErrorDeg);
-        double feedForward = Pose.rotationKS * Math.signum(angleErrorDeg);
+        double feedForward = Pose.rotationKS * Math.signum(correction);
         double output = MathUtil.clamp(correction + feedForward, -1.0, 1.0);
 
         DogLog.log("Pose/Angle Error", angleErrorDeg);
@@ -214,7 +214,8 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Angle feedforward", feedForward);
         DogLog.log("Pose/Angle output", output);
         
-        return output;
+        // Invert due to use as joystick controls
+        return -output;
     }
 
     @Override

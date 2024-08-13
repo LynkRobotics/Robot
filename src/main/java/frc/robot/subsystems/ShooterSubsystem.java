@@ -69,7 +69,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SLIDE,
     DUMP,
     EJECT,
-    BLOOP
+    BLOOP,
+    SHUTTLE
   };
 
   private Speed nextShot = null;
@@ -103,6 +104,14 @@ public class ShooterSubsystem extends SubsystemBase {
     new ShooterCalibration(108.1, new ShooterSpeed(2800, 1550)),
     new ShooterCalibration(120.9, new ShooterSpeed(2800, 1425)),
     new ShooterCalibration(132.0, new ShooterSpeed(2700, 1400))
+  };
+
+  private final ShooterCalibration[] shuttleCalibration = {
+    new ShooterCalibration(210, new ShooterSpeed(1450, 1450)),
+    new ShooterCalibration(292, new ShooterSpeed(2100, 2200)),
+    new ShooterCalibration(384, new ShooterSpeed(2700, 3000)),
+    new ShooterCalibration(449, new ShooterSpeed(2900, 3200)), // Blair Robot Project FTW!
+    new ShooterCalibration(506, new ShooterSpeed(3200, 3506)), // Thanks, YETI!
   };
 
   public ShooterSubsystem() {
@@ -160,15 +169,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isAutoAimingActive() {
-    return autoAimingActive;
+    return autoAimingActive; // || SmartDashboard.getBoolean("pose/Full field aiming", true);
   }
 
-  private ShooterSpeed speedFromDistance(double meters) {
+  private ShooterSpeed speedFromDistance(double meters, ShooterCalibration[] calibrationTable) {
     double distance = Units.metersToInches(meters);
     ShooterCalibration priorEntry = null;
     ShooterSpeed speed = null;
 
-    for (ShooterCalibration calibration : shooterCalibration) {
+    for (ShooterCalibration calibration : calibrationTable) {
       if (distance <= calibration.distance) {
         if (priorEntry == null) {
           // Anything closer that minimum calibration distance gets the same speed as minimum distance
@@ -208,18 +217,31 @@ public class ShooterSubsystem extends SubsystemBase {
       speed = defaultSpeed();
     }
 
+    if (speed == Speed.VISION && PoseSubsystem.getZone() != PoseSubsystem.Zone.SPEAKER) {
+      speed = Speed.SHUTTLE;
+    }
+
     if (speed == Speed.VISION) {
       if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
         distance = VisionSubsystem.getInstance().distanceToSpeaker();
       } else {
         distance = PoseSubsystem.getInstance().distanceToSpeaker();
       }
-      shooterSpeed = speedFromDistance(distance);
+      shooterSpeed = speedFromDistance(distance, shooterCalibration);
       if (shooterSpeed == null) {
-        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far\n", Units.metersToInches(distance))); 
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far", Units.metersToInches(distance))); 
         return false;
       }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
+      autoAimingActive = true;
+    } else if (speed == Speed.SHUTTLE) {
+      distance = PoseSubsystem.getInstance().distanceToShuttle();
+      shooterSpeed = speedFromDistance(distance, shuttleCalibration);
+      if (shooterSpeed == null) {
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find shuttle speed", Units.metersToInches(distance))); 
+        return false;
+      }
+      //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       autoAimingActive = true;
     } else {
       shooterSpeed = shooterSpeeds.get(speed);
@@ -275,8 +297,8 @@ public class ShooterSubsystem extends SubsystemBase {
       Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError));
   }
 
-  public boolean usingVision() {
-    return nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION);
+  public boolean usingVision() { 
+    return (nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
   }
 
   public boolean dumping() {
@@ -287,6 +309,9 @@ public class ShooterSubsystem extends SubsystemBase {
     return nextShot == Speed.SLIDE || (nextShot == null && defaultSpeed() == Speed.SLIDE);
   }
 
+  public boolean shuttling() {
+    return nextShot == Speed.SHUTTLE || (nextShot == null && defaultSpeed() == Speed.SHUTTLE);
+  }
 
   @Override
   public void periodic() {

@@ -19,6 +19,11 @@ public class AimCommand extends Command {
     }
 
     @Override
+    public void initialize() {
+        PoseSubsystem.angleErrorReset();
+    }
+
+    @Override
     public void execute() {
         // TODO Remove code duplication with TeleopSwerve (or need for this entirely)
         Rotation2d angleError = s_Vision.angleError();

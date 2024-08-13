@@ -111,7 +111,7 @@ public class RobotContainer {
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command starting");})
             .andThen(
                 (Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before ShootCommand");}).andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After ShootCommand");})))
-                 .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before AimCommand");}).andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After ShootCommand");})))
+                 .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before AimCommand");}).andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After AimCommand");})))
                  .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before waitSeconds");}).andThen(Commands.waitSeconds(2.50)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After waitSeconds");}))))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After race group");}))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command ending");}))

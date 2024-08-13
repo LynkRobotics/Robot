@@ -17,6 +17,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +35,13 @@ public class PoseSubsystem extends SubsystemBase {
     private final Field2d field;
     private final Pigeon2 gyro;
     private static Rotation2d targetAngle = null;
+    private static Zone zone = Zone.SPEAKER;
+
+    public enum Zone {
+        SPEAKER,
+        MIDDLE,
+        SOURCE
+    }
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
         assert(instance == null);
@@ -57,6 +65,7 @@ public class PoseSubsystem extends SubsystemBase {
 
         SmartDashboard.putBoolean("pose/Update from vision in Teleop", true);
         SmartDashboard.putBoolean("pose/Update from vision in Auto", false);
+        SmartDashboard.putBoolean("pose/Require target to aim", true);
 
         AutoBuilder.configureHolonomic(
             this::getPose,
@@ -128,10 +137,19 @@ public class PoseSubsystem extends SubsystemBase {
         return (Robot.isRed() ? Pose.redSpeakerLocation : Pose.blueSpeakerLocation);
     }
 
+    public Translation2d shuttleLocation() {
+        return (Robot.isRed() ? Pose.redShuttleLocation : Pose.blueShuttleLocation);
+    }
+
     public double distanceToSpeaker() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker 
         distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-        //distance *= Constants.Vision.distanceFudgeFactor;
+        return distance;
+    }
+
+    public double distanceToShuttle() {
+        double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().shuttleLocation()); // distance from center of robot to shuttle location
+        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
 
@@ -175,16 +193,42 @@ public class PoseSubsystem extends SubsystemBase {
         return false;
     }
 
+    public Rotation2d shuttleShotError() {
+        Rotation2d robotAngle = getPose().getRotation();
+        Rotation2d targetAngle = angleToShuttle();
+        return targetAngle.minus(robotAngle);
+    }
+
+    public boolean shuttleShotAligned() {
+        if (Math.abs(shuttleShotError().getDegrees()) < Pose.maxShuttleError) {
+            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.shuttleShotVelocityErrorMax) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
     public static void angleErrorReset() {
         Pose.rotationPID.reset();
     }
 
     private Translation2d speakerOffset() {
-        return speakerLocation().minus(getPose().getTranslation());
+        return getPose().getTranslation().minus(speakerLocation());
     }
 
-    private Rotation2d angleToSpeaker() {
+    public Rotation2d angleToSpeaker() {
         return speakerOffset().getAngle();
+    }
+
+    private Translation2d shuttleOffset() {
+        return getPose().getTranslation().minus(shuttleLocation());
+    }
+
+    public Rotation2d angleToShuttle() {
+        return shuttleOffset().getAngle();
     }
 
     public Rotation2d angleError() {
@@ -205,7 +249,7 @@ public class PoseSubsystem extends SubsystemBase {
     public static double angleErrorToSpeed(Rotation2d angleError) {
         double angleErrorDeg = angleError.getDegrees();
         double correction = Pose.rotationPID.calculate(angleErrorDeg);
-        double feedForward = Pose.rotationKS * Math.signum(angleErrorDeg);
+        double feedForward = Pose.rotationKS * Math.signum(correction);
         double output = MathUtil.clamp(correction + feedForward, -1.0, 1.0);
 
         DogLog.log("Pose/Angle Error", angleErrorDeg);
@@ -213,7 +257,12 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Angle feedforward", feedForward);
         DogLog.log("Pose/Angle output", output);
         
-        return output;
+        // Invert due to use as joystick controls
+        return -output;
+    }
+
+    public static Zone getZone() {
+        return zone;
     }
 
     @Override
@@ -225,12 +274,32 @@ public class PoseSubsystem extends SubsystemBase {
         } else {
             s_Vision.updatePoseEstimate(null);
         }
-        field.setRobotPose(getPose());
+
+        Pose2d pose = getPose();
+        field.setRobotPose(pose);
+        double distance = pose.getTranslation().getX();
+        if (Robot.isRed()) {
+            distance = Constants.Pose.fieldLength - distance;
+        }
+        if (distance > Constants.Pose.zoneSourceStart) {
+            if (distance > Constants.Pose.zoneMiddleEnd || zone != Zone.MIDDLE) {
+                zone = Zone.SOURCE;
+            }
+        } else if (distance < Constants.Pose.zoneSpeakerEnd) {
+            if (distance < Constants.Pose.zoneMiddleStart || zone != Zone.MIDDLE) {
+                zone = Zone.SPEAKER;
+            }
+        } else {
+            zone = Zone.MIDDLE;
+        }
+        DogLog.log("Pose/Zone", zone);
+        SmartDashboard.putString("pose/Zone", zone.toString());
+        SmartDashboard.putNumber("pose/Distance to shuttle", Units.metersToInches(distanceToShuttle()));
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
-        SmartDashboard.putString("pose/Pose", getPose().toString());
+        SmartDashboard.putString("pose/Pose", pose.toString());
 
-        DogLog.log("Pose/Pose", getPose());
+        DogLog.log("Pose/Pose", pose.toString());
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }

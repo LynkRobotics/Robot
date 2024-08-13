@@ -20,7 +20,7 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final double driveStickSensitivity = 1.00; 
     public static final double turnStickSensitivity = 1.00;
-    public static final double aimingOverride = 0.25;
+    public static final double aimingOverride = 0.001;
 
     public static final boolean tuningMode = true;
 
@@ -170,12 +170,20 @@ public final class Constants {
         public static final Rotation2d blueSlideAngle = new Rotation2d(Units.degreesToRadians(0.0));
         public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
         public static final double maxSlideError = 2.0; // degrees
+        public static final double maxShuttleError = 1.5; // degrees
         public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
         public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
+        public static final Translation2d blueShuttleLocation = new Translation2d(0.5, 7.0);
+        public static final Translation2d redShuttleLocation = new Translation2d(16.0, 7.0);
+        public static final double fieldLength = 16.54;
+        public static final double zoneMiddleStart = 5.3;
+        public static final double zoneSpeakerEnd = 5.8;
+        public static final double zoneSourceStart = 10.2;
+        public static final double zoneMiddleEnd = 11.2;
     }
 
     public class Intake {
@@ -209,6 +217,7 @@ public final class Constants {
         public static final double maxRPMErrorLong = 30.0;
         public static final double slideShotVelocityErrorMax = 100.0;
         public static final double dumpShotVelocityErrorMax = 60.0;
+        public static final double shuttleShotVelocityErrorMax = 75.0;
         public static final double farDistance = Units.inchesToMeters(114.0); // when more precision is required
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;

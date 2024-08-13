@@ -42,6 +42,8 @@ public class ShootCommand extends Command {
     this.shooter = shooter;
     this.index = index;
     assert(vision != null);
+
+    SmartDashboard.putBoolean("pose/Update when shooting", true);
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
@@ -99,6 +101,7 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
+    // TODO Consider not requiring seeing the target to shoot
     if (shooter.usingVision() && !seenTarget) {
       seenTarget = vision.haveSpeakerTarget();
       if (!seenTarget) {
@@ -110,7 +113,7 @@ public class ShootCommand extends Command {
     if (!feeding && shooter.isReady(precise)) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
       if (!shooterReady) {
-        // System.out.println("Shooter is ready");
+        DogLog.log("Shooter/Status", "Shooter is ready");
         shooterReady = true;
       }
 
@@ -119,17 +122,11 @@ public class ShootCommand extends Command {
           // Aligned if vision is aligned with target
           aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
         } else if (shooter.dumping()) {
-          if (swerve == null) {
-            DogLog.log("Shooter/Status", "ERROR: Cannot aim for dumping without swerve object");
-          } else {
-            aligned = PoseSubsystem.getInstance().dumpShotAligned();
-          }
+          aligned = PoseSubsystem.getInstance().dumpShotAligned();
         } else if (shooter.sliding()) {
-          if (swerve == null) {
-            DogLog.log("Shooter/Status", "ERROR: Cannot aim for sliding without swerve object");
-          } else {
-            aligned = PoseSubsystem.getInstance().slideShotAligned();
-          }
+          aligned = PoseSubsystem.getInstance().slideShotAligned();
+        } else if (shooter.shuttling()) {
+          aligned = PoseSubsystem.getInstance().shuttleShotAligned();
         } else {
           // "Aligned" because all other shots don't require alignment
           aligned = true;
@@ -147,7 +144,9 @@ public class ShootCommand extends Command {
             Pose2d oldPose = PoseSubsystem.getInstance().getPose();
             DogLog.log("Shooter/Status", "Setting pose based on vision: " + String.format("%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)",
               pose.getX(), pose.getY(), pose.getRotation().getDegrees(), oldPose.getX(), oldPose.getY(), oldPose.getRotation().getDegrees()));
-            PoseSubsystem.getInstance().setPose(pose);
+            if (SmartDashboard.getBoolean("pose/Update when shooting", true)) {
+              PoseSubsystem.getInstance().setPose(pose);
+            }
           }
         }
       }

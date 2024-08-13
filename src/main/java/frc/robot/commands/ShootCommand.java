@@ -101,6 +101,7 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
+    // TODO Consider not requiring seeing the target to shoot
     if (shooter.usingVision() && !seenTarget) {
       seenTarget = vision.haveSpeakerTarget();
       if (!seenTarget) {

@@ -143,7 +143,12 @@ public class PoseSubsystem extends SubsystemBase {
     public double distanceToSpeaker() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker 
         distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
-        //distance *= Constants.Vision.distanceFudgeFactor;
+        return distance;
+    }
+
+    public double distanceToShuttle() {
+        double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().shuttleLocation()); // distance from center of robot to shuttle location
+        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
 

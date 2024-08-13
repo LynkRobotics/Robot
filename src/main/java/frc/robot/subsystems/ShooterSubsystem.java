@@ -107,8 +107,11 @@ public class ShooterSubsystem extends SubsystemBase {
   };
 
   private final ShooterCalibration[] shuttleCalibration = {
-    new ShooterCalibration(0.1, new ShooterSpeed(2650, 2650)),
-    new ShooterCalibration(999.9, new ShooterSpeed(2650, 2650)),
+    new ShooterCalibration(210, new ShooterSpeed(1450, 1450)),
+    new ShooterCalibration(292, new ShooterSpeed(2100, 2200)),
+    new ShooterCalibration(384, new ShooterSpeed(2700, 3000)),
+    new ShooterCalibration(449, new ShooterSpeed(2900, 3200)), // Blair Robot Project FTW!
+    new ShooterCalibration(506, new ShooterSpeed(3200, 3506)), // Thanks, YETI!
   };
 
   public ShooterSubsystem() {
@@ -214,7 +217,7 @@ public class ShooterSubsystem extends SubsystemBase {
       speed = defaultSpeed();
     }
 
-    if (speed == Speed.VISION && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER) {
+    if (speed == Speed.VISION && PoseSubsystem.getZone() != PoseSubsystem.Zone.SPEAKER) {
       speed = Speed.SHUTTLE;
     }
 

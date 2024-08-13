@@ -181,7 +181,7 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     private Translation2d speakerOffset() {
-        return speakerLocation().minus(getPose().getTranslation());
+        return getPose().getTranslation().minus(speakerLocation());
     }
 
     private Rotation2d angleToSpeaker() {

@@ -83,13 +83,13 @@ public class TeleopSwerve extends Command {
                     rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
                 }
             } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
-                /* Testing -- auto-aim when available */
                 if (IndexSubsystem.getInstance().haveNote() && (s_Vision.haveSpeakerTarget() || !SmartDashboard.getBoolean("pose/Require target to aim", true))) {                
                     if (!inProgress) {
                         PoseSubsystem.angleErrorReset();
                     }
                     inProgress = true;
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(s_Vision.angleError());
+                    // rotationVal = PoseSubsystem.angleErrorToSpeed(s_Vision.angleError());
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(PoseSubsystem.getInstance().angleError());
                 } else if (PoseSubsystem.getTargetAngle() != null) {
                     if (!inProgress) {
                         PoseSubsystem.angleErrorReset();

@@ -34,6 +34,13 @@ public class PoseSubsystem extends SubsystemBase {
     private final Field2d field;
     private final Pigeon2 gyro;
     private static Rotation2d targetAngle = null;
+    private static Zone zone = Zone.SPEAKER;
+
+    public enum Zone {
+        SPEAKER,
+        MIDDLE,
+        SOURCE
+    }
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
         assert(instance == null);
@@ -218,6 +225,10 @@ public class PoseSubsystem extends SubsystemBase {
         return -output;
     }
 
+    public static Zone getZone() {
+        return zone;
+    }
+
     @Override
     public void periodic() {
         poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
@@ -227,12 +238,31 @@ public class PoseSubsystem extends SubsystemBase {
         } else {
             s_Vision.updatePoseEstimate(null);
         }
-        field.setRobotPose(getPose());
+
+        Pose2d pose = getPose();
+        field.setRobotPose(pose);
+        double distance = pose.getTranslation().getX();
+        if (Robot.isRed()) {
+            distance = Constants.Pose.fieldLength - distance;
+        }
+        if (distance > Constants.Pose.zoneSourceStart) {
+            if (distance > Constants.Pose.zoneMiddleEnd || zone != Zone.MIDDLE) {
+                zone = Zone.SOURCE;
+            }
+        } else if (distance < Constants.Pose.zoneSpeakerEnd) {
+            if (distance < Constants.Pose.zoneMiddleStart || zone != Zone.MIDDLE) {
+                zone = Zone.SPEAKER;
+            }
+        } else {
+            zone = Zone.MIDDLE;
+        }
+        DogLog.log("Pose/Zone", zone);
+        SmartDashboard.putString("pose/Zone", zone.toString());
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
-        SmartDashboard.putString("pose/Pose", getPose().toString());
+        SmartDashboard.putString("pose/Pose", pose.toString());
 
-        DogLog.log("Pose/Pose", getPose());
+        DogLog.log("Pose/Pose", pose.toString());
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }

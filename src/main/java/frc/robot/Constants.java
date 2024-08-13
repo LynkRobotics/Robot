@@ -176,6 +176,11 @@ public final class Constants {
 
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
+        public static final double fieldLength = 16.54;
+        public static final double zoneMiddleStart = 5.3;
+        public static final double zoneSpeakerEnd = 5.8;
+        public static final double zoneSourceStart = 10.2;
+        public static final double zoneMiddleEnd = 11.2;
     }
 
     public class Intake {

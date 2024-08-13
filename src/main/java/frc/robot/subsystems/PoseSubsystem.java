@@ -136,6 +136,10 @@ public class PoseSubsystem extends SubsystemBase {
         return (Robot.isRed() ? Pose.redSpeakerLocation : Pose.blueSpeakerLocation);
     }
 
+    public Translation2d shuttleLocation() {
+        return (Robot.isRed() ? Pose.redShuttleLocation : Pose.blueShuttleLocation);
+    }
+
     public double distanceToSpeaker() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker 
         distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
@@ -191,8 +195,16 @@ public class PoseSubsystem extends SubsystemBase {
         return getPose().getTranslation().minus(speakerLocation());
     }
 
-    private Rotation2d angleToSpeaker() {
+    public Rotation2d angleToSpeaker() {
         return speakerOffset().getAngle();
+    }
+
+    private Translation2d shuttleOffset() {
+        return getPose().getTranslation().minus(shuttleLocation());
+    }
+
+    public Rotation2d angleToShuttle() {
+        return shuttleOffset().getAngle();
     }
 
     public Rotation2d angleError() {

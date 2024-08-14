@@ -71,8 +71,10 @@ public class TeleopSwerve extends Command {
                     angleError = PoseSubsystem.getInstance().slideShotError();
                 } else if (s_Shooter.shuttling()) {
                     angleError = PoseSubsystem.getInstance().shuttleShotError();
+                } else if (s_Shooter.farShuttling()) {
+                    angleError = PoseSubsystem.getInstance().farShuttleShotError();
                 } else {
-                    System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding nor shuttling");
+                    System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding nor (far)shuttling");
                     angleError = new Rotation2d();
                 }
                 
@@ -96,6 +98,8 @@ public class TeleopSwerve extends Command {
 
                     if (zone == PoseSubsystem.Zone.SPEAKER) {
                         targetAngle = s_Pose.angleToSpeaker();
+                    } else if (zone == PoseSubsystem.Zone.FAR) {
+                        targetAngle = s_Pose.angleToFarShuttle();
                     } else {
                         targetAngle = s_Pose.angleToShuttle();
                     }

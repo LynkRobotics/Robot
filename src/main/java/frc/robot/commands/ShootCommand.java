@@ -127,6 +127,8 @@ public class ShootCommand extends Command {
           aligned = PoseSubsystem.getInstance().slideShotAligned();
         } else if (shooter.shuttling()) {
           aligned = PoseSubsystem.getInstance().shuttleShotAligned();
+        } else if (shooter.farShuttling()) {
+          aligned = PoseSubsystem.getInstance().farShuttleShotAligned();
         } else {
           // "Aligned" because all other shots don't require alignment
           aligned = true;

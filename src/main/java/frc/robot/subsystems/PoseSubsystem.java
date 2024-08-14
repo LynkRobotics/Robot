@@ -40,7 +40,7 @@ public class PoseSubsystem extends SubsystemBase {
     public enum Zone {
         SPEAKER,
         MIDDLE,
-        SOURCE
+        FAR
     }
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
@@ -283,7 +283,7 @@ public class PoseSubsystem extends SubsystemBase {
         }
         if (distance > Constants.Pose.zoneSourceStart) {
             if (distance > Constants.Pose.zoneMiddleEnd || zone != Zone.MIDDLE) {
-                zone = Zone.SOURCE;
+                zone = Zone.FAR;
             }
         } else if (distance < Constants.Pose.zoneSpeakerEnd) {
             if (distance < Constants.Pose.zoneMiddleStart || zone != Zone.MIDDLE) {

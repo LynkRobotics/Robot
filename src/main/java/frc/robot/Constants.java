@@ -298,7 +298,7 @@ public final class Constants {
         public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
         public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
         public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;
-        public static final double calibrationOffsetRed  = atHQ ? calibrationFactorBlue : Units.inchesToMeters(0.0);
+        public static final double calibrationOffsetRed  = atHQ ? calibrationOffsetBlue : Units.inchesToMeters(0.0);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

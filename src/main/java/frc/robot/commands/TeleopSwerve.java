@@ -58,7 +58,6 @@ public class TeleopSwerve extends Command {
             if (s_Shooter.isAutoAimingActive()) {
                 Rotation2d angleError;
                 
-                SmartDashboard.putString("Debug", "autoAimingActive");
                 if (s_Shooter.usingVision()) {
                     if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
                         angleError = s_Vision.angleError();
@@ -86,7 +85,6 @@ public class TeleopSwerve extends Command {
                     rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
                 }
             } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
-                SmartDashboard.putString("Debug", "auto aiming");
                 boolean haveNote = IndexSubsystem.getInstance().haveNote();
 
                 if (haveNote && SmartDashboard.getBoolean("pose/Full field aiming", true)) {
@@ -119,11 +117,9 @@ public class TeleopSwerve extends Command {
                 }
                 inProgress = false;
             } else {
-                SmartDashboard.putString("Debug", "neither");
                 inProgress = false;
             }
         } else {
-            SmartDashboard.putString("Debug", "none");
             inProgress = false;
         }
 

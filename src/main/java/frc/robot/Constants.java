@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -15,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.subsystems.PoseSubsystem.Target;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
@@ -170,17 +174,22 @@ public final class Constants {
         public static final Rotation2d blueSlideAngle = new Rotation2d(Units.degreesToRadians(0.0));
         public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
         public static final double maxSlideError = 2.0; // degrees
-        public static final double maxShuttleError = 1.5; // degrees
         public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
         public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
-        public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
-        public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
-        public static final Translation2d blueShuttleLocation = new Translation2d(0.5, 7.0);
-        public static final Translation2d redShuttleLocation = new Translation2d(16.0, 7.0);
-        public static final Translation2d blueFarShuttleLocation = new Translation2d(7.5, 7.0);
-        public static final Translation2d redFarShuttleLocation = new Translation2d(9.1, 7.0);
+        public static EnumMap <Target, Translation2d> redLocations = new EnumMap<>(Map.of(
+            Target.SPEAKER, new Translation2d(16.579, 5.548),
+            Target.AMP, new Translation2d(0.0, 0.0),
+            Target.SHUTTLE, new Translation2d(16.0, 7.0),
+            Target.FAR_SHUTTLE, new Translation2d(9.1, 7.0)
+        ));
+        public static EnumMap <Target, Translation2d> blueLocations = new EnumMap<>(Map.of(
+            Target.SPEAKER, new Translation2d(0.0, 5.548),
+            Target.AMP, new Translation2d(0.0, 0.0),
+            Target.SHUTTLE, new Translation2d(0.5, 7.0),
+            Target.FAR_SHUTTLE, new Translation2d(7.5, 7.0)
+        ));
         public static final double fieldLength = 16.54;
         public static final double zoneMiddleStart = 5.3;
         public static final double zoneSpeakerEnd = 5.8;
@@ -215,11 +224,22 @@ public final class Constants {
         public static final double intakeSpeed = -800;
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
-        public static final double maxRPMError = 60.0;
-        public static final double maxRPMErrorLong = 30.0;
         public static final double slideShotVelocityErrorMax = 100.0;
         public static final double dumpShotVelocityErrorMax = 60.0;
         public static final double shuttleShotVelocityErrorMax = 75.0;
+        public static EnumMap <Target, Double> maxAngleError = new EnumMap<>(Map.of(
+            Target.SPEAKER, 1.0,
+            Target.AMP, 1.0,
+            Target.SHUTTLE, 1.5,
+            Target.FAR_SHUTTLE, 1.5
+        ));
+        public static EnumMap <Target, Double> maxVelocityError = new EnumMap<>(Map.of(
+            Target.SPEAKER, 60.0,
+            Target.AMP, 60.0,
+            Target.SHUTTLE, 75.0,
+            Target.FAR_SHUTTLE, 75.0
+        ));
+        public static final double longAccuracyFactor = 0.5;
         public static final double farDistance = Units.inchesToMeters(114.0); // when more precision is required
         /* Motor Config Values */
         public static final double peakForwardVoltage = 12.0;
@@ -295,7 +315,6 @@ public final class Constants {
             new Translation3d(-0.148, 0.005, 0.325),
             new Rotation3d(Units.degreesToRadians(1.2), Units.degreesToRadians(-30.7), Math.PI)); // As measured by PhotonVision
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
-        public static final double maxAngleError = 1.0; // degrees
         public static final boolean atHQ = true;
         public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
         public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);

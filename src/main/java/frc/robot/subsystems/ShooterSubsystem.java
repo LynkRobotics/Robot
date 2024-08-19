@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.PoseSubsystem.Target;
 
 public class ShooterSubsystem extends SubsystemBase {
   private static TalonFX top;
@@ -228,9 +229,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     if (speed == Speed.VISION) {
       if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
-        distance = VisionSubsystem.getInstance().distanceToSpeaker();
+        distance = VisionSubsystem.getInstance().distanceToTarget(Target.SPEAKER);
       } else {
-        distance = PoseSubsystem.getInstance().distanceToSpeaker();
+        distance = PoseSubsystem.getInstance().getDistance(Target.SPEAKER);
       }
       shooterSpeed = speedFromDistance(distance, shooterCalibration);
       if (shooterSpeed == null) {
@@ -240,7 +241,7 @@ public class ShooterSubsystem extends SubsystemBase {
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       autoAimingActive = true;
     } else if (speed == Speed.SHUTTLE) {
-      distance = PoseSubsystem.getInstance().distanceToShuttle();
+      distance = PoseSubsystem.getInstance().getDistance(Target.SHUTTLE);
       shooterSpeed = speedFromDistance(distance, shuttleCalibration);
       if (shooterSpeed == null) {
         DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find shuttle speed", Units.metersToInches(distance))); 
@@ -249,7 +250,7 @@ public class ShooterSubsystem extends SubsystemBase {
       //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       autoAimingActive = true;
     } else if (speed == Speed.FARSHUTTLE) {
-      distance = PoseSubsystem.getInstance().distanceToFarShuttle();
+      distance = PoseSubsystem.getInstance().getDistance(Target.FAR_SHUTTLE);
       shooterSpeed = speedFromDistance(distance, shuttleCalibration);
       if (shooterSpeed == null) {
         DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find far shuttle speed", Units.metersToInches(distance))); 
@@ -306,9 +307,18 @@ public class ShooterSubsystem extends SubsystemBase {
     setCurrentSpeed(Speed.STOP);
   }
 
-  public boolean isReady(boolean precise) {
-    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError) &&
-      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < (precise ? Constants.Shooter.maxRPMErrorLong : Constants.Shooter.maxRPMError));
+  private double getMaxRPMError(Target target, boolean precise) {
+    double rpm = Constants.Shooter.maxVelocityError.get(target);
+    if (precise) {
+      rpm *= Constants.Shooter.longAccuracyFactor;
+    }
+    return rpm;
+  }
+
+  public boolean isReady(Target target, boolean precise) {
+    double maxError = getMaxRPMError(target, precise);
+    return (Math.abs(toRPM(top.getVelocity().getValueAsDouble()) - topCurrentTarget) < maxError &&
+      Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < maxError);
   }
 
   public boolean usingVision() { 

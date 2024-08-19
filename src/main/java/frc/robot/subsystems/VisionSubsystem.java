@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.PoseSubsystem.Target;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -96,7 +97,7 @@ public class VisionSubsystem extends SubsystemBase {
           return Optional.empty();
       }
       Rotation2d adjustment = new Rotation2d(); //Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
-      Rotation2d rotation = angleToSpeaker().plus(adjustment); // Adjust angle to PathPlanner coordinates
+      Rotation2d rotation = angleToTarget(Target.SPEAKER).plus(adjustment); // Adjust angle to PathPlanner coordinates
       // System.out.println("Overriding rotation target to be " + rotation.getDegrees());
       return Optional.of(rotation);
   }
@@ -107,7 +108,7 @@ public class VisionSubsystem extends SubsystemBase {
           return Optional.empty();
       }
       Rotation2d adjustment = new Rotation2d(); //Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
-      Rotation2d rotation = angleToSpeaker().plus(adjustment); // Adjust angle to PathPlanner coordinates
+      Rotation2d rotation = angleToTarget(Target.SPEAKER).plus(adjustment); // Adjust angle to PathPlanner coordinates
       // System.out.println("Overriding amp rotation target to be " + rotation.getDegrees());
       return Optional.of(rotation);
   }
@@ -117,7 +118,7 @@ public class VisionSubsystem extends SubsystemBase {
           return Optional.empty();
       }
       Rotation2d adjustment = new Rotation2d(); //Units.degreesToRadians(180.0)); // TODO What about when on Red Alliance?
-      Rotation2d rotation = angleToSpeaker().plus(adjustment); // Adjust angle to PathPlanner coordinates
+      Rotation2d rotation = angleToTarget(Target.SPEAKER).plus(adjustment); // Adjust angle to PathPlanner coordinates
       // System.out.println("Overriding amp rotation target to be " + rotation.getDegrees());
       return Optional.of(rotation);
   }
@@ -142,12 +143,12 @@ public class VisionSubsystem extends SubsystemBase {
     return haveSourceTarget;
   }
 
-  private Translation2d speakerOffset() {
-    return lastPose.getTranslation().minus(PoseSubsystem.getInstance().speakerLocation());
+  private Translation2d targetOffset(Target target) {
+    return lastPose.getTranslation().minus(PoseSubsystem.getLocation(target));
   }
 
-  public Rotation2d angleToSpeaker() {
-    return speakerOffset().getAngle();
+  public Rotation2d angleToTarget(Target target) {
+    return targetOffset(target).getAngle();
   }
 
   public Rotation2d angleError() {
@@ -155,20 +156,20 @@ public class VisionSubsystem extends SubsystemBase {
       return new Rotation2d(0.0);
     }
 
-    Rotation2d speakerAngle = angleToSpeaker();
+    Rotation2d speakerAngle = angleToTarget(Target.SPEAKER);
     Rotation2d robotAngle = lastPose.getRotation();
 
     return speakerAngle.minus(robotAngle);
   }
 
-  // Distance from center of robot to speaker
-  public double distanceToSpeakerFromCenter() {
-    return lastPose.getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation());
+  // Distance from center of robot to target
+  public double distanceToTargetFromCenter(Target target) {
+    return lastPose.getTranslation().getDistance(PoseSubsystem.getLocation(target));
   }
 
-  // Distance from edge of robot to speaker 
-  public double distanceToSpeakerRaw() {
-    double distance = distanceToSpeakerFromCenter();
+  // Distance from edge of robot to target 
+  public double distanceToTargetRaw(Target target) {
+    double distance = distanceToTargetFromCenter(target);
     distance += Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
     return distance;
   }
@@ -200,9 +201,9 @@ public class VisionSubsystem extends SubsystemBase {
     return true;
   }
 
-  public double distanceToSpeaker() {
+  public double distanceToTarget(Target target) {
     boolean isRed = Robot.isRed();
-    double distance = distanceToSpeakerFromCenter();
+    double distance = distanceToTargetFromCenter(target);
 
     // Fudge factor based on calibration between two points
     distance *= isRed ? Constants.Vision.calibrationFactorRed : Constants.Vision.calibrationFactorBlue;
@@ -268,8 +269,8 @@ public class VisionSubsystem extends SubsystemBase {
 
       if (haveSpeakerTarget && calibrateCount >= 0) {
         calibrateCount++;
-        calibrateSpeakerSum += distanceToSpeaker();
-        calibrateRawSum += distanceToSpeakerRaw();
+        calibrateSpeakerSum += distanceToTarget(Target.SPEAKER);
+        calibrateRawSum += distanceToTargetRaw(Target.SPEAKER);
         if (calibrateCount < calibrateMax) {
           SmartDashboard.putString("vision/Calibration", "Calibrating (" + calibrateCount + "/" + calibrateMax + ") ...");
         } else {
@@ -286,11 +287,11 @@ public class VisionSubsystem extends SubsystemBase {
     DogLog.log("Vision/Have amp target", haveAmpTarget);
     DogLog.log("Vision/Have source target", haveSourceTarget);
     DogLog.log("Vision/Result hasTargets", result.hasTargets());
-    DogLog.log("Vision/Distance", Units.metersToInches(distanceToSpeaker()));
-    DogLog.log("Vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
+    DogLog.log("Vision/Distance", Units.metersToInches(distanceToTarget(Target.SPEAKER)));
+    DogLog.log("Vision/Raw distance", Units.metersToInches(distanceToTargetRaw(Target.SPEAKER)));
     DogLog.log("Vision/Pose", lastPose);
-    DogLog.log("Vision/speakerOffset", speakerOffset().toString());
-    DogLog.log("Vision/speakerOffset angle", angleToSpeaker().getDegrees());
+    DogLog.log("Vision/speakerOffset", targetOffset(Target.SPEAKER).toString());
+    DogLog.log("Vision/speakerOffset angle", angleToTarget(Target.SPEAKER).getDegrees());
     DogLog.log("Vision/Angle error", angleError().getDegrees());
 
     updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
@@ -300,11 +301,11 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("vision/Have speaker target", haveSpeakerTarget);
       SmartDashboard.putBoolean("vision/Have amp target", haveAmpTarget);
       SmartDashboard.putBoolean("vision/Have source target", haveSourceTarget);
-      SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToSpeaker()));
-      SmartDashboard.putNumber("vision/Raw distance", Units.metersToInches(distanceToSpeakerRaw()));
+      SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToTarget(Target.SPEAKER)));
+      SmartDashboard.putNumber("vision/Raw distance", Units.metersToInches(distanceToTargetRaw(Target.SPEAKER)));
       SmartDashboard.putString("vision/Last pose", lastPose.toString());
-      SmartDashboard.putString("vision/speakerOffset", speakerOffset().toString());
-      SmartDashboard.putNumber("vision/speakerOffset angle", angleToSpeaker().getDegrees());
+      SmartDashboard.putString("vision/speakerOffset", targetOffset(Target.SPEAKER).toString());
+      SmartDashboard.putNumber("vision/speakerOffset angle", angleToTarget(Target.SPEAKER).getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());
     }
   }

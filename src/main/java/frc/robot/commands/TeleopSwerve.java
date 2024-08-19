@@ -7,6 +7,7 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.PoseSubsystem.Target;
 
 import java.util.function.DoubleSupplier;
 
@@ -63,16 +64,16 @@ public class TeleopSwerve extends Command {
                     if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
                         angleError = s_Vision.angleError();
                     } else {
-                        angleError = PoseSubsystem.getInstance().angleError();
+                        angleError = PoseSubsystem.getInstance().targetAngleError(Target.SPEAKER);
                     }
                 } else if (s_Shooter.dumping()) {
                     angleError = PoseSubsystem.getInstance().dumpShotError();
                 } else if (s_Shooter.sliding()) {
                     angleError = PoseSubsystem.getInstance().slideShotError();
                 } else if (s_Shooter.shuttling()) {
-                    angleError = PoseSubsystem.getInstance().shuttleShotError();
+                    angleError = PoseSubsystem.getInstance().targetAngleError(Target.SHUTTLE);
                 } else if (s_Shooter.farShuttling()) {
-                    angleError = PoseSubsystem.getInstance().farShuttleShotError();
+                    angleError = PoseSubsystem.getInstance().targetAngleError(Target.FAR_SHUTTLE);
                 } else {
                     System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding nor (far)shuttling");
                     angleError = new Rotation2d();
@@ -97,11 +98,11 @@ public class TeleopSwerve extends Command {
                     Rotation2d targetAngle;
 
                     if (zone == PoseSubsystem.Zone.SPEAKER) {
-                        targetAngle = s_Pose.angleToSpeaker();
+                        targetAngle = s_Pose.angleToTarget(Target.SPEAKER);
                     } else if (zone == PoseSubsystem.Zone.FAR) {
-                        targetAngle = s_Pose.angleToFarShuttle();
+                        targetAngle = s_Pose.angleToTarget(Target.FAR_SHUTTLE);
                     } else {
-                        targetAngle = s_Pose.angleToShuttle();
+                        targetAngle = s_Pose.angleToTarget(Target.SHUTTLE);
                     }
 
                     Rotation2d angleError = targetAngle.minus(s_Pose.getPose().getRotation());

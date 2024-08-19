@@ -21,6 +21,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LEDSubsystem.TempState;
+import frc.robot.subsystems.PoseSubsystem.Target;
 
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
@@ -109,7 +110,7 @@ public class ShootCommand extends Command {
         return;
       }
     }
-    boolean precise = shooter.usingVision() && vision.distanceToSpeaker() > Constants.Shooter.farDistance;
+    boolean precise = shooter.usingVision() && vision.distanceToTarget(Target.SPEAKER) > Constants.Shooter.farDistance;
     if (!feeding && shooter.isReady(precise)) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
       if (!shooterReady) {
@@ -120,15 +121,15 @@ public class ShootCommand extends Command {
       if (!aligned) {
         if (shooter.usingVision()) {
           // Aligned if vision is aligned with target
-          aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Vision.maxAngleError;
+          aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Shooter.maxAngleError.get(Target.SPEAKER);
         } else if (shooter.dumping()) {
           aligned = PoseSubsystem.getInstance().dumpShotAligned();
         } else if (shooter.sliding()) {
           aligned = PoseSubsystem.getInstance().slideShotAligned();
         } else if (shooter.shuttling()) {
-          aligned = PoseSubsystem.getInstance().shuttleShotAligned();
+          aligned = PoseSubsystem.getInstance().targetAligned(Target.SHUTTLE);
         } else if (shooter.farShuttling()) {
-          aligned = PoseSubsystem.getInstance().farShuttleShotAligned();
+          aligned = PoseSubsystem.getInstance().targetAligned(Target.FAR_SHUTTLE);
         } else {
           // "Aligned" because all other shots don't require alignment
           aligned = true;

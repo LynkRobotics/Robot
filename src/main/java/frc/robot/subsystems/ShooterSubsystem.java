@@ -346,6 +346,22 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
 
+    double topTorqueCurrent = top.getTorqueCurrent().getValueAsDouble();
+    double topSupplyCurrent = top.getSupplyCurrent().getValueAsDouble();
+
+    double bottomCurrent = bottom.getTorqueCurrent().getValueAsDouble();
+
+    DogLog.log("Shooter/Top Torque Current", topTorqueCurrent);
+    DogLog.log("Shooter/Top Supply Current", topSupplyCurrent);
+
+    DogLog.log("Shooter/Bottom Current", bottomCurrent);
+
+    boolean active = (topTorqueCurrent > 30);
+
+    DogLog.log("Shooter/ActiveCurrent", active);
+    if (active){
+      DogLog.log("Shooter/Status", "DEBUG: Note has left the shooter");
+    }
 
     DogLog.log("Shooter/Top RPM", topVel);
     DogLog.log("Shooter/Bottom RPM", bottomVel);

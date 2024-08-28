@@ -70,7 +70,8 @@ public class ShooterSubsystem extends SubsystemBase {
     DUMP,
     EJECT,
     BLOOP,
-    SHUTTLE
+    SHUTTLE,
+    FARSHUTTLE
   };
 
   private Speed nextShot = null;
@@ -217,8 +218,12 @@ public class ShooterSubsystem extends SubsystemBase {
       speed = defaultSpeed();
     }
 
-    if (speed == Speed.VISION && PoseSubsystem.getZone() != PoseSubsystem.Zone.SPEAKER) {
-      speed = Speed.SHUTTLE;
+    if (speed == Speed.VISION) {
+      if (PoseSubsystem.getZone() == PoseSubsystem.Zone.FAR) {
+        speed = Speed.FARSHUTTLE;
+      } else if (PoseSubsystem.getZone() == PoseSubsystem.Zone.MIDDLE) {
+        speed = Speed.SHUTTLE;
+      }
     }
 
     if (speed == Speed.VISION) {
@@ -239,6 +244,15 @@ public class ShooterSubsystem extends SubsystemBase {
       shooterSpeed = speedFromDistance(distance, shuttleCalibration);
       if (shooterSpeed == null) {
         DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find shuttle speed", Units.metersToInches(distance))); 
+        return false;
+      }
+      //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
+      autoAimingActive = true;
+    } else if (speed == Speed.FARSHUTTLE) {
+      distance = PoseSubsystem.getInstance().distanceToFarShuttle();
+      shooterSpeed = speedFromDistance(distance, shuttleCalibration);
+      if (shooterSpeed == null) {
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find far shuttle speed", Units.metersToInches(distance))); 
         return false;
       }
       //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
@@ -311,6 +325,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean shuttling() {
     return nextShot == Speed.SHUTTLE || (nextShot == null && defaultSpeed() == Speed.SHUTTLE);
+  }
+
+  public boolean farShuttling() {
+    return nextShot == Speed.FARSHUTTLE || (nextShot == null && defaultSpeed() == Speed.FARSHUTTLE);
   }
 
   @Override

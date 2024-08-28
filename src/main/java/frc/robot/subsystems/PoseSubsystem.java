@@ -40,7 +40,7 @@ public class PoseSubsystem extends SubsystemBase {
     public enum Zone {
         SPEAKER,
         MIDDLE,
-        SOURCE
+        FAR
     }
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
@@ -141,6 +141,10 @@ public class PoseSubsystem extends SubsystemBase {
         return (Robot.isRed() ? Pose.redShuttleLocation : Pose.blueShuttleLocation);
     }
 
+    public Translation2d farShuttleLocation() {
+        return (Robot.isRed() ? Pose.redFarShuttleLocation : Pose.blueFarShuttleLocation);
+    }
+
     public double distanceToSpeaker() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker 
         distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
@@ -149,6 +153,12 @@ public class PoseSubsystem extends SubsystemBase {
 
     public double distanceToShuttle() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().shuttleLocation()); // distance from center of robot to shuttle location
+        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+        return distance;
+    }
+
+    public double distanceToFarShuttle() {
+        double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().farShuttleLocation()); // distance from center of robot to far shuttle location
         distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
@@ -210,6 +220,22 @@ public class PoseSubsystem extends SubsystemBase {
         return false;
     }
 
+    public Rotation2d farShuttleShotError() {
+        Rotation2d robotAngle = getPose().getRotation();
+        Rotation2d targetAngle = angleToFarShuttle();
+        return targetAngle.minus(robotAngle);
+    }
+
+    public boolean farShuttleShotAligned() {
+        if (Math.abs(farShuttleShotError().getDegrees()) < Pose.maxShuttleError) {
+            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.shuttleShotVelocityErrorMax) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 
     public static void angleErrorReset() {
         Pose.rotationPID.reset();
@@ -229,6 +255,14 @@ public class PoseSubsystem extends SubsystemBase {
 
     public Rotation2d angleToShuttle() {
         return shuttleOffset().getAngle();
+    }
+
+    private Translation2d farShuttleOffset() {
+        return getPose().getTranslation().minus(farShuttleLocation());
+    }
+
+    public Rotation2d angleToFarShuttle() {
+        return farShuttleOffset().getAngle();
     }
 
     public Rotation2d angleError() {
@@ -283,7 +317,7 @@ public class PoseSubsystem extends SubsystemBase {
         }
         if (distance > Constants.Pose.zoneSourceStart) {
             if (distance > Constants.Pose.zoneMiddleEnd || zone != Zone.MIDDLE) {
-                zone = Zone.SOURCE;
+                zone = Zone.FAR;
             }
         } else if (distance < Constants.Pose.zoneSpeakerEnd) {
             if (distance < Constants.Pose.zoneMiddleStart || zone != Zone.MIDDLE) {
@@ -295,11 +329,12 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Zone", zone);
         SmartDashboard.putString("pose/Zone", zone.toString());
         SmartDashboard.putNumber("pose/Distance to shuttle", Units.metersToInches(distanceToShuttle()));
+        SmartDashboard.putNumber("pose/Distance to far shuttle", Units.metersToInches(distanceToFarShuttle()));
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
         SmartDashboard.putString("pose/Pose", pose.toString());
 
-        DogLog.log("Pose/Pose", pose.toString());
+        DogLog.log("Pose/Pose", pose);
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }

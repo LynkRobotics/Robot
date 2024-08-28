@@ -22,6 +22,8 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.LEDSubsystem.TempState;
 import frc.robot.subsystems.PoseSubsystem.Target;
+import frc.robot.subsystems.PoseSubsystem.Zone;
+import frc.robot.subsystems.ShooterSubsystem.ShotType;
 
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
@@ -37,6 +39,7 @@ public class ShootCommand extends Command {
   private boolean autoAim = true;
   private boolean shooterReady = false;
   private boolean seenTarget = false;
+  private Target target = Target.AUTO;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -69,12 +72,36 @@ public class ShootCommand extends Command {
     this.autoAim = false;
   }
 
+  Target zoneToTarget(Zone zone) {
+    if (zone == Zone.FAR) {
+      return Target.FAR_SHUTTLE;
+    } else if (zone == Zone.MIDDLE) {
+      return Target.SHUTTLE;
+    } else {
+      return Target.SPEAKER;
+    }
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // System.out.println("Spinning up shooter");
-    shooterReady = false;
+    DogLog.log("Shooter/Status", "Shot triggered");
+
+    ShotType next = shooter.nextShot();
+
+    if (next == ShotType.AUTO) {
+      target = zoneToTarget(PoseSubsystem.getZone());
+    } else if (next == ShotType.DUMP) {
+      target = Target.FIXED_DUMP;
+    } else if (next == ShotType.SLIDE) {
+      target = Target.FIXED_SLIDE;
+    } else if (next == ShotType.AMP) {
+      target = Target.FIXED_AMP;
+    } else {
+      target = Target.SPEAKER;
+    }
     LEDSubsystem.setTempState(TempState.SHOOTING);
+    shooterReady = false;
     cancelled = false;
     seenTarget = false;
     feeding = false;
@@ -123,9 +150,9 @@ public class ShootCommand extends Command {
           // Aligned if vision is aligned with target
           aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Shooter.maxAngleError.get(Target.SPEAKER);
         } else if (shooter.dumping()) {
-          aligned = PoseSubsystem.getInstance().dumpShotAligned();
+          aligned = PoseSubsystem.getInstance().targetAligned(Target.FIXED_DUMP);
         } else if (shooter.sliding()) {
-          aligned = PoseSubsystem.getInstance().slideShotAligned();
+          aligned = PoseSubsystem.getInstance().targetAligned(Target.FIXED_SLIDE);
         } else if (shooter.shuttling()) {
           aligned = PoseSubsystem.getInstance().targetAligned(Target.SHUTTLE);
         } else if (shooter.farShuttling()) {

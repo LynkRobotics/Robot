@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.subsystems.PoseSubsystem.Target;
 
 public final class Constants {
@@ -168,25 +169,22 @@ public final class Constants {
     public class Pose {
         public static final int pigeonID = 1;
 
-        public static final Rotation2d blueDumpAngle = new Rotation2d(Units.degreesToRadians(-38.0));
-        public static final Rotation2d redDumpAngle = new Rotation2d(Units.degreesToRadians(-142.0));
-        public static final double maxDumpError = 1.5; // degrees
-        public static final Rotation2d blueSlideAngle = new Rotation2d(Units.degreesToRadians(0.0));
-        public static final Rotation2d redSlideAngle = new Rotation2d(Units.degreesToRadians(180.0));
-        public static final double maxSlideError = 2.0; // degrees
+        public static final Rotation2d ampAngle = Rotation2d.fromDegrees(90.0);
+        public static final Rotation2d blueDumpAngle = Rotation2d.fromDegrees(-38.0);
+        public static final Rotation2d redDumpAngle = PoseSubsystem.reflect(blueDumpAngle, Rotation2d.fromDegrees(90.0));
+        public static final Rotation2d blueSlideAngle = Rotation2d.fromDegrees(0.0);
+        public static final Rotation2d redSlideAngle = Rotation2d.fromDegrees(180.0);
         public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
         public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
         public static EnumMap <Target, Translation2d> redLocations = new EnumMap<>(Map.of(
             Target.SPEAKER, new Translation2d(16.579, 5.548),
-            Target.AMP, new Translation2d(0.0, 0.0),
             Target.SHUTTLE, new Translation2d(16.0, 7.0),
             Target.FAR_SHUTTLE, new Translation2d(9.1, 7.0)
         ));
         public static EnumMap <Target, Translation2d> blueLocations = new EnumMap<>(Map.of(
             Target.SPEAKER, new Translation2d(0.0, 5.548),
-            Target.AMP, new Translation2d(0.0, 0.0),
             Target.SHUTTLE, new Translation2d(0.5, 7.0),
             Target.FAR_SHUTTLE, new Translation2d(7.5, 7.0)
         ));
@@ -224,20 +222,21 @@ public final class Constants {
         public static final double intakeSpeed = -800;
         public static final double stopSpeed = 0.00;
         public static final double topSpeed = 6000;
-        public static final double slideShotVelocityErrorMax = 100.0;
-        public static final double dumpShotVelocityErrorMax = 60.0;
-        public static final double shuttleShotVelocityErrorMax = 75.0;
         public static EnumMap <Target, Double> maxAngleError = new EnumMap<>(Map.of(
             Target.SPEAKER, 1.0,
-            Target.AMP, 1.0,
             Target.SHUTTLE, 1.5,
-            Target.FAR_SHUTTLE, 1.5
+            Target.FAR_SHUTTLE, 1.5,
+            Target.FIXED_AMP, 1.0,
+            Target.FIXED_DUMP, 1.5,
+            Target.FIXED_SLIDE, 2.0
         ));
         public static EnumMap <Target, Double> maxVelocityError = new EnumMap<>(Map.of(
             Target.SPEAKER, 60.0,
-            Target.AMP, 60.0,
             Target.SHUTTLE, 75.0,
-            Target.FAR_SHUTTLE, 75.0
+            Target.FAR_SHUTTLE, 75.0,
+            Target.FIXED_AMP, 60.0,
+            Target.FIXED_DUMP, 60.0,
+            Target.FIXED_SLIDE, 100.0
         ));
         public static final double longAccuracyFactor = 0.5;
         public static final double farDistance = Units.inchesToMeters(114.0); // when more precision is required

@@ -8,7 +8,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-//import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -24,13 +23,12 @@ import frc.robot.subsystems.PoseSubsystem.Target;
 public class ShooterSubsystem extends SubsystemBase {
   private static TalonFX top;
   private static TalonFX bottom;
-  //private final VelocityTorqueCurrentFOC velocityTorqueCurrentFOC = new VelocityTorqueCurrentFOC(0);
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final VelocityVoltage topControl = new VelocityVoltage(0).withEnableFOC(true);
   private final VelocityVoltage bottomControl = new VelocityVoltage(0).withEnableFOC(true);
   private double topCurrentTarget = 0.0;
   private double bottomCurrentTarget = 0.0;
-  SendableChooser<Speed> defaultShotChooser = new SendableChooser<>();
+  SendableChooser<ShotType> defaultShotChooser = new SendableChooser<>();
   private boolean autoAimingActive = false;
 
   private class ShooterSpeed {
@@ -53,16 +51,16 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public enum Speed {
+  public enum ShotType {
     STOP,
     INTAKE,
+    AUTO,
     IDLE,
     AMP,
     SUBWOOFER,
     MIDLINE,
     PODIUM,
     FULL,
-    VISION,
     SOURCESIDEOTF,
     AMPSIDEOTF,
     OTF,
@@ -72,28 +70,29 @@ public class ShooterSubsystem extends SubsystemBase {
     EJECT,
     BLOOP,
     SHUTTLE,
-    FARSHUTTLE
+    FARSHUTTLE,
+    SPEAKER
   };
 
-  private Speed nextShot = null;
+  private ShotType nextShot = null;
 
-  private final EnumMap<Speed, ShooterSpeed> shooterSpeeds = new EnumMap<>(Map.ofEntries(
-      Map.entry(Speed.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
-      Map.entry(Speed.INTAKE, new ShooterSpeed(Constants.Shooter.intakeSpeed, Constants.Shooter.intakeSpeed)),
-      Map.entry(Speed.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
-      Map.entry(Speed.AMP, new ShooterSpeed(350, 950)),
-      Map.entry(Speed.SUBWOOFER, new ShooterSpeed(1360, 2830)),
-      Map.entry(Speed.MIDLINE, new ShooterSpeed(2800, 2300)),
-      Map.entry(Speed.PODIUM, new ShooterSpeed(3000, 1600)),
-      Map.entry(Speed.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
-      Map.entry(Speed.OTF, new ShooterSpeed(3000, 1600)),
-      Map.entry(Speed.SOURCESIDEOTF, new ShooterSpeed(2950, 1925)),
-      Map.entry(Speed.AMPSIDEOTF, new ShooterSpeed(2950, 1800)),
-      Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
-      Map.entry(Speed.SHORTSLIDE, new ShooterSpeed(2250, 900)),
-      Map.entry(Speed.DUMP, new ShooterSpeed(2650, 2650)),
-      Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800)),
-      Map.entry(Speed.BLOOP, new ShooterSpeed(400, 400))
+  private final EnumMap<ShotType, ShooterSpeed> shooterSpeeds = new EnumMap<>(Map.ofEntries(
+      Map.entry(ShotType.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
+      Map.entry(ShotType.INTAKE, new ShooterSpeed(Constants.Shooter.intakeSpeed, Constants.Shooter.intakeSpeed)),
+      Map.entry(ShotType.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
+      Map.entry(ShotType.AMP, new ShooterSpeed(350, 950)),
+      Map.entry(ShotType.SUBWOOFER, new ShooterSpeed(1360, 2830)),
+      Map.entry(ShotType.MIDLINE, new ShooterSpeed(2800, 2300)),
+      Map.entry(ShotType.PODIUM, new ShooterSpeed(3000, 1600)),
+      Map.entry(ShotType.FULL, new ShooterSpeed(Constants.Shooter.topSpeed, Constants.Shooter.topSpeed)),
+      Map.entry(ShotType.OTF, new ShooterSpeed(3000, 1600)),
+      Map.entry(ShotType.SOURCESIDEOTF, new ShooterSpeed(2950, 1925)),
+      Map.entry(ShotType.AMPSIDEOTF, new ShooterSpeed(2950, 1800)),
+      Map.entry(ShotType.SLIDE, new ShooterSpeed(2500, 1000)),
+      Map.entry(ShotType.SHORTSLIDE, new ShooterSpeed(2250, 900)),
+      Map.entry(ShotType.DUMP, new ShooterSpeed(2650, 2650)),
+      Map.entry(ShotType.EJECT, new ShooterSpeed(-800, -800)),
+      Map.entry(ShotType.BLOOP, new ShooterSpeed(400, 400))
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
@@ -124,10 +123,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Top RPM adjustment", 0.0);
     SmartDashboard.putNumber("shooter/Bottom RPM adjustment", 0.0);
 
-    defaultShotChooser.setDefaultOption("== VISION ==", Speed.VISION);
-    for (Speed speed : Speed.values()) {
-      if (speed != Speed.VISION) {
-        defaultShotChooser.addOption(speed.toString(), speed);
+    defaultShotChooser.setDefaultOption("== AUTO ==", ShotType.AUTO);
+    for (ShotType shot : ShotType.values()) {
+      if (shot != ShotType.AUTO) {
+        defaultShotChooser.addOption(shot.toString(), shot);
       }
     }
     SmartDashboard.putData("shooter/Default shot", defaultShotChooser);
@@ -166,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase {
     return rpm / 60.0;
   }
 
-  public void setNextShot(Speed speed) {
+  public void setNextShot(ShotType speed) {
     nextShot = speed;
   }
 
@@ -207,27 +206,29 @@ public class ShooterSubsystem extends SubsystemBase {
     return setCurrentSpeed(nextShot);
   }
 
-  private Speed defaultSpeed() {
+  private ShotType defaultSpeed() {
     return defaultShotChooser.getSelected();
   }
 
-  private boolean setCurrentSpeed(Speed speed) {
+  private boolean setCurrentSpeed(ShotType shot) {
     ShooterSpeed shooterSpeed;
     double distance;
 
-    if (speed == null) {
-      speed = defaultSpeed();
+    if (shot == null) {
+      shot = defaultSpeed();
     }
 
-    if (speed == Speed.VISION) {
+    if (shot == ShotType.AUTO) {
       if (PoseSubsystem.getZone() == PoseSubsystem.Zone.FAR) {
-        speed = Speed.FARSHUTTLE;
+        shot = ShotType.FARSHUTTLE;
       } else if (PoseSubsystem.getZone() == PoseSubsystem.Zone.MIDDLE) {
-        speed = Speed.SHUTTLE;
+        shot = ShotType.SHUTTLE;
+      } else {
+        shot = ShotType.SPEAKER;
       }
     }
 
-    if (speed == Speed.VISION) {
+    if (shot == ShotType.VISION) {
       if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
         distance = VisionSubsystem.getInstance().distanceToTarget(Target.SPEAKER);
       } else {
@@ -240,7 +241,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
       //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       autoAimingActive = true;
-    } else if (speed == Speed.SHUTTLE) {
+    } else if (shot == ShotType.SHUTTLE) {
       distance = PoseSubsystem.getInstance().getDistance(Target.SHUTTLE);
       shooterSpeed = speedFromDistance(distance, shuttleCalibration);
       if (shooterSpeed == null) {
@@ -249,7 +250,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
       //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       autoAimingActive = true;
-    } else if (speed == Speed.FARSHUTTLE) {
+    } else if (shot == ShotType.FARSHUTTLE) {
       distance = PoseSubsystem.getInstance().getDistance(Target.FAR_SHUTTLE);
       shooterSpeed = speedFromDistance(distance, shuttleCalibration);
       if (shooterSpeed == null) {
@@ -259,8 +260,8 @@ public class ShooterSubsystem extends SubsystemBase {
       //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
       autoAimingActive = true;
     } else {
-      shooterSpeed = shooterSpeeds.get(speed);
-      autoAimingActive = (speed == Speed.DUMP || speed == Speed.SLIDE);
+      shooterSpeed = shooterSpeeds.get(shot);
+      autoAimingActive = (shot == ShotType.DUMP || shot == ShotType.SLIDE);
     }
 
     setCurrentSpeed(shooterSpeed);
@@ -292,19 +293,19 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void idle() {
-    setCurrentSpeed(Speed.IDLE);
+    setCurrentSpeed(ShotType.IDLE);
   }
 
   public void intake() {
-    setCurrentSpeed(Speed.INTAKE);
+    setCurrentSpeed(ShotType.INTAKE);
   }
 
   public void eject() {
-    setCurrentSpeed(Speed.EJECT);
+    setCurrentSpeed(ShotType.EJECT);
   }
 
   public void stop() {
-    setCurrentSpeed(Speed.STOP);
+    setCurrentSpeed(ShotType.STOP);
   }
 
   private double getMaxRPMError(Target target, boolean precise) {
@@ -321,24 +322,35 @@ public class ShooterSubsystem extends SubsystemBase {
       Math.abs(toRPM(bottom.getVelocity().getValueAsDouble()) - bottomCurrentTarget) < maxError);
   }
 
+  public ShotType nextShot() {
+    ShotType shot = nextShot;
+
+    if (shot == null) {
+      // TODO Handle Vision / Automatic
+      shot = defaultSpeed();
+    }
+
+    return shot;
+  }
+
   public boolean usingVision() { 
-    return (nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
+    return (nextShot == ShotType.VISION || (nextShot == null && defaultSpeed() == ShotType.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
   }
 
   public boolean dumping() {
-    return nextShot == Speed.DUMP || (nextShot == null && defaultSpeed() == Speed.DUMP);
+    return nextShot() == ShotType.DUMP;
   }
 
   public boolean sliding() {
-    return nextShot == Speed.SLIDE || (nextShot == null && defaultSpeed() == Speed.SLIDE);
+    return nextShot() == ShotType.SLIDE;
   }
 
   public boolean shuttling() {
-    return nextShot == Speed.SHUTTLE || (nextShot == null && defaultSpeed() == Speed.SHUTTLE);
+    return nextShot() == ShotType.SHUTTLE;
   }
 
   public boolean farShuttling() {
-    return nextShot == Speed.FARSHUTTLE || (nextShot == null && defaultSpeed() == Speed.FARSHUTTLE);
+    return nextShot() == ShotType.FARSHUTTLE;
   }
 
   @Override

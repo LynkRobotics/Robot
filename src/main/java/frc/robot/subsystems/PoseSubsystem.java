@@ -45,9 +45,11 @@ public class PoseSubsystem extends SubsystemBase {
 
     public enum Target {
         SPEAKER,
-        AMP,
         SHUTTLE,
-        FAR_SHUTTLE
+        FAR_SHUTTLE,
+        FIXED_AMP,
+        FIXED_SLIDE,
+        FIXED_DUMP
     }
 
     public PoseSubsystem(Swerve s_Swerve, VisionSubsystem s_Vision) {
@@ -151,7 +153,15 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public Rotation2d angleToTarget(Target target) {
-        return targetOffset(target).getAngle();
+        if (target == Target.FIXED_AMP) {
+            return Robot.isRed() ? Pose.redAmpAngle : Pose.blueAmpAngle;
+        } else if (target == Target.FIXED_DUMP) {
+            return Robot.isRed() ? Pose.redDumpAngle : Pose.blueDumpAngle;
+        } else if (target == Target.FIXED_SLIDE) {
+            return Robot.isRed() ? Pose.redSlideAngle : Pose.blueSlideAngle;
+        } else {
+            return targetOffset(target).getAngle();
+        }
     }
 
     public Rotation2d targetAngleError(Target target) {
@@ -165,26 +175,6 @@ public class PoseSubsystem extends SubsystemBase {
         // TODO Consider putting this into the PID
         if (Math.abs(targetAngleError(target).getDegrees()) < Constants.Shooter.maxAngleError.get(target)) {
             if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.maxVelocityError.get(target)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    public Rotation2d dumpShotError() {
-        Rotation2d robotAngle = getPose().getRotation();
-        if (Robot.isRed()){
-            return Pose.redDumpAngle.minus(robotAngle);
-        } else {
-            return Pose.blueDumpAngle.minus(robotAngle);
-        }
-    }
-
-    public boolean dumpShotAligned() {
-        if (Math.abs(dumpShotError().getDegrees()) < Pose.maxDumpError) {
-            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.dumpShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;
@@ -242,6 +232,10 @@ public class PoseSubsystem extends SubsystemBase {
 
     public static Zone getZone() {
         return zone;
+    }
+
+    public static Rotation2d reflect(Rotation2d angle, Rotation2d across) {
+        return angle.times(2.0).minus(across);
     }
 
     @Override

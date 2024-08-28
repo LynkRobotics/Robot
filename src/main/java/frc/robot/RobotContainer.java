@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
-import frc.robot.subsystems.ShooterSubsystem.Speed;
+import frc.robot.subsystems.ShooterSubsystem.ShotType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -125,7 +125,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Fixed SW shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin SW shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SUBWOOFER); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.SUBWOOFER); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
@@ -133,7 +133,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Shoot OTF",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin OTF");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.OTF); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.OTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
@@ -141,7 +141,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Amp-side OTF Shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Amp-side OTF Shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDEOTF); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.AMPSIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
@@ -149,7 +149,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Source-side OTF Shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Source-side OTF Shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SOURCESIDEOTF); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.SOURCESIDEOTF); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
@@ -163,7 +163,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("Amp Shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Amp Shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.AMP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
@@ -171,7 +171,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Bloop Shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Bloop Shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.BLOOP); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.BLOOP); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
@@ -179,7 +179,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Slide Shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Slide shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.SLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
@@ -187,7 +187,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Short Slide Shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Short Slide shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SHORTSLIDE); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.SHORTSLIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.00))))
@@ -303,10 +303,10 @@ public class RobotContainer {
         rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber));
 
         /* Buttons to set the next shot */
-        ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }).withName("Set amp shot"));
+        ampButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.AMP); }).withName("Set amp shot"));
         defaultShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(null); }).withName("Set default shot"));
-        dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.DUMP); }).withName("Set dump shot"));
-        slideShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SLIDE); }).withName("Set slide shot"));
+        dumpShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.DUMP); }).withName("Set dump shot"));
+        slideShotButton.onTrue(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.SLIDE); }).withName("Set slide shot"));
 
         ejectButton.whileTrue(new EjectCommand(s_Intake, s_Index, s_Shooter));
 
@@ -443,7 +443,7 @@ public class RobotContainer {
                 s_Swerve // Reference to this subsystem to set requirements
             ),
             Commands.runOnce(s_Vision::disableRotationAmpOverride),
-            Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMP); }),
+            Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.AMP); }),
             new ShootCommand(s_Shooter, s_Index, false)
         ).handleInterrupt(s_Vision::disableRotationAmpOverride);
     }

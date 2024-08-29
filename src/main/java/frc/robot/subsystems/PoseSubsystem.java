@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import dev.doglog.DogLog;
@@ -337,5 +338,8 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Pose", pose);
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> {
+            DogLog.log("Pose/Auto Target Pose", targetPose);
+        });
     }
 }

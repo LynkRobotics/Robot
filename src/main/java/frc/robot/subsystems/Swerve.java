@@ -110,6 +110,7 @@ public class Swerve extends SubsystemBase {
 
     public void stopSwerve(){
         drive(new Translation2d(0, 0), 0, false);
+        DogLog.log("Swerve/Status", "Stopped Swerve");
     }
 
     @Override

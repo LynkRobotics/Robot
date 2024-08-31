@@ -8,27 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8315976631953266,
-        "y": 6.744683307548434
+        "x": 2.8660254037844393,
+        "y": 7.244683307548433
       },
       "isLocked": false,
       "linkedName": "Amp-side shot"
-    },
-    {
-      "anchor": {
-        "x": 7.421340660863139,
-        "y": 7.55
-      },
-      "prevControl": {
-        "x": 5.286604936846237,
-        "y": 7.5356817604544295
-      },
-      "nextControl": {
-        "x": 7.92132941438955,
-        "y": 7.553353557380682
-      },
-      "isLocked": false,
-      "linkedName": null
     },
     {
       "anchor": {
@@ -36,7 +20,7 @@
         "y": 7.45
       },
       "prevControl": {
-        "x": 8.100000000000001,
+        "x": 5.300000000000001,
         "y": 7.45
       },
       "nextControl": null,
@@ -46,12 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 0.65,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -59,8 +38,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 2.8,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -75,5 +54,5 @@
     "rotation": 38.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

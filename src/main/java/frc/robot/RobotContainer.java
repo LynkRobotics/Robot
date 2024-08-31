@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -195,7 +196,8 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
-
+        NamedCommands.registerCommand("Stop", Commands.runOnce(() -> { s_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, true); } ));
+        NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() -> { s_Pose.setPose(s_Vision.lastPose()); } ));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -237,17 +239,16 @@ public class RobotContainer {
 
 
         DogLog.setOptions(new DogLogOptions(
-            false, //Whether logged values should be published to NetworkTables
+            Constants.Vision.atHQ, //Whether logged values should be published to NetworkTables
             false, //Whether all NetworkTables fields should be saved to the log file.
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
-            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
+            ));
 
         // Testing...
         SmartDashboard.putBoolean("Shoot with Vision", true);
         SmartDashboard.getBoolean("Use Vision Pose in Auto", false);
-        SmartDashboard.getBoolean("Disable Vision Pose in Teleop", false);
         
         // Configure the button bindings
         configureButtonBindings();

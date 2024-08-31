@@ -96,7 +96,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroGyro() {
         gyro.setYaw(0);
-        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
+        DogLog.log("Pose/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void hack() {
@@ -109,7 +109,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(getGyroYaw(), s_Swerve.getModulePositions(), pose);
-        DogLog.log("Swerve/Status/Setting Pose", pose);
+        DogLog.log("Pose/Status/Setting Pose", pose);
     }
 
     public Rotation2d getHeading() {
@@ -122,7 +122,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
-        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
+        DogLog.log("Pose/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -302,8 +302,7 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
-        if ((DriverStation.isTeleop() && SmartDashboard.getBoolean("pose/Update from vision in Teleop", true))
-            || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("pose/Update from vision in Auto", false))) {
+        if (!DriverStation.isAutonomousEnabled() || SmartDashboard.getBoolean("pose/Update from vision in Auto", false)) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {
             s_Vision.updatePoseEstimate(null);

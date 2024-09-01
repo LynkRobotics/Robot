@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.314327434188076,
-        "y": 5.080373334128613
+        "x": 2.243886669591521,
+        "y": 5.2614127046435915
       },
       "isLocked": false,
       "linkedName": "Straight shot"
@@ -20,8 +20,8 @@
         "y": 4.23
       },
       "prevControl": {
-        "x": 2.334327434188076,
-        "y": 4.689626665871388
+        "x": 2.169256702149768,
+        "y": 4.253908144179926
       },
       "nextControl": null,
       "isLocked": false,

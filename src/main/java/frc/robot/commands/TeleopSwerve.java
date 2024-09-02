@@ -24,7 +24,15 @@ public class TeleopSwerve extends Command {
     private final DoubleSupplier strafeSup;
     private final DoubleSupplier rotationSup;
     private DoubleSupplier speedLimitRotSupplier;
-    private boolean inProgress = false;
+    private PoseSubsystem s_Pose = null;
+    private Rotation2d lastAngle = null;
+    private AimingMode aimingMode = AimingMode.MANUAL;
+
+    private enum AimingMode {
+        MANUAL,
+        TARGET,
+        MAINTAIN
+    }
 
     public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedLimitRotSupplier) {
         this.s_Swerve = s_Swerve;
@@ -46,6 +54,10 @@ public class TeleopSwerve extends Command {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
+
+        if (s_Pose == null) {
+            s_Pose = PoseSubsystem.getInstance();
+        }
 
         // Driver position is inverted for Red alliance, so adjust field-oriented controls
         if (Robot.isRed()) {
@@ -77,10 +89,10 @@ public class TeleopSwerve extends Command {
                     angleError = new Rotation2d();
                 }
                 
-                if (!inProgress) {
+                if (aimingMode != AimingMode.TARGET) {
                     PoseSubsystem.angleErrorReset();
+                    aimingMode = AimingMode.TARGET;
                 }
-                inProgress = true;
                 if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
                     rotationVal = 0.0;
                 } else {
@@ -90,7 +102,6 @@ public class TeleopSwerve extends Command {
                 boolean haveNote = IndexSubsystem.getInstance().haveNote();
 
                 if (haveNote && SmartDashboard.getBoolean("pose/Full field aiming", true)) {
-                    PoseSubsystem s_Pose = PoseSubsystem.getInstance();
                     PoseSubsystem.Zone zone = PoseSubsystem.getZone();
                     Rotation2d targetAngle;
 
@@ -105,26 +116,49 @@ public class TeleopSwerve extends Command {
                     Rotation2d angleError = targetAngle.minus(s_Pose.getPose().getRotation());
                     rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
                 } else if (haveNote && s_Vision.haveSpeakerTarget()) {              
-                    if (!inProgress) {
+                    if (aimingMode != AimingMode.TARGET) {
                         PoseSubsystem.angleErrorReset();
+                        aimingMode = AimingMode.TARGET;
                     }
-                    inProgress = true;
                     rotationVal = PoseSubsystem.angleErrorToSpeed(s_Vision.angleError());
                 } else if (PoseSubsystem.getTargetAngle() != null) {
-                    if (!inProgress) {
+                    if (aimingMode != AimingMode.TARGET) {
                         PoseSubsystem.angleErrorReset();
+                        aimingMode = AimingMode.TARGET;
                     }
-                    inProgress = true;
                     rotationVal = PoseSubsystem.angleErrorToSpeed(PoseSubsystem.getTargetAngle().minus(PoseSubsystem.getInstance().getPose().getRotation()));
                 } else {
-                    inProgress = false;
+                    if (aimingMode == AimingMode.TARGET) {
+                        aimingMode = AimingMode.MANUAL;
+                    }
                 }
-                inProgress = false;
             } else {
-                inProgress = false;
+                if (aimingMode == AimingMode.TARGET) {
+                    aimingMode = AimingMode.MANUAL;
+                }
             }
         } else {
-            inProgress = false;
+            if (aimingMode == AimingMode.TARGET) {
+                aimingMode = AimingMode.MANUAL;
+            }
+        }
+
+        // Maintain angle when not explicitly changing
+        Rotation2d currentAngle = s_Pose.getPose().getRotation();
+        if (Math.abs(rotationVal) < Constants.aimingOverride) {
+            if (lastAngle != null && aimingMode != AimingMode.TARGET) {
+                if (aimingMode != AimingMode.MAINTAIN) {
+                    PoseSubsystem.angleErrorReset();
+                    lastAngle = currentAngle;
+                    aimingMode = AimingMode.MAINTAIN;
+                } else {
+                    Rotation2d angleError = lastAngle.minus(currentAngle);
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                }
+            }
+        } else {
+            lastAngle = currentAngle;
+            aimingMode = AimingMode.MANUAL;
         }
 
         /* Drive */

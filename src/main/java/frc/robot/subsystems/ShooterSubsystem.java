@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import java.util.EnumMap;
 import java.util.Map;
 
+import javax.swing.SortOrder;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -54,7 +56,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public enum ShotType {
     STOP,
     INTAKE,
-    AUTO,
     IDLE,
     AMP,
     SUBWOOFER,
@@ -69,9 +70,9 @@ public class ShooterSubsystem extends SubsystemBase {
     DUMP,
     EJECT,
     BLOOP,
+    AUTOSPEAKER,
     SHUTTLE,
     FARSHUTTLE,
-    SPEAKER
   };
 
   private ShotType nextShot = null;
@@ -93,6 +94,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(ShotType.DUMP, new ShooterSpeed(2650, 2650)),
       Map.entry(ShotType.EJECT, new ShooterSpeed(-800, -800)),
       Map.entry(ShotType.BLOOP, new ShooterSpeed(400, 400))
+      // Auto types: AUTOSPEAKER, SHUTTLE, FARSHUTTLE
   ));
 
   private final ShooterCalibration[] shooterCalibration = {
@@ -202,79 +204,42 @@ public class ShooterSubsystem extends SubsystemBase {
     return speed;
   }
 
-  public boolean shoot() {
-    return setCurrentSpeed(nextShot);
-  }
-
-  private ShotType defaultSpeed() {
+  private ShotType defaultShot() {
     return defaultShotChooser.getSelected();
   }
 
-  private boolean setCurrentSpeed(ShotType shot) {
+  public boolean setCurrentSpeed(ShotType shot) {
     ShooterSpeed shooterSpeed;
     double distance;
 
+    // TODO Is this safeguard needed?
     if (shot == null) {
-      shot = defaultSpeed();
+      DogLog.logFault("ShooterSubsystem::setCurrentSpeed: shot is null");
+      shot = defaultShot();
     }
 
-    if (shot == ShotType.AUTO) {
-      if (PoseSubsystem.getZone() == PoseSubsystem.Zone.FAR) {
-        shot = ShotType.FARSHUTTLE;
-      } else if (PoseSubsystem.getZone() == PoseSubsystem.Zone.MIDDLE) {
-        shot = ShotType.SHUTTLE;
-      } else {
-        shot = ShotType.SPEAKER;
-      }
-    }
-
-    if (shot == ShotType.VISION) {
-      if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+    if (shooterSpeeds.containsKey(shot)) {
+      shooterSpeed = shooterSpeeds.get(shot);
+    } else {
+      if (shot == ShotType.AUTOSPEAKER && SmartDashboard.getBoolean("Shoot with Vision", true)) {
         distance = VisionSubsystem.getInstance().distanceToTarget(Target.SPEAKER);
       } else {
         distance = PoseSubsystem.getInstance().getDistance(Target.SPEAKER);
       }
-      shooterSpeed = speedFromDistance(distance, shooterCalibration);
+      shooterSpeed = speedFromDistance(distance, shot == ShotType.AUTOSPEAKER ? shooterCalibration : shuttleCalibration);
       if (shooterSpeed == null) {
-        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f too far", Units.metersToInches(distance))); 
+        DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f", shot.toString(), Units.metersToInches(distance)));
         return false;
       }
-      //System.out.printf("Shoot @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
-      autoAimingActive = true;
-    } else if (shot == ShotType.SHUTTLE) {
-      distance = PoseSubsystem.getInstance().getDistance(Target.SHUTTLE);
-      shooterSpeed = speedFromDistance(distance, shuttleCalibration);
-      if (shooterSpeed == null) {
-        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find shuttle speed", Units.metersToInches(distance))); 
-        return false;
-      }
-      //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
-      autoAimingActive = true;
-    } else if (shot == ShotType.FARSHUTTLE) {
-      distance = PoseSubsystem.getInstance().getDistance(Target.FAR_SHUTTLE);
-      shooterSpeed = speedFromDistance(distance, shuttleCalibration);
-      if (shooterSpeed == null) {
-        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance of %01.1f failed to find far shuttle speed", Units.metersToInches(distance))); 
-        return false;
-      }
-      //System.out.printf("Shuttle @ %01.2f ft: %d, %d%n", VisionSubsystem.getInstance().distanceToSpeaker(), (int)shooterSpeed.topMotorSpeed, (int)shooterSpeed.bottomMotorSpeed);
-      autoAimingActive = true;
-    } else {
-      shooterSpeed = shooterSpeeds.get(shot);
-      autoAimingActive = (shot == ShotType.DUMP || shot == ShotType.SLIDE);
     }
 
     setCurrentSpeed(shooterSpeed);
     return true;
   }
 
-  public void shoot(double topRPM, double bottomRPM) {
+  public void setCurrentSpeed(double topRPM, double bottomRPM) {
     setCurrentSpeed(new ShooterSpeed(topRPM, bottomRPM));
   }
-
-  /*private void setVelocityTorque(TalonFX motor, double rpm) {
-    motor.setControl(velocityTorqueCurrentFOC.withVelocity(toRPS(rpm)));
-  }*/
 
   private void setCurrentSpeed(ShooterSpeed speed) {
     topCurrentTarget = speed.topMotorSpeed + SmartDashboard.getNumber("shooter/Top RPM adjustment", 0.0);
@@ -327,30 +292,30 @@ public class ShooterSubsystem extends SubsystemBase {
 
     if (shot == null) {
       // TODO Handle Vision / Automatic
-      shot = defaultSpeed();
+      shot = defaultShot();
     }
 
     return shot;
   }
 
   public boolean usingVision() { 
-    return (nextShot == ShotType.VISION || (nextShot == null && defaultSpeed() == ShotType.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
+    return (nextShot == ShotType.VISION || (nextShot == null && defaultShot() == ShotType.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
   }
 
-  public boolean dumping() {
-    return nextShot() == ShotType.DUMP;
-  }
-
-  public boolean sliding() {
-    return nextShot() == ShotType.SLIDE;
-  }
-
-  public boolean shuttling() {
-    return nextShot() == ShotType.SHUTTLE;
-  }
-
-  public boolean farShuttling() {
-    return nextShot() == ShotType.FARSHUTTLE;
+  public Target shotToTarget(ShotType shot) {
+    if (shot == ShotType.DUMP) {
+      return Target.FIXED_DUMP;
+    } else if (shot == ShotType.SLIDE) {
+      return Target.FIXED_SLIDE;
+    } else if (shot == ShotType.AMP) {
+      return Target.FIXED_AMP;
+    } else if (shot == ShotType.SHUTTLE) {
+      return Target.SHUTTLE;
+    } else if (shot == ShotType.FARSHUTTLE) {
+      return Target.FAR_SHUTTLE;
+    } else {
+      return Target.SPEAKER;
+    }
   }
 
   @Override
@@ -365,7 +330,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
     SmartDashboard.putBoolean("shooter/ready", isReady(false));
-    SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
+    SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultShot().toString() : nextShot.toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
 
 

@@ -28,7 +28,6 @@ import frc.robot.subsystems.ShooterSubsystem.ShotType;
 public class ShootCommand extends Command {
   private final ShooterSubsystem shooter;
   private final IndexSubsystem index;
-  private Swerve swerve = null;
   private boolean feeding = false;
   DoubleSupplier topSupplier = null;
   DoubleSupplier bottomSupplier = null;
@@ -39,7 +38,8 @@ public class ShootCommand extends Command {
   private boolean autoAim = true;
   private boolean shooterReady = false;
   private boolean seenTarget = false;
-  private Target target = Target.AUTO;
+  private ShotType shot = ShotType.AUTO;
+  private Target target = Target.SPEAKER;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
@@ -50,18 +50,8 @@ public class ShootCommand extends Command {
     SmartDashboard.putBoolean("pose/Update when shooting", true);
   }
 
-  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
-    this(shooter, index);
-    this.swerve = swerve;
-  }
-
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, boolean autoAim) {
     this(shooter, index);
-    this.autoAim = autoAim;
-  }
-
-  public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve, boolean autoAim) {
-    this(shooter, index, swerve);
     this.autoAim = autoAim;
   }
 
@@ -87,15 +77,14 @@ public class ShootCommand extends Command {
   public void initialize() {
     DogLog.log("Shooter/Status", "Shot triggered");
 
-    ShotType next = shooter.nextShot();
-
-    if (next == ShotType.AUTO) {
+    shot = shooter.nextShot();
+    if (shot == ShotType.AUTO) {
       target = zoneToTarget(PoseSubsystem.getZone());
-    } else if (next == ShotType.DUMP) {
+    } else if (shot == ShotType.DUMP) {
       target = Target.FIXED_DUMP;
-    } else if (next == ShotType.SLIDE) {
+    } else if (shot == ShotType.SLIDE) {
       target = Target.FIXED_SLIDE;
-    } else if (next == ShotType.AMP) {
+    } else if (shot == ShotType.AMP) {
       target = Target.FIXED_AMP;
     } else {
       target = Target.SPEAKER;
@@ -108,16 +97,12 @@ public class ShootCommand extends Command {
     gone = false;
 
     if (topSupplier != null && bottomSupplier != null) {
-      shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
+      shooter.setCurrentSpeed(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (!cancelled) {
-        if (!shooter.shoot()) {
-          DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
-          cancelled = true;
-        }
-      }
-      if (cancelled) {
+      if (!shooter.shoot()) {
+        DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
         LEDSubsystem.setTempState(TempState.ERROR);
+        cancelled = true;
         cancel();
       }
     }
@@ -126,18 +111,19 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    PoseSubsystem s_Pose = PoseSubsystem.getInstance();
+
     if (cancelled) {
       return;
     }
-    // TODO Consider not requiring seeing the target to shoot
-    if (shooter.usingVision() && !seenTarget) {
+    if (shooter.requireVision() && !seenTarget) {
       seenTarget = vision.haveSpeakerTarget();
       if (!seenTarget) {
         DogLog.log("Shooter/Status", "Shoot Command waiting for speaker target");
         return;
       }
     }
-    boolean precise = shooter.usingVision() && vision.distanceToTarget(Target.SPEAKER) > Constants.Shooter.farDistance;
+    boolean precise = target == Target.SPEAKER && s_Pose.getDistance(Target.SPEAKER) > Constants.Shooter.farDistance;
     if (!feeding && shooter.isReady(precise)) {
       boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
       if (!shooterReady) {
@@ -146,36 +132,25 @@ public class ShootCommand extends Command {
       }
 
       if (!aligned) {
+        // TODO Simplify this if/else sequence
         if (shooter.usingVision()) {
+          // TODO Revisit this conditional
           // Aligned if vision is aligned with target
           aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Shooter.maxAngleError.get(Target.SPEAKER);
-        } else if (shooter.dumping()) {
-          aligned = PoseSubsystem.getInstance().targetAligned(Target.FIXED_DUMP);
-        } else if (shooter.sliding()) {
-          aligned = PoseSubsystem.getInstance().targetAligned(Target.FIXED_SLIDE);
-        } else if (shooter.shuttling()) {
-          aligned = PoseSubsystem.getInstance().targetAligned(Target.SHUTTLE);
-        } else if (shooter.farShuttling()) {
-          aligned = PoseSubsystem.getInstance().targetAligned(Target.FAR_SHUTTLE);
         } else {
-          // "Aligned" because all other shots don't require alignment
-          aligned = true;
+          aligned = PoseSubsystem.getInstance().targetAligned(target);
         }
       }
       if (aligned) {
         index.feed();
         feeding = true;
-        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches", vision.angleToSpeaker().getDegrees(), Units.metersToInches(vision.distanceToSpeaker())));
-        if (shooter.usingVision() && DriverStation.isAutonomousEnabled()) {
+        DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches",
+          vision.angleToTarget(Target.SPEAKER).getDegrees(), Units.metersToInches(vision.distanceToTarget(Target.SPEAKER))));
+        DogLog.log("Shooter/Shot Pose", s_Pose.getPose());
+        if (shooter.usingVision() && DriverStation.isAutonomousEnabled() && SmartDashboard.getBoolean("pose/Update when shooting", true)) {
           Pose2d pose = vision.lastPose();
-          if (swerve == null) {
-            DogLog.log("Shooter/Status", "Unable to set pose due to lack of Swerve subsystem");
-          } else {
-            DogLog.log("Shooter/Status", "Setting pose based on vision: " + pose);
-            if (SmartDashboard.getBoolean("pose/Update when shooting", true)) {
-              PoseSubsystem.getInstance().setPose(pose);
-            }
-          }
+          DogLog.log("Shooter/Status", "Setting pose based on vision: " + pose);
+          s_Pose.setPose(pose);
         }
       }
     }

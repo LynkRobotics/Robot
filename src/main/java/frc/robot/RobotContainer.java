@@ -239,7 +239,7 @@ public class RobotContainer {
 
 
         DogLog.setOptions(new DogLogOptions(
-            Constants.Vision.atHQ, //Whether logged values should be published to NetworkTables
+            Constants.atHQ, //Whether logged values should be published to NetworkTables
             false, //Whether all NetworkTables fields should be saved to the log file.
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.

@@ -17,6 +17,7 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+    public static final boolean atHQ = true;
     public static final double stickDeadband = 0.1;
     public static final double driveStickSensitivity = 1.00; 
     public static final double turnStickSensitivity = 1.00;
@@ -296,7 +297,6 @@ public final class Constants {
             new Rotation3d(Units.degreesToRadians(1.2), Units.degreesToRadians(-30.7), Math.PI)); // As measured by PhotonVision
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
-        public static final boolean atHQ = true;
         public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
         public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
         public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;

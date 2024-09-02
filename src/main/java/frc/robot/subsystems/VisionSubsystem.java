@@ -60,7 +60,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     camera = new PhotonCamera(Constants.Vision.cameraName);
 
-    if (Constants.Vision.atHQ) {
+    if (Constants.atHQ) {
       try {
         kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory().toPath().resolve("2024-crescendo-hq.json"));
       } catch (IOException e) {

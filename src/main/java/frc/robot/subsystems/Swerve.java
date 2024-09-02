@@ -108,6 +108,11 @@ public class Swerve extends SubsystemBase {
         DogLog.log("Swerve/Status", "Braked Swerve Motors");
     }
 
+    public void stopSwerve(){
+        drive(new Translation2d(0, 0), 0, false);
+        DogLog.log("Swerve/Status", "Stopped Swerve");
+    }
+
     @Override
     public void periodic(){
         for(SwerveModule mod : mSwerveMods){

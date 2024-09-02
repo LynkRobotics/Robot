@@ -3,6 +3,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.Robot;
+import frc.robot.Constants.Pose;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -148,12 +149,12 @@ public class TeleopSwerve extends Command {
         if (Math.abs(rotationVal) < Constants.aimingOverride) {
             if (lastAngle != null && aimingMode != AimingMode.TARGET) {
                 if (aimingMode != AimingMode.MAINTAIN) {
-                    PoseSubsystem.angleErrorReset();
+                    PoseSubsystem.angleErrorReset(Pose.maintainPID);
                     lastAngle = currentAngle;
                     aimingMode = AimingMode.MAINTAIN;
                 } else {
                     Rotation2d angleError = lastAngle.minus(currentAngle);
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError, Pose.maintainPID);
                 }
             }
         } else {

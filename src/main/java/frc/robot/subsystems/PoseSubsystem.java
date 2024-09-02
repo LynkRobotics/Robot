@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -57,6 +58,10 @@ public class PoseSubsystem extends SubsystemBase {
         Pose.rotationPID.enableContinuousInput(-180.0, 180.0);
         Pose.rotationPID.setIZone(Pose.rotationIZone); // Only use Integral term within this range
         Pose.rotationPID.reset();
+
+        Pose.maintainPID.enableContinuousInput(-180.0, 180.0);
+        Pose.maintainPID.setIZone(Pose.rotationIZone); // Only use Integral term within this range
+        Pose.maintainPID.reset();
 
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
@@ -238,7 +243,11 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public static void angleErrorReset() {
-        Pose.rotationPID.reset();
+        angleErrorReset(Pose.rotationPID);
+    }
+
+    public static void angleErrorReset(PIDController pid) {
+        pid.reset();
     }
 
     private Translation2d speakerOffset() {
@@ -279,10 +288,14 @@ public class PoseSubsystem extends SubsystemBase {
     public static Rotation2d getTargetAngle() {
         return targetAngle;
     }
-    
+
     public static double angleErrorToSpeed(Rotation2d angleError) {
+        return angleErrorToSpeed(angleError, Pose.rotationPID);
+    }
+
+    public static double angleErrorToSpeed(Rotation2d angleError, PIDController pid) {
         double angleErrorDeg = angleError.getDegrees();
-        double correction = Pose.rotationPID.calculate(angleErrorDeg);
+        double correction = pid.calculate(angleErrorDeg);
         double feedForward = Pose.rotationKS * Math.signum(correction);
         double output = MathUtil.clamp(correction + feedForward, -1.0, 1.0);
 

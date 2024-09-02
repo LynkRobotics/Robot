@@ -314,6 +314,8 @@ public class RobotContainer {
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
         SmartDashboard.putData("Speaker align", speakerPathCommand());
+        SmartDashboard.putData("Speaker Amp-Side align", speakerAmpSidePathCommand());
+        SmartDashboard.putData("Speaker Source-Side align", speakerSourceSidePathCommand());
 
         SmartDashboard.putData("pose/Align to zero", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("Align to zero"));
         SmartDashboard.putData("pose/Align to 90", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("Align to 90"));
@@ -498,4 +500,56 @@ public class RobotContainer {
         ).handleInterrupt(s_Vision::disableRotationTargetOverride)
         .withName("Speaker align");
     }
-}
+
+
+    private Command speakerAmpSidePathCommand() {
+            PathPlannerPath path = PathPlannerPath.fromPathFile("To Speaker-AmpSide");
+
+            return Commands.sequence(
+                Commands.runOnce(s_Vision::enableRotationTargetOverride),
+                new FollowPathHolonomic(
+                    path,
+                    s_Pose::getPose, // Robot pose supplier
+                    s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                    s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                    new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(2.0, 0.0, 0.0), // Rotation PID constants
+                        Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                        Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                    ),
+                    Robot::isRed,
+                    s_Swerve // Reference to this subsystem to set requirements
+                ),
+                Commands.runOnce(s_Vision::disableRotationTargetOverride)
+            ).handleInterrupt(s_Vision::disableRotationTargetOverride)
+            .withName("Speaker Amp Side align");
+        }
+    
+
+    private Command speakerSourceSidePathCommand() {
+            PathPlannerPath path = PathPlannerPath.fromPathFile("To Speaker-SourceSide");
+
+            return Commands.sequence(
+                Commands.runOnce(s_Vision::enableRotationTargetOverride),
+                new FollowPathHolonomic(
+                    path,
+                    s_Pose::getPose, // Robot pose supplier
+                    s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                    s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                    new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(2.0, 0.0, 0.0), // Rotation PID constants
+                        Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                        Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                    ),
+                    Robot::isRed,
+                    s_Swerve // Reference to this subsystem to set requirements
+                ),
+                Commands.runOnce(s_Vision::disableRotationTargetOverride)
+            ).handleInterrupt(s_Vision::disableRotationTargetOverride)
+            .withName("Speaker Source Side align");
+        }
+} 

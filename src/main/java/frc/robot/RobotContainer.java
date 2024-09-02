@@ -196,7 +196,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
-        NamedCommands.registerCommand("Stop", Commands.runOnce(() -> { s_Swerve.drive(new Translation2d(0.0, 0.0), 0.0, true); } ));
+        NamedCommands.registerCommand("Stop", Commands.runOnce(s_Swerve::stopSwerve));
         NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() -> { s_Pose.setPose(s_Vision.lastPose()); } ));
 
         // Build an autoChooser (defaults to none)

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 5.854111344586325,
+        "y": 1.5579005703465956
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.098482924238575,
-        "y": 0.11194495116263059
+        "x": 6.337074257730859,
+        "y": 1.4284910477953352
       },
       "isLocked": false,
-      "linkedName": "G Note"
+      "linkedName": "SS Dump"
     },
     {
       "anchor": {
-        "x": 1.35,
-        "y": 3.9
+        "x": 8.3,
+        "y": 0.8
       },
       "prevControl": {
-        "x": 1.3499999999999999,
-        "y": 2.078432604085395
+        "x": 7.817037086855467,
+        "y": 0.9294095225512604
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side close shot"
+      "linkedName": "H Note"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -20.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 30.0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

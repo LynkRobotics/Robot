@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 1.48,
+        "y": 1.48
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.098482924238575,
-        "y": 0.11194495116263059
+        "x": 4.48,
+        "y": 1.48
       },
       "isLocked": false,
-      "linkedName": "G Note"
+      "linkedName": "SS Rush"
     },
     {
       "anchor": {
-        "x": 1.35,
-        "y": 3.9
+        "x": 8.35,
+        "y": 2.55
       },
       "prevControl": {
-        "x": 1.3499999999999999,
-        "y": 2.078432604085395
+        "x": 4.293111529585913,
+        "y": 1.4629600105694127
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side close shot"
+      "linkedName": "G Note"
     }
   ],
   "rotationTargets": [],
@@ -39,14 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": 15.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 30.0,
-    "velocity": 0
+    "rotation": 0.0,
+    "velocity": 0.0
   },
   "useDefaultConstraints": true
 }

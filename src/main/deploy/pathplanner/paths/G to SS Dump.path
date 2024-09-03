@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.098482924238575,
-        "y": 0.11194495116263059
+        "x": 8.254526008643884,
+        "y": 2.579744192282398
       },
       "isLocked": false,
       "linkedName": "G Note"
     },
     {
       "anchor": {
-        "x": 1.35,
-        "y": 3.9
+        "x": 5.854111344586325,
+        "y": 1.5579005703465956
       },
       "prevControl": {
-        "x": 1.3499999999999999,
-        "y": 2.078432604085395
+        "x": 6.498065155433589,
+        "y": 1.5579005703465956
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source-side close shot"
+      "linkedName": "SS Dump"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 30.0,
+    "rotation": 15.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5815457085459625,
-        "y": 3.069157411042095
+        "x": 1.7500000000000002,
+        "y": 3.177211973102586
       },
       "isLocked": false,
       "linkedName": "Source-side angle shot"
     },
     {
       "anchor": {
-        "x": 1.48,
+        "x": 1.8,
         "y": 1.3
       },
       "prevControl": {
-        "x": 1.544230724825086,
-        "y": 2.170843974415222
+        "x": 1.8,
+        "y": 2.3
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SS Drop"
     }
   ],
   "rotationTargets": [],

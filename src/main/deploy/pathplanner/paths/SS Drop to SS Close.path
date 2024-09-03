@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 1.8,
+        "y": 1.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.098482924238575,
-        "y": 0.11194495116263059
+        "x": 1.782635182233307,
+        "y": 1.398480775301221
       },
       "isLocked": false,
-      "linkedName": "G Note"
+      "linkedName": "SS Drop"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 3.9
       },
       "prevControl": {
-        "x": 1.3499999999999999,
-        "y": 2.078432604085395
+        "x": 1.5892866058242643,
+        "y": 3.7190527141040706
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,8 +45,8 @@
   "reversed": false,
   "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 30.0,
-    "velocity": 0
+    "rotation": -90.0,
+    "velocity": 0.0
   },
   "useDefaultConstraints": true
 }

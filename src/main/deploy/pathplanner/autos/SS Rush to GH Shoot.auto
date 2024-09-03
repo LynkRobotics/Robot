@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Rush to H"
+                        "pathName": "SS Rush to G"
                       }
                     },
                     {
@@ -56,7 +56,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "H to SS Dump"
+                  "pathName": "G to SS Dump"
                 }
               },
               {
@@ -91,7 +91,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Dump to G"
+                        "pathName": "SS Dump to H"
                       }
                     },
                     {
@@ -113,7 +113,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "G to close shot"
+                  "pathName": "H to close shot"
                 }
               },
               {

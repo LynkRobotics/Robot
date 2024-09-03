@@ -43,7 +43,7 @@ public class ShootCommand extends Command {
     this.index = index;
     assert(vision != null);
 
-    SmartDashboard.putBoolean("pose/Update when shooting", true);
+    SmartDashboard.putBoolean("pose/Update when shooting", false);
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
@@ -146,7 +146,7 @@ public class ShootCommand extends Command {
             Pose2d oldPose = PoseSubsystem.getInstance().getPose();
             DogLog.log("Shooter/Status", "Setting pose based on vision: " + String.format("%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)",
               pose.getX(), pose.getY(), pose.getRotation().getDegrees(), oldPose.getX(), oldPose.getY(), oldPose.getRotation().getDegrees()));
-            if (SmartDashboard.getBoolean("pose/Update when shooting", true)) {
+            if (SmartDashboard.getBoolean("pose/Update when shooting", false)) {
               PoseSubsystem.getInstance().setPose(pose);
             }
           }

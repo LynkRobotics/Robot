@@ -33,7 +33,7 @@ public class IndexSubsystem extends SubsystemBase {
 
     leftIndexSensor = new DigitalInput(Constants.Index.leftIndexSensorID);
     rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
-    SmartDashboard.putBoolean("indexer/Left sensor enabled", true);
+    SmartDashboard.putBoolean("indexer/Left sensor enabled", false);
     SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
   }
 
@@ -42,7 +42,7 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public boolean haveNote() {
-    return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
+    return (SmartDashboard.getBoolean("indexer/Left sensor enabled", false) && !leftIndexSensor.get()) ||
       (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());
   }
 

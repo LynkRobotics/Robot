@@ -8,43 +8,49 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.72,
-        "y": 4.73
+        "x": 2.2625441614519595,
+        "y": 4.337866857551897
       },
       "isLocked": false,
       "linkedName": "C Note"
     },
     {
       "anchor": {
-        "x": 2.1319417184288914,
-        "y": 6.02636987092156
+        "x": 2.1505992102893297,
+        "y": 5.028194056388113
       },
       "prevControl": {
-        "x": 2.1505992102893297,
-        "y": 5.392015147666658
+        "x": 2.1447990079537163,
+        "y": 4.594276037311043
       },
       "nextControl": {
-        "x": 2.118008527512989,
-        "y": 6.500098362062241
+        "x": 2.156399412624943,
+        "y": 5.462112075465183
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.7,
+        "x": 2.72,
         "y": 6.85
       },
       "prevControl": {
-        "x": 2.4771053178469993,
-        "y": 6.707368323827557
+        "x": 2.514420301567876,
+        "y": 6.259588519177039
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "A Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 45.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -55,8 +61,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 25.0,
-    "rotateFast": true
+    "rotation": 45.0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Note to Note",

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.44,
-      "y": 7.32
+      "x": 1.48,
+      "y": 1.48
     },
     "rotation": 0.0
   },
@@ -18,12 +18,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -40,45 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AS Angled to A"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A to D"
+                        "pathName": "SS Rush to H"
                       }
                     },
                     {
@@ -96,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to Amp-side shot"
+            "pathName": "H to close shot"
           }
         },
         {
@@ -106,7 +62,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -118,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp-side shot to E"
+                  "pathName": "SS Close to Pickup"
                 }
               }
             ]
@@ -127,7 +83,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "E to Amp-side shot"
+            "pathName": "Pickup to SS Close"
           }
         },
         {
@@ -135,10 +91,16 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SS Close to H"
+          }
         }
       ]
     }
   },
-  "folder": "Amp-side",
+  "folder": "Source-side",
   "choreoAuto": false
 }

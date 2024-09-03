@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.48,
-      "y": 5.54
+      "x": 1.44,
+      "y": 7.32
     },
     "rotation": 0.0
   },
@@ -18,12 +18,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot without aiming"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -40,139 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Subwoofer to B"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot without aiming"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B to C for shooting"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "C to A Pickup"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Set Instant Pose"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A to amp-side shot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Set Instant Pose"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "A to D"
+                        "pathName": "AS Rush to E"
                       }
                     },
                     {
@@ -190,23 +52,17 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to Amp-side shot"
+            "pathName": "E to AS Dump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Slide Shot"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Set Instant Pose"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -216,9 +72,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Amp-side shot to E"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "AS Rush to D"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -227,18 +96,62 @@
         {
           "type": "path",
           "data": {
-            "pathName": "E to A"
+            "pathName": "D to AS Dump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Slide Shot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "AS Dump to F"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F to Stage Dump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Slide Shot"
           }
         }
       ]
     }
   },
-  "folder": "Straight-on",
+  "folder": "Amp-side",
   "choreoAuto": false
 }

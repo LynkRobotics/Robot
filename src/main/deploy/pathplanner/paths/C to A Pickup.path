@@ -4,35 +4,51 @@
     {
       "anchor": {
         "x": 2.72,
-        "y": 6.85
+        "y": 4.23
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0120105294756048,
-        "y": 6.819313274990187
+        "x": 2.327845382963493,
+        "y": 4.990879072667236
       },
       "isLocked": false,
-      "linkedName": "A Note"
+      "linkedName": "C Note"
     },
     {
       "anchor": {
-        "x": 2.7,
-        "y": 5.54
+        "x": 2.327845382963493,
+        "y": 6.13831482208419
       },
       "prevControl": {
-        "x": 1.8707368323827558,
-        "y": 5.867781190107834
+        "x": 2.3220451806278795,
+        "y": 5.70439680300712
+      },
+      "nextControl": {
+        "x": 2.3336455852991063,
+        "y": 6.57223284116126
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1114600411019007,
+        "y": 6.977901955803912
+      },
+      "prevControl": {
+        "x": 2.7942826794744495,
+        "y": 6.912600734292378
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "A Pickup"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.15,
-      "rotationDegrees": -50.0,
-      "rotateFast": true
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 45.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
@@ -45,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 45.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Note to Note",
   "previewStartingState": {
-    "rotation": 45.0,
+    "rotation": -30.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

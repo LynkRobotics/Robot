@@ -3,32 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.31,
-        "y": 4.05
+        "x": 5.85,
+        "y": 6.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7895289232155407,
-        "y": 1.5704710767844592
+        "x": 6.327001785837089,
+        "y": 6.222998214162911
       },
       "isLocked": false,
-      "linkedName": "Source-side Angled Line"
+      "linkedName": "AS Dump"
     },
     {
       "anchor": {
-        "x": 8.3,
-        "y": 0.8
+        "x": 8.35,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 5.851107489695087,
-        "y": 1.2318058224216388
+        "x": 7.642893218813452,
+        "y": 4.8071067811865476
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "H Note"
+      "linkedName": "F Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": -45.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -10.0,
-    "rotateFast": true
+    "rotation": -45.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Side",
+  "folder": "Amp Side",
   "previewStartingState": {
-    "rotation": -50.0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

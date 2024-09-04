@@ -7,6 +7,7 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
+import static frc.robot.Options.*;
 
 import java.util.function.DoubleSupplier;
 
@@ -36,8 +37,6 @@ public class TeleopSwerve extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.speedLimitRotSupplier = speedLimitRotSupplier;
-
-        SmartDashboard.putBoolean("Aiming enabled", true);
     }
 
     @Override
@@ -54,13 +53,13 @@ public class TeleopSwerve extends Command {
         }
 
         /* Override rotation if using vision to aim */
-        if (SmartDashboard.getBoolean("Aiming enabled", true)) {
+        if (optAimingEnabled.get()) {
             if (s_Shooter.isAutoAimingActive()) {
                 Rotation2d angleError;
                 
                 SmartDashboard.putString("Debug", "autoAimingActive");
                 if (s_Shooter.usingVision()) {
-                    if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+                    if (optShootWithVision.get()) {
                         angleError = s_Vision.angleError();
                     } else {
                         angleError = PoseSubsystem.getInstance().angleError();
@@ -91,7 +90,7 @@ public class TeleopSwerve extends Command {
                 SmartDashboard.putString("Debug", "auto aiming");
                 boolean haveNote = IndexSubsystem.getInstance().haveNote();
 
-                if (haveNote && SmartDashboard.getBoolean("pose/Full field aiming", true)) {
+                if (haveNote && optFullFieldAiming.get()) {
                     PoseSubsystem s_Pose = PoseSubsystem.getInstance();
                     PoseSubsystem.Zone zone = PoseSubsystem.getZone();
                     Rotation2d targetAngle;

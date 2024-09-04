@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Pose;
 import frc.robot.Robot;
+import static frc.robot.Options.*;
 
 public class PoseSubsystem extends SubsystemBase {
     private static PoseSubsystem instance;
@@ -62,10 +63,6 @@ public class PoseSubsystem extends SubsystemBase {
 
         field = new Field2d();
         SmartDashboard.putData("pose/Field", field);
-
-        SmartDashboard.putBoolean("pose/Update from vision in Teleop", true);
-        SmartDashboard.putBoolean("pose/Update from vision in Auto", false);
-        SmartDashboard.putBoolean("pose/Require target to aim", true);
 
         AutoBuilder.configureHolonomic(
             this::getPose,
@@ -302,8 +299,8 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
-        if ((DriverStation.isTeleop() && SmartDashboard.getBoolean("pose/Update from vision in Teleop", true))
-            || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("pose/Update from vision in Auto", false))) {
+        if ((DriverStation.isTeleop() && optUpdatePoseWithVisionTeleop.get())
+            || (DriverStation.isAutonomous() && optUpdatePoseWithVisionAuto.get())) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {
             s_Vision.updatePoseEstimate(null);

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import static frc.robot.Options.*;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
 
 public class IndexSubsystem extends SubsystemBase {
@@ -33,8 +34,6 @@ public class IndexSubsystem extends SubsystemBase {
 
     leftIndexSensor = new DigitalInput(Constants.Index.leftIndexSensorID);
     rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
-    SmartDashboard.putBoolean("indexer/Left sensor enabled", true);
-    SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
   }
 
   public static IndexSubsystem getInstance() {
@@ -42,8 +41,8 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public boolean haveNote() {
-    return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
-      (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());
+    return (optLeftIndexSensorEnabled.get() && !leftIndexSensor.get()) ||
+      (optRightIndexSensorEnabled.get() && !rightIndexSensor.get());
   }
 
   public void applyConfigs() {

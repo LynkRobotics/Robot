@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import static frc.robot.Options.*;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LEDSubsystem.TempState;
@@ -35,7 +36,7 @@ public class ClimberPositionCommand extends Command {
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
       DogLog.log("Climber/Status", "ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
-    } else if (!SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
+    } else if (!optClimbersEnabled.get()) {
       DogLog.log("Climber/Status", "ERROR: Attempt to use climbers, but they are disabled");
       cancelled = true;
     } else {

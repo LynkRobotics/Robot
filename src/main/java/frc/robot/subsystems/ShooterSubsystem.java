@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import static frc.robot.Options.*;
 
 public class ShooterSubsystem extends SubsystemBase {
   private static TalonFX top;
@@ -170,7 +171,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isAutoAimingActive() {
-    return autoAimingActive; // || SmartDashboard.getBoolean("pose/Full field aiming", true);
+    return autoAimingActive;
   }
 
   private ShooterSpeed speedFromDistance(double meters, ShooterCalibration[] calibrationTable) {
@@ -227,7 +228,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     if (speed == Speed.VISION) {
-      if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+      if (optShootWithVision.get()) {
         distance = VisionSubsystem.getInstance().distanceToSpeaker();
       } else {
         distance = PoseSubsystem.getInstance().distanceToSpeaker();

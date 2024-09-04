@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import static frc.robot.Options.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -78,7 +79,6 @@ public class VisionSubsystem extends SubsystemBase {
     PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
     SmartDashboard.putData("vision/Field", field);
-    SmartDashboard.putBoolean("vision/Update dashboard", updateDashboard);
     SmartDashboard.putData("vision/Calibrate", Commands.runOnce(this::calibrate, this).withName("Calibrate Vision").ignoringDisable(true));
   }
 
@@ -293,8 +293,7 @@ public class VisionSubsystem extends SubsystemBase {
     DogLog.log("Vision/speakerOffset angle", angleToSpeaker().getDegrees());
     DogLog.log("Vision/Angle error", angleError().getDegrees());
 
-    updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
-    if (updateDashboard) {
+    if (optUpdateVisionDashboard.get()) {
       SmartDashboard.putString("vision/Result", result.toString());
       SmartDashboard.putBoolean("vision/Have target(s)", haveTarget);
       SmartDashboard.putBoolean("vision/Have speaker target", haveSpeakerTarget);

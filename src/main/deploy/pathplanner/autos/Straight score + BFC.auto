@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.31,
-      "y": 4.05
+      "x": 1.48,
+      "y": 5.54
     },
-    "rotation": -45.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,39 @@
         {
           "type": "named",
           "data": {
-            "name": "Startup delay"
+            "name": "Fixed SW shot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Subwoofer to B"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -40,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Angled Line to H"
+                        "pathName": "B to F"
                       }
                     },
                     {
@@ -58,44 +90,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to SS Dump"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Short Slide Shot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SS Dump to G"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "G to close shot"
+            "pathName": "F to B"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
           }
         },
         {
@@ -109,9 +116,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "SS Close to Pickup"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "B to C"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -120,7 +140,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup to SS Close"
+            "pathName": "C to B"
           }
         },
         {
@@ -130,14 +150,33 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "SS Close to H"
+            "name": "Set Instant Pose"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B to F"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coast after auto"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "folder": "Source-side",
+  "folder": "Straight-on",
   "choreoAuto": false
 }

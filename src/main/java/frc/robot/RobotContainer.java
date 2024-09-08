@@ -105,7 +105,7 @@ public class RobotContainer {
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
         NamedCommands.registerCommand("Done", new PrintCommand("Done"));
-        NamedCommands.registerCommand("Start", new PrintCommand("Hello World"));
+        NamedCommands.registerCommand("Start", new PrintCommand("Starting"));
         NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command starting");})
@@ -130,6 +130,14 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "SW complete");}))
+        );
+        NamedCommands.registerCommand("Fixed AS shot",
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin AS shot");})
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDE); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.50))))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "AS complete");}))
         );
         NamedCommands.registerCommand("Shoot OTF",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin OTF");})
@@ -197,6 +205,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
         NamedCommands.registerCommand("Stop", Commands.runOnce(s_Swerve::stopSwerve));
         NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() -> { s_Pose.setPose(s_Vision.lastPose()); } ));
+        NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -235,7 +244,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("autoSetup/SetSwerveCoast", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Coasting Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToCoast, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Coasted");})).ignoringDisable(true));
         SmartDashboard.putData("autoSetup/SetSwerveBrake", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Braking Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToBrake, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Braked");})).ignoringDisable(true));
-
+        SmartDashboard.putData("autoSetup/SetSwerveAligned", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Aligning Swerve Motors");}).andThen(Commands.run(s_Swerve::alignStraight, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Aligned");})).ignoringDisable(true));
 
         DogLog.setOptions(new DogLogOptions(
             Constants.atHQ, //Whether logged values should be published to NetworkTables
@@ -423,7 +432,15 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
+        s_Swerve.stopSwerve();
         s_Vision.disableRotationTargetOverride();
+        s_Swerve.setDriveMotorsToCoast();
+    }
+
+    public void teleopExit() {
+        if (SmartDashboard.getBoolean("Brake after teleOp", true)) {
+            s_Swerve.setDriveMotorsToBrake();
+        }
     }
 
     private Command ampPathCommand() {

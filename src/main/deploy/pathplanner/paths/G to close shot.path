@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 8.32,
+        "y": 2.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.098482924238575,
-        "y": 0.11194495116263059
+        "x": 5.068482924238576,
+        "y": 0.011944951162630946
       },
       "isLocked": false,
       "linkedName": "G Note"

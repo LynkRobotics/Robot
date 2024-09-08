@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7895289232155407,
-        "y": 1.5704710767844592
+        "x": 1.463406691841821,
+        "y": 3.179987417549785
       },
       "isLocked": false,
       "linkedName": "Source-side Angled Line"
@@ -20,15 +20,21 @@
         "y": 0.8
       },
       "prevControl": {
-        "x": 5.851107489695087,
-        "y": 1.2318058224216388
+        "x": 1.604867258900903,
+        "y": 3.236829032221161
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "H Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": -20.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,8 +45,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -10.0,
-    "rotateFast": true
+    "rotation": -20.0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Side",

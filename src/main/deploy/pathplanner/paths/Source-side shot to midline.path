@@ -3,48 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 5.54
+        "x": 2.0,
+        "y": 3.610224674994805
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.08164961784469,
-        "y": 5.380001385457317
+        "x": 2.106392276041411,
+        "y": 3.3179142989666444
       },
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "Source-side angle shot"
     },
     {
       "anchor": {
-        "x": 5.0704966864479175,
-        "y": 4.34
+        "x": 3.512596116101323,
+        "y": 1.5
       },
       "prevControl": {
-        "x": 4.505291362863165,
-        "y": 4.472965151954631
+        "x": 3.1990059126310073,
+        "y": 1.5
       },
       "nextControl": {
-        "x": 6.507123559701665,
-        "y": 4.0020320040640085
+        "x": 3.810093904565877,
+        "y": 1.5
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.35,
-        "y": 5.75
+        "x": 8.4,
+        "y": 1.5
       },
       "prevControl": {
-        "x": 7.862545546909275,
-        "y": 5.686438681968273
+        "x": 5.9,
+        "y": 1.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "E Note"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -55,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 15.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note to Note",
+  "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -45.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

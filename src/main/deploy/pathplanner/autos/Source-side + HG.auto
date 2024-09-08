@@ -68,6 +68,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -80,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source-side shot to G"
+                  "pathName": "Source-side shot to G2"
                 }
               }
             ]
@@ -89,7 +95,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G to source-side shot"
+            "pathName": "G2 to source-side shot"
           }
         },
         {
@@ -99,9 +105,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Source-side shot to G"
+            "name": "Set Instant Pose"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source-side shot to midline"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coast after auto"
+                }
+              }
+            ]
           }
         }
       ]

@@ -90,7 +90,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Source-side shot to G"
+                        "pathName": "Source-side shot to G2"
                       }
                     },
                     {
@@ -108,7 +108,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G to source-side shot"
+            "pathName": "G2 to source-side shot"
           }
         },
         {

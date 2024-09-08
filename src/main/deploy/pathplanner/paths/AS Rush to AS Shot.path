@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 5.54
+        "x": 1.4416145195926755,
+        "y": 7.323065555222019
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.08164961784469,
-        "y": 5.380001385457317
+        "x": 1.5123251977113303,
+        "y": 7.252354877103365
       },
       "isLocked": false,
-      "linkedName": "Straight shot"
+      "linkedName": "AS Rush Start"
     },
     {
       "anchor": {
-        "x": 5.0704966864479175,
-        "y": 4.34
+        "x": 2.0,
+        "y": 6.744683307548434
       },
       "prevControl": {
-        "x": 4.505291362863165,
-        "y": 4.472965151954631
-      },
-      "nextControl": {
-        "x": 6.507123559701665,
-        "y": 4.0020320040640085
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.35,
-        "y": 5.75
-      },
-      "prevControl": {
-        "x": 7.862545546909275,
-        "y": 5.686438681968273
+        "x": 1.9292893218813452,
+        "y": 6.815393985667089
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "E Note"
+      "linkedName": "Amp-side shot"
     }
   ],
   "rotationTargets": [],
@@ -55,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 15.0,
-    "rotateFast": false
+    "rotation": 30.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Note to Note",
+  "folder": "Amp Side",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

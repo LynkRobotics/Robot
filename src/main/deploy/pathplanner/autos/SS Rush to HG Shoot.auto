@@ -199,6 +199,25 @@
           "data": {
             "name": "Set Instant Pose"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SS Close to H"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coast after auto"
+                }
+              }
+            ]
+          }
         }
       ]
     }

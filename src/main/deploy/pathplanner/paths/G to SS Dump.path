@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 8.32,
+        "y": 2.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.254526008643884,
-        "y": 2.579744192282398
+        "x": 8.224526008643885,
+        "y": 2.479744192282398
       },
       "isLocked": false,
       "linkedName": "G Note"
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -15.0,
     "rotateFast": false
   },
   "reversed": false,

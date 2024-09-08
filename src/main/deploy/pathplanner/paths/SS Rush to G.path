@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.48,
-        "y": 1.48
+        "x": 2.08,
+        "y": 0.4407695154586735
       },
       "isLocked": false,
       "linkedName": "SS Rush"
     },
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 8.32,
+        "y": 2.45
       },
       "prevControl": {
-        "x": 4.293111529585913,
-        "y": 1.4629600105694127
+        "x": 4.325562631560356,
+        "y": 1.152128623625221
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 15.0,
+    "rotation": 18.0,
     "rotateFast": false
   },
   "reversed": false,

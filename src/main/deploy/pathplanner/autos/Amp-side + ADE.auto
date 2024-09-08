@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.44,
+      "y": 7.32
+    },
+    "rotation": 0.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,19 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Set Instant Pose"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Startup delay"
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "AS Rush to AS Shot"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Fixed AS shot"
           }
         },
         {
@@ -40,7 +46,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AS Angled to A"
+                        "pathName": "Amp-side shot to A"
                       }
                     },
                     {
@@ -59,6 +65,12 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
           }
         },
         {
@@ -96,7 +108,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D to A"
+            "pathName": "D to Amp-side shot"
           }
         },
         {
@@ -124,7 +136,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A to E"
+                  "pathName": "Amp-side shot to E"
                 }
               }
             ]
@@ -133,7 +145,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "E to A"
+            "pathName": "E to Amp-side shot"
           }
         },
         {
@@ -143,9 +155,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "A to E"
+            "name": "Set Instant Pose"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp-side shot to midline"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coast after auto"
+                }
+              }
+            ]
           }
         }
       ]

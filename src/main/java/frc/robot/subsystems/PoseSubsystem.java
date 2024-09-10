@@ -93,8 +93,7 @@ public class PoseSubsystem extends SubsystemBase {
             targetPoseField.setRobotPose(targetPose);
         });
         PathPlannerLogging.setLogActivePathCallback((activePath) -> {
-            // DogLog.log("Pose/Active Path", activePath); //TODO: Investigate why DogLog doesn't like
-            
+            DogLog.log("Pose/Active Path", activePath.toArray(Pose2d[]::new)); //we have to convert the List of poses PathPlanner gives us to an array because DogLog does not support list, fourtunetely aScope doesn't care whether its a list or an array
         });
         PathPlannerLogging.setLogCurrentPoseCallback((currentPose) -> {
             DogLog.log("Pose/PP Current Pose", currentPose);

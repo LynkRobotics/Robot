@@ -88,6 +88,17 @@ public class PoseSubsystem extends SubsystemBase {
             s_Swerve // Reference to Swerve subsystem to set requirements
         );
 
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> {
+            DogLog.log("Pose/Auto Target Pose", targetPose);
+            targetPoseField.setRobotPose(targetPose);
+        });
+        PathPlannerLogging.setLogActivePathCallback((activePath) -> {
+            DogLog.log("Pose/Active Path", activePath);
+        });
+        PathPlannerLogging.setLogCurrentPoseCallback((currentPose) -> {
+            DogLog.log("Pose/PP Current Pose", currentPose);
+        });
+
     }
 
     public static PoseSubsystem getInstance() {
@@ -342,18 +353,7 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
 
-        if(DriverStation.isAutonomousEnabled()){
-            PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> {
-                DogLog.log("Pose/Auto Target Pose", targetPose);
-                targetPoseField.setRobotPose(targetPose);
-            });
-            PathPlannerLogging.setLogActivePathCallback((activePath) -> {
-                DogLog.log("Pose/Active Path", activePath);
-            });
-            PathPlannerLogging.setLogCurrentPoseCallback((currentPose) -> {
-                DogLog.log("Pose/PP Current Pose", currentPose);
-            });
-        }
+    
         
     }
 }

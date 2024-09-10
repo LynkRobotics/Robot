@@ -93,7 +93,7 @@ public class PoseSubsystem extends SubsystemBase {
             targetPoseField.setRobotPose(targetPose);
         });
         PathPlannerLogging.setLogActivePathCallback((activePath) -> {
-            // DogLog.log("Pose/Active Path", activePath); //TODO: Investigate why DogLog doesn't like
+            DogLog.log("Pose/Active Path", activePath.toArray(Pose2d[]::new));
         });
         PathPlannerLogging.setLogCurrentPoseCallback((currentPose) -> {
             DogLog.log("Pose/PP Current Pose", currentPose);

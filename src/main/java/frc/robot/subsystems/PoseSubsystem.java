@@ -137,7 +137,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
-        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Heading");
+        DogLog.log("Pose/Gyro/Status", "Zeroed Gyro Heading");
     }
 
     public void resetHeading() {
@@ -352,6 +352,8 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Pose", pose);
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
+        DogLog.log("Pose/Distance to shuttle", Units.metersToInches(distanceToShuttle()));
+        DogLog.log("Pose/Distance to far shuttle", Units.metersToInches(distanceToFarShuttle()));
 
     
         

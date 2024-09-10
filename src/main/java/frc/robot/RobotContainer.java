@@ -325,6 +325,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+        DogLog.log("Auto/Auto Selected", autoChooser.getSelected().toString());
         return autoChooser.getSelected();
     }
 

@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import dev.doglog.DogLog;
@@ -33,6 +34,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field;
+    private final Field2d targetPoseField;
     private final Pigeon2 gyro;
     private static Rotation2d targetAngle = null;
     private static Zone zone = Zone.SPEAKER;
@@ -61,7 +63,9 @@ public class PoseSubsystem extends SubsystemBase {
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
         field = new Field2d();
+        targetPoseField = new Field2d();
         SmartDashboard.putData("pose/Field", field);
+        SmartDashboard.putData("pose/Target Pose Field", targetPoseField);
 
         SmartDashboard.putBoolean("pose/Update from vision in Teleop", true);
         SmartDashboard.putBoolean("pose/Update from vision in Auto", false);
@@ -84,6 +88,18 @@ public class PoseSubsystem extends SubsystemBase {
             s_Swerve // Reference to Swerve subsystem to set requirements
         );
 
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> {
+            DogLog.log("Pose/Auto Target Pose", targetPose);
+            targetPoseField.setRobotPose(targetPose);
+        });
+        PathPlannerLogging.setLogActivePathCallback((activePath) -> {
+            // DogLog.log("Pose/Active Path", activePath); //TODO: Investigate why DogLog doesn't like
+            
+        });
+        PathPlannerLogging.setLogCurrentPoseCallback((currentPose) -> {
+            DogLog.log("Pose/PP Current Pose", currentPose);
+        });
+
     }
 
     public static PoseSubsystem getInstance() {
@@ -96,7 +112,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void zeroGyro() {
         gyro.setYaw(0);
-        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
+        DogLog.log("Pose/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public void hack() {
@@ -109,7 +125,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(getGyroYaw(), s_Swerve.getModulePositions(), pose);
-        DogLog.log("Swerve/Status/Setting Pose", pose);
+        DogLog.log("Pose/Status/Setting Pose", pose);
     }
 
     public Rotation2d getHeading() {
@@ -337,5 +353,8 @@ public class PoseSubsystem extends SubsystemBase {
         DogLog.log("Pose/Pose", pose);
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
+
+    
+        
     }
 }

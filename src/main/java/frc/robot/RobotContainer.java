@@ -243,7 +243,7 @@ public class RobotContainer {
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
-            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
+            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(Constants.Vision.atHQ).withNtPublish(false));
         DogLog.setPdh(new PowerDistribution());
 
         // Testing...

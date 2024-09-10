@@ -16,6 +16,7 @@ import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -237,12 +238,13 @@ public class RobotContainer {
 
 
         DogLog.setOptions(new DogLogOptions(
-            false, //Whether logged values should be published to NetworkTables
+            Constants.Vision.atHQ, //Whether logged values should be published to NetworkTables
             false, //Whether all NetworkTables fields should be saved to the log file.
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
             ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
+        DogLog.setPdh(new PowerDistribution());
 
         // Testing...
         SmartDashboard.putBoolean("Shoot with Vision", true);

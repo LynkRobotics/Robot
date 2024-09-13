@@ -100,7 +100,7 @@ public class RobotContainer {
         s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index).withName("Index Stop"));
 
         SmartDashboard.putData("Command scheduler", CommandScheduler.getInstance());
-        SmartDashboard.putData("Shoot Command", new ShootCommand(s_Shooter, s_Index, s_Swerve).withTimeout(3.0));
+        SmartDashboard.putData("Shoot Command", new ShootCommand(s_Shooter, s_Index).withTimeout(3.0));
 
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
@@ -110,7 +110,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command starting");})
             .andThen(
-                (Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before ShootCommand");}).andThen(new ShootCommand(s_Shooter, s_Index, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After ShootCommand");})))
+                (Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before ShootCommand");}).andThen(new ShootCommand(s_Shooter, s_Index)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After ShootCommand");})))
                  .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before AimCommand");}).andThen(new AimCommand(s_Swerve, s_Vision)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After AimCommand");})))
                  .raceWith(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Before waitSeconds");}).andThen(Commands.waitSeconds(2.50)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After waitSeconds");}))))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "After race group");}))
@@ -119,7 +119,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot without aiming",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin shot w/o aim");})
             .andThen(
-                (new ShootCommand(s_Shooter, s_Index, s_Swerve, false)
+                (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Shot w/o aim complete");}))  
         );
@@ -279,7 +279,7 @@ public class RobotContainer {
             Commands.either(new ShootCommand(s_Shooter, s_Index,
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
                 () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
-            new ShootCommand(s_Shooter, s_Index, s_Swerve),
+            new ShootCommand(s_Shooter, s_Index),
             () -> SmartDashboard.getBoolean("Direct set RPM", false))
             .withName("Shoot"));
         climberExtendButton.onTrue(

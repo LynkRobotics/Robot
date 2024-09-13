@@ -17,7 +17,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -154,7 +153,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public Rotation2d angleToTarget(Target target) {
         if (target == Target.FIXED_AMP) {
-            return Robot.isRed() ? Pose.redAmpAngle : Pose.blueAmpAngle;
+            return Pose.ampAngle;
         } else if (target == Target.FIXED_DUMP) {
             return Robot.isRed() ? Pose.redDumpAngle : Pose.blueDumpAngle;
         } else if (target == Target.FIXED_SLIDE) {
@@ -175,26 +174,6 @@ public class PoseSubsystem extends SubsystemBase {
         // TODO Consider putting this into the PID
         if (Math.abs(targetAngleError(target).getDegrees()) < Constants.Shooter.maxAngleError.get(target)) {
             if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.maxVelocityError.get(target)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    public Rotation2d slideShotError() {
-        Rotation2d robotAngle = getPose().getRotation();
-        if (Robot.isRed()){
-            return Pose.redSlideAngle.minus(robotAngle);
-        } else {
-            return Pose.blueSlideAngle.minus(robotAngle);
-        }
-    }
-
-    public boolean slideShotAligned() {
-        if (Math.abs(slideShotError().getDegrees()) < Pose.maxSlideError) {
-            if (Math.abs(Pose.rotationPID.getVelocityError()) < Constants.Shooter.slideShotVelocityErrorMax) {
                 return true;
             } else {
                 return false;

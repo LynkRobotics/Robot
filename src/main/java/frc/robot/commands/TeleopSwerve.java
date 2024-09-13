@@ -3,6 +3,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.Robot;
+import frc.robot.Constants.Pose;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -66,17 +67,8 @@ public class TeleopSwerve extends Command {
                     } else {
                         angleError = PoseSubsystem.getInstance().targetAngleError(Target.SPEAKER);
                     }
-                } else if (s_Shooter.dumping()) {
-                    angleError = PoseSubsystem.getInstance().dumpShotError();
-                } else if (s_Shooter.sliding()) {
-                    angleError = PoseSubsystem.getInstance().slideShotError();
-                } else if (s_Shooter.shuttling()) {
-                    angleError = PoseSubsystem.getInstance().targetAngleError(Target.SHUTTLE);
-                } else if (s_Shooter.farShuttling()) {
-                    angleError = PoseSubsystem.getInstance().targetAngleError(Target.FAR_SHUTTLE);
                 } else {
-                    System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding nor (far)shuttling");
-                    angleError = new Rotation2d();
+                    angleError = PoseSubsystem.getInstance().targetAngleError(s_Shooter.currentTarget());
                 }
                 
                 if (!inProgress) {

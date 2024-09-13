@@ -38,7 +38,7 @@ public class ShootCommand extends Command {
   private boolean autoAim = true;
   private boolean shooterReady = false;
   private boolean seenTarget = false;
-  private ShotType shot = ShotType.AUTO;
+  private ShotType shot = ShotType.AUTOSPEAKER;
   private Target target = Target.SPEAKER;
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
@@ -78,7 +78,7 @@ public class ShootCommand extends Command {
     DogLog.log("Shooter/Status", "Shot triggered");
 
     shot = shooter.nextShot();
-    if (shot == ShotType.AUTO) {
+    if (shot == ShotType.AUTOSPEAKER) {
       target = zoneToTarget(PoseSubsystem.getZone());
     } else if (shot == ShotType.DUMP) {
       target = Target.FIXED_DUMP;

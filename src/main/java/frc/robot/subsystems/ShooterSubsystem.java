@@ -125,9 +125,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Top RPM adjustment", 0.0);
     SmartDashboard.putNumber("shooter/Bottom RPM adjustment", 0.0);
 
-    defaultShotChooser.setDefaultOption("== AUTO ==", ShotType.AUTO);
+    defaultShotChooser.setDefaultOption("== AUTO SPEAKER ==", ShotType.AUTOSPEAKER);
     for (ShotType shot : ShotType.values()) {
-      if (shot != ShotType.AUTO) {
+      if (shot != ShotType.AUTOSPEAKER) {
         defaultShotChooser.addOption(shot.toString(), shot);
       }
     }
@@ -318,6 +318,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public Target currentTarget() {
+    return shotToTarget(nextShot);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -332,7 +336,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("shooter/ready", isReady(false));
     SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultShot().toString() : nextShot.toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
-
 
     DogLog.log("Shooter/Top RPM", topVel);
     DogLog.log("Shooter/Bottom RPM", bottomVel);

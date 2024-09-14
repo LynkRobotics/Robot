@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.132149537026346,
-        "y": 1.5167813517445219
+        "x": 7.486641882374674,
+        "y": 0.23321864825547875
       },
       "isLocked": false,
       "linkedName": "F Note"
@@ -20,8 +20,8 @@
         "y": 3.610224674994805
       },
       "prevControl": {
-        "x": 3.604544299997691,
-        "y": 0.29851986976701333
+        "x": 3.32602119749694,
+        "y": 1.1754219872076113
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.2,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -48,5 +48,5 @@
     "rotation": 35.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

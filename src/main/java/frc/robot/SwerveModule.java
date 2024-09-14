@@ -82,6 +82,10 @@ public class SwerveModule {
         mAngleMotor.setNeutralMode(NeutralModeValue.Coast);
     }
 
+    public void setDriveCoastMode(){
+        mDriveMotor.setNeutralMode(NeutralModeValue.Coast);
+    }
+
     public void setBrakeMode(){
         mDriveMotor.setNeutralMode(NeutralModeValue.Brake);
         mAngleMotor.setNeutralMode(NeutralModeValue.Brake);

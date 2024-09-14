@@ -106,7 +106,7 @@ public class RobotContainer {
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
         NamedCommands.registerCommand("Done", new PrintCommand("Done"));
-        NamedCommands.registerCommand("Start", new PrintCommand("Hello World"));
+        NamedCommands.registerCommand("Start", new PrintCommand("Starting"));
         NamedCommands.registerCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         NamedCommands.registerCommand("Shoot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Named 'Shoot' command starting");})
@@ -131,6 +131,14 @@ public class RobotContainer {
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "SW complete");}))
+        );
+        NamedCommands.registerCommand("Fixed AS shot",
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin AS shot");})
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDE); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.50))))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "AS complete");}))
         );
         NamedCommands.registerCommand("Shoot OTF",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin OTF");})
@@ -196,7 +204,9 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
-
+        NamedCommands.registerCommand("Stop", Commands.runOnce(s_Swerve::stopSwerve));
+        NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() -> { s_Pose.setPose(s_Vision.lastPose()); } ));
+        NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -233,15 +243,15 @@ public class RobotContainer {
 
         SmartDashboard.putData("autoSetup/SetSwerveCoast", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Coasting Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToCoast, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Coasted");})).ignoringDisable(true));
         SmartDashboard.putData("autoSetup/SetSwerveBrake", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Braking Swerve Motors");}).andThen(Commands.runOnce(s_Swerve::setMotorsToBrake, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Braked");})).ignoringDisable(true));
-
+        SmartDashboard.putData("autoSetup/SetSwerveAligned", Commands.runOnce(() -> { DogLog.log("Auto/Status", "Aligning Swerve Motors");}).andThen(Commands.run(s_Swerve::alignStraight, s_Swerve)).andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Swerve Motors Aligned");})).ignoringDisable(true));
 
         DogLog.setOptions(new DogLogOptions(
-            false, //Whether logged values should be published to NetworkTables
+            Constants.atHQ, //Whether logged values should be published to NetworkTables
             false, //Whether all NetworkTables fields should be saved to the log file.
             true, //Whether driver station data (robot enable state and joystick inputs) should be saved to the log file.
             true, //Whether to log extra data, like PDH currents, CAN usage, etc.
             1000 //The size of the log message queue to use
-            ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
+            ));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -304,7 +314,9 @@ public class RobotContainer {
 
         ampShotButton.whileTrue(ampPathCommand().withName("Amp path & shoot"));
         sourceAlignButton.whileTrue(sourcePathCommand().withName("Source align"));
-        SmartDashboard.putData("Speaker align", speakerPathCommand());
+        SmartDashboard.putData("Speaker align", pathCommand("To Speaker"));
+        SmartDashboard.putData("Speaker Amp-Side align", pathCommand("To Speaker-AmpSide"));
+        SmartDashboard.putData("Speaker Source-Side align", pathCommand("To Speaker-SourceSide"));
 
         SmartDashboard.putData("pose/Align to zero", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("Align to zero"));
         SmartDashboard.putData("pose/Align to 90", Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("Align to 90"));
@@ -408,10 +420,20 @@ public class RobotContainer {
                 )
             ).withName("Smart ADE OTF");
         chooser.addOption("Smart ADE OTF", smartADEOTF);
+
+        chooser.addOption("Choreo Test", choreoTestCommand());
     }
 
     public void teleopInit() {
+        s_Swerve.stopSwerve();
         s_Vision.disableRotationTargetOverride();
+        s_Swerve.setDriveMotorsToCoast();
+    }
+
+    public void teleopExit() {
+        if (optBrakeAfterTeleop.get()) {
+            s_Swerve.setDriveMotorsToBrake();
+        }
     }
 
     private Command ampPathCommand() {
@@ -464,9 +486,8 @@ public class RobotContainer {
         ).handleInterrupt(s_Vision::disableRotationSourceOverride);
     }
 
-
-    private Command speakerPathCommand() {
-        PathPlannerPath path = PathPlannerPath.fromPathFile("To Speaker");
+    private Command pathCommand(String pathName) {
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
         return Commands.sequence(
             Commands.runOnce(s_Vision::enableRotationTargetOverride),
@@ -487,6 +508,28 @@ public class RobotContainer {
             ),
             Commands.runOnce(s_Vision::disableRotationTargetOverride)
         ).handleInterrupt(s_Vision::disableRotationTargetOverride)
-        .withName("Speaker align");
+        .withName(pathName);
+    }
+
+    private Command choreoTestCommand() {
+        PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory("Choreo-Straight");
+
+        return Commands.sequence(
+            new FollowPathHolonomic(
+                path,
+                s_Pose::getPose, // Robot pose supplier
+                s_Swerve::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                s_Swerve::driveRobotRelativeAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(8.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2.0, 0.0, 0.0), // Rotation PID constants
+                    Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                    Constants.Swerve.driveRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                Robot::isRed,
+                s_Swerve // Reference to this subsystem to set requirements
+            )
+        ).handleInterrupt(s_Vision::disableRotationSourceOverride);
     }
 }

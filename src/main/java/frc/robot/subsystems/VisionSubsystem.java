@@ -63,7 +63,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     camera = new PhotonCamera(Constants.Vision.cameraName);
 
-    if (Constants.Vision.atHQ) {
+    if (Constants.atHQ) {
       try {
         kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory().toPath().resolve("2024-crescendo-hq.json"));
       } catch (IOException e) {
@@ -303,7 +303,7 @@ public class VisionSubsystem extends SubsystemBase {
       SmartDashboard.putBoolean("vision/Have source target", haveSourceTarget);
       SmartDashboard.putNumber("vision/distance", Units.metersToInches(distanceToTarget(Target.SPEAKER)));
       SmartDashboard.putNumber("vision/Raw distance", Units.metersToInches(distanceToTargetRaw(Target.SPEAKER)));
-      SmartDashboard.putString("vision/Last pose", lastPose.toString());
+      SmartDashboard.putString("vision/Last pose", PoseSubsystem.prettyPose(lastPose));
       SmartDashboard.putString("vision/speakerOffset", targetOffset(Target.SPEAKER).toString());
       SmartDashboard.putNumber("vision/speakerOffset angle", angleToTarget(Target.SPEAKER).getDegrees());
       SmartDashboard.putNumber("vision/Angle error", angleError().getDegrees());

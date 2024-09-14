@@ -150,7 +150,8 @@ public class ShootCommand extends Command {
         DogLog.log("Shooter/Shot Pose", s_Pose.getPose());
         if (shooter.usingVision() && DriverStation.isAutonomousEnabled() && optSetPoseWhenShooting.get()) {
           Pose2d pose = vision.lastPose();
-          DogLog.log("Shooter/Status", "Setting pose based on vision: " + pose);
+          Pose2d oldPose = s_Pose.getPose();
+          DogLog.log("Shooter/Status", "Setting pose based on vision: " + PoseSubsystem.prettyPose(pose) + ", was " + PoseSubsystem.prettyPose(oldPose));
           s_Pose.setPose(pose);
         }
       }

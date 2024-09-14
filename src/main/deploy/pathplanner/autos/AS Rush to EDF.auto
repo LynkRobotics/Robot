@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
-      "y": 1.48
+      "x": 1.44,
+      "y": 7.32
     },
     "rotation": 0.0
   },
@@ -15,12 +15,6 @@
           "type": "named",
           "data": {
             "name": "Startup delay"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Bloop Shot"
           }
         },
         {
@@ -40,13 +34,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Extreme to H"
+                        "pathName": "AS Rush to E"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.25
+                        "waitTime": 0.5
                       }
                     }
                   ]
@@ -58,13 +52,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "H to close shot"
+            "pathName": "E to AS Dump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Slide Shot"
           }
         },
         {
@@ -78,9 +72,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "SS Close to Pickup"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "AS Rush to D"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -89,24 +96,62 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup to SS Close"
+            "pathName": "D to AS Dump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Slide Shot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "AS Dump to F"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "SS Close to H"
+            "pathName": "F to Stage Dump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Slide Shot"
           }
         }
       ]
     }
   },
-  "folder": "Source-side",
+  "folder": "Amp-side",
   "choreoAuto": false
 }

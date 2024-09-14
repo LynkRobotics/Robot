@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.31,
-      "y": 4.05
+      "x": 1.48,
+      "y": 5.54
     },
-    "rotation": -45.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -20,13 +20,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot without aiming"
           }
         },
         {
           "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
               {
                 "type": "sequential",
                 "data": {
@@ -34,41 +40,29 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Angled Line to H"
+                        "pathName": "Subwoofer to B"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.25
+                        "waitTime": 0.5
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "H to SS Dump"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Short Slide Shot"
+            "name": "Shoot without aiming"
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -78,9 +72,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "SS Dump to G"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "B to A"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -89,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G to close shot"
+            "pathName": "A to amp-side shot"
           }
         },
         {
@@ -109,9 +116,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "SS Close to Pickup"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Amp-side shot to D"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -120,7 +140,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup to SS Close"
+            "pathName": "D to Amp-side shot"
           }
         },
         {
@@ -130,14 +150,52 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Amp-side shot to E"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "SS Close to H"
+            "pathName": "E to Amp-side shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "Source-side",
+  "folder": "Straight-on",
   "choreoAuto": false
 }

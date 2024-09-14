@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.130602443023068,
-        "y": 3.9553882744129125
+        "x": 2.0,
+        "y": 4.076983362324371
       },
       "isLocked": false,
       "linkedName": "Source-side angle shot"
@@ -20,8 +20,8 @@
         "y": 4.23
       },
       "prevControl": {
-        "x": 2.433146604475027,
-        "y": 4.151291938947515
+        "x": 2.0666404969173575,
+        "y": 4.347195603482116
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.45,
       "rotationDegrees": 15.0,
       "rotateFast": true
     }
@@ -38,8 +38,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.3,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

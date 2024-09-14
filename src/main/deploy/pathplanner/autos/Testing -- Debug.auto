@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 6.68
+      "x": 1.48,
+      "y": 5.54
     },
-    "rotation": 60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -18,56 +18,44 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Fixed SW shot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Amp-side SW to Center-line"
+            "pathName": "Subwoofer to B"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Intake note"
+            "waitTime": 20.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Amp Shot"
+            "name": "Shoot without aiming"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 20.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center-line follow"
+            "pathName": "B to A"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Center-line to source-side shot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source-side shot to G"
+            "waitTime": 3.0
           }
         }
       ]
     }
   },
-  "folder": "Amp-side",
+  "folder": "Testing",
   "choreoAuto": false
 }

@@ -22,6 +22,7 @@ import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.subsystems.PoseSubsystem.Target;
 
 public final class Constants {
+    public static final boolean atHQ = true;
     public static final double stickDeadband = 0.1;
     public static final double driveStickSensitivity = 1.00; 
     public static final double turnStickSensitivity = 1.00;
@@ -41,7 +42,7 @@ public final class Constants {
         /* Center to Center distance of left and right modules in meters. */
         public static final double wheelBase = Units.inchesToMeters(15.75); 
         /* Center to Center distance of front and rear module wheels in meters. */
-        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.965; // testing
+        public static final double wheelCircumference = chosenModule.wheelCircumference * 0.97845; // testing
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -125,7 +126,7 @@ public final class Constants {
             public static final int angleMotorID = 1;
             public static final int canCoderID = 0;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(33.39);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.72);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -136,7 +137,7 @@ public final class Constants {
             public static final int angleMotorID = 19;
             public static final int canCoderID = 1;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-70.83);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-72.16);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -147,7 +148,7 @@ public final class Constants {
             public static final int angleMotorID = 9;
             public static final int canCoderID = 2;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(163.82);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(163.56);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -158,7 +159,7 @@ public final class Constants {
             public static final int angleMotorID = 11;
             public static final int canCoderID = 3;
             public static final String canBusID = swerveCanBus;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-25.13);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-21.35);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, canBusID, angleOffset);
         }
@@ -173,6 +174,7 @@ public final class Constants {
         public static final Rotation2d blueSlideAngle = Rotation2d.fromDegrees(0.0);
         public static final Rotation2d redSlideAngle = Rotation2d.fromDegrees(180.0);
         public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
+        public static final PIDController maintainPID = new PIDController(0.0040, 0.000, 0.0);
         public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
@@ -312,7 +314,6 @@ public final class Constants {
             new Translation3d(-0.148, 0.005, 0.325),
             new Rotation3d(Units.degreesToRadians(1.2), Units.degreesToRadians(-30.7), Math.PI)); // As measured by PhotonVision
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
-        public static final boolean atHQ = true;
         public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
         public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
         public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;

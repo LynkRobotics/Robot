@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import dev.doglog.DogLog;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
@@ -56,7 +57,15 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+    }
+
+    public void alignStraight() {
+        SwerveModuleState aligned = new SwerveModuleState(0.0, new Rotation2d());
+
+        for(SwerveModule mod : mSwerveMods) {
+            mod.setDesiredState(aligned, false);
+        }
+    }
 
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
@@ -101,6 +110,13 @@ public class Swerve extends SubsystemBase {
         DogLog.log("Swerve/Status", "Coasted Swerve Motors");
     }
 
+    public void setDriveMotorsToCoast(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setCoastMode();  
+        }
+        DogLog.log("Swerve/Status", "Coasted Swerve Drive Motors");
+    }
+
     public void setMotorsToBrake(){
         for(SwerveModule mod : mSwerveMods){
             mod.setBrakeMode();  
@@ -108,8 +124,20 @@ public class Swerve extends SubsystemBase {
         DogLog.log("Swerve/Status", "Braked Swerve Motors");
     }
 
+    public void setDriveMotorsToBrake(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.setBrakeMode();  
+        }
+        DogLog.log("Swerve/Status", "Braked Swerve Drive Motors");
+    }
+
+    public void stopSwerve(){
+        drive(new Translation2d(0, 0), 0, false);
+        DogLog.log("Swerve/Status", "Stopped Swerve");
+    }
+
     @Override
-    public void periodic(){
+    public void periodic() {
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             DogLog.log("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

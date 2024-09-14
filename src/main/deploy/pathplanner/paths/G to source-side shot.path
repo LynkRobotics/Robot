@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.35,
-        "y": 2.55
+        "x": 8.32,
+        "y": 2.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.132149537026346,
-        "y": -0.03321864825547788
+        "x": 7.102149537026347,
+        "y": -0.13321864825547752
       },
       "isLocked": false,
       "linkedName": "G Note"
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.2,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -48,5 +48,5 @@
     "rotation": 35.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

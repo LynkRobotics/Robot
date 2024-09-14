@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,7 +39,6 @@ public class PoseSubsystem extends SubsystemBase {
     private static Zone zone = Zone.SPEAKER;
 
     private static final TunableOption optUpdatePoseWithVisionAuto = new TunableOption("pose/Update with vision in Auto", false);
-    private static final TunableOption optUpdatePoseWithVisionTeleop = new TunableOption("pose/Update with vision in Teleop", true);
 
     public enum Zone {
         SPEAKER,
@@ -70,6 +70,10 @@ public class PoseSubsystem extends SubsystemBase {
         Pose.rotationPID.setIZone(Pose.rotationIZone); // Only use Integral term within this range
         Pose.rotationPID.reset();
 
+        Pose.maintainPID.enableContinuousInput(-180.0, 180.0);
+        Pose.maintainPID.setIZone(Pose.rotationIZone); // Only use Integral term within this range
+        Pose.maintainPID.reset();
+
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), s_Swerve.getModulePositions(), new Pose2d());
 
         field = new Field2d();
@@ -98,13 +102,17 @@ public class PoseSubsystem extends SubsystemBase {
         return instance;
     }
     
+    public static String prettyPose(Pose2d pose) {
+        return String.format("(%01.2f, %01.2f @ %01.1f)", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+    }
+    
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
     public void zeroGyro() {
         gyro.setYaw(0);
-        DogLog.log("Swerve/Gyro/Status", "Zeroed Gyro Yaw");
+        DogLog.log("Pose/Gyro/Status", "Zeroed Gyro Yaw");
     }
 
     public Pose2d getPose() {
@@ -183,7 +191,11 @@ public class PoseSubsystem extends SubsystemBase {
     }
 
     public static void angleErrorReset() {
-        Pose.rotationPID.reset();
+        angleErrorReset(Pose.rotationPID);
+    }
+
+    public static void angleErrorReset(PIDController pid) {
+        pid.reset();
     }
 
     public static void setTargetAngle(Rotation2d angle) {
@@ -193,10 +205,14 @@ public class PoseSubsystem extends SubsystemBase {
     public static Rotation2d getTargetAngle() {
         return targetAngle;
     }
-    
+
     public static double angleErrorToSpeed(Rotation2d angleError) {
+        return angleErrorToSpeed(angleError, Pose.rotationPID);
+    }
+
+    public static double angleErrorToSpeed(Rotation2d angleError, PIDController pid) {
         double angleErrorDeg = angleError.getDegrees();
-        double correction = Pose.rotationPID.calculate(angleErrorDeg);
+        double correction = pid.calculate(angleErrorDeg);
         double feedForward = Pose.rotationKS * Math.signum(correction);
         double output = MathUtil.clamp(correction + feedForward, -1.0, 1.0);
 
@@ -220,8 +236,7 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
-        if ((DriverStation.isTeleop() && optUpdatePoseWithVisionTeleop.get())
-            || (DriverStation.isAutonomous() && optUpdatePoseWithVisionAuto.get())) {
+        if (!DriverStation.isAutonomousEnabled() || optUpdatePoseWithVisionAuto.get()) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {
             s_Vision.updatePoseEstimate(null);

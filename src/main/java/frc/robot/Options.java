@@ -8,6 +8,7 @@ public final class Options {
     public static final TunableOption optDirectRPM = new TunableOption("Direct set RPM", false);
     public static final TunableOption optShootWithVision = new TunableOption("Shoot with Vision", true);
     public static final TunableOption optAimingEnabled = new TunableOption("Aiming enabled", true);
+    public static final TunableOption optBrakeAfterTeleop = new TunableOption("Brake after teleOp", true);
     // public static final TunableOption optVisionPoseInAuto = new TunableOption("Use Vision Pose in Auto", false);
     // public static final TunableOption optVisionPoseInTeleop = new TunableOption("Disable Vision Pose in Teleop", true);
 }

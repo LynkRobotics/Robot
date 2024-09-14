@@ -6,9 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import static frc.robot.Options.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -54,6 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
   private final int calibrateMax = 30;
   private double calibrateSpeakerSum = 0.0;
   private double calibrateRawSum = 0.0;
+  private static final TunableOption optUpdateVisionDashboard = new TunableOption("Update vision dashboard", false);
 
   public VisionSubsystem() {
     assert(instance == null);

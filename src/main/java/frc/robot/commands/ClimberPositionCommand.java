@@ -7,8 +7,8 @@ package frc.robot.commands;
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
-import static frc.robot.Options.*;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LEDSubsystem.TempState;
@@ -18,6 +18,7 @@ public class ClimberPositionCommand extends Command {
   private final double position;
   private final LEDSubsystem.TempState ledState;
   private boolean cancelled = false;
+  private static final TunableOption optClimbersEnabled = new TunableOption("Climbers enabled", true);
   
   /** Creates a new PushClimberCommand. */
   public ClimberPositionCommand(double position, LEDSubsystem.TempState ledState, ClimberSubsystem s_Climber) {

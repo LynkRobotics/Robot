@@ -12,8 +12,8 @@ import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
-import static frc.robot.Options.*;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
 
 public class IndexSubsystem extends SubsystemBase {
@@ -23,6 +23,8 @@ public class IndexSubsystem extends SubsystemBase {
   private final DigitalInput leftIndexSensor;
   private final DigitalInput rightIndexSensor;
   private boolean haveNote = false;
+  private static final TunableOption optLeftIndexSensorEnabled = new TunableOption("indexer/Left index sensor enabled", false);
+  private static final TunableOption optRightIndexSensorEnabled = new TunableOption("indexer/Right index sensor enabled", true);
 
   public IndexSubsystem() {
     assert(instance == null);

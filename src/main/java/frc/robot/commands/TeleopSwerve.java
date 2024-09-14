@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.Robot;
@@ -26,6 +27,7 @@ public class TeleopSwerve extends Command {
     private final DoubleSupplier rotationSup;
     private DoubleSupplier speedLimitRotSupplier;
     private boolean inProgress = false;
+    private static final TunableOption optFullFieldAiming = new TunableOption("Full field aiming", true);
 
     public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedLimitRotSupplier) {
         this.s_Swerve = s_Swerve;

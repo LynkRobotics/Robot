@@ -9,15 +9,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Abstracts a boolean that can be managed via the dashboard.
  */
 public class TunableOption implements BooleanSupplier {
-  // TODO Use raw NetworkTables and subscribe to updates, instead of using SmartDashboard
-  // private static final String tableKey = "TunableOptions";
+  // TODO Consider using raw NetworkTables and subscribe to updates, instead of using SmartDashboard
+  private static final String tableKey = "TunableOptions";
 
   private String key;
   private boolean defaultValue;
 
   public TunableOption(String name, boolean defaultValue) {
-    //this.key = tableKey + "/" + name;
-    key = name;
+    if (name.indexOf("/") >= 0) {
+      key = name;
+    } else {
+      key = tableKey + "/" + name;
+    }
     this.defaultValue = defaultValue;
     SmartDashboard.putBoolean(name, defaultValue);
   }

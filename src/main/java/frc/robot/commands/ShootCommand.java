@@ -14,8 +14,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
-import static frc.robot.Options.*;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PoseSubsystem;
@@ -38,6 +38,7 @@ public class ShootCommand extends Command {
   private boolean autoAim = true;
   private boolean shooterReady = false;
   private boolean seenTarget = false;
+  private static final TunableOption optSetPoseWhenShooting = new TunableOption("Set pose when shooting", true);
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);

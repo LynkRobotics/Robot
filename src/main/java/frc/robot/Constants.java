@@ -251,6 +251,7 @@ public final class Constants {
         public static final double kS = 0.21;  // Voltage to overcome static friction
         public static final double RPMsPerVolt = 490;
         /* Time to complete shot once Note no longer detected */
+        // TODO Revisit this value -- we seem to be waiting longer than necessary
         public static final double postShotTimeout = 0.4; // in seconds
     }
 

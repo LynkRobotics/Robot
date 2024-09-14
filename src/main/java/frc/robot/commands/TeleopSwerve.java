@@ -10,6 +10,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.PoseSubsystem.Target;
+
 import static frc.robot.Options.*;
 
 import java.util.function.DoubleSupplier;
@@ -67,64 +68,47 @@ public class TeleopSwerve extends Command {
             strafeVal *= -1.0;
         }
 
-        /* Override rotation if using vision to aim */
-        if (optAimingEnabled.get()) {
-            if (s_Shooter.isAutoAimingActive()) {
-                Rotation2d angleError;
-                
-                if (s_Shooter.usingVision()) {
-                    if (optShootWithVision.get()) {
-                        angleError = s_Vision.angleError();
-                    } else {
-                        angleError = PoseSubsystem.getInstance().targetAngleError(Target.SPEAKER);
-                    }
+        // Override rotation automatically aiming
+        if (Swerve.isAimingActive()) {
+            Rotation2d angleError;
+
+            if (s_Shooter.requiresVision()) {
+                if (s_Vision.haveTarget()) {
+                    angleError = s_Vision.angleError();
                 } else {
-                    angleError = PoseSubsystem.getInstance().targetAngleError(s_Shooter.currentTarget());
+                    angleError = new Rotation2d();
                 }
-                
+            } else {
+                angleError = PoseSubsystem.getInstance().targetAngleError(s_Shooter.currentTarget());
+            }
+            
+            if (aimingMode != AimingMode.TARGET) {
+                PoseSubsystem.angleErrorReset();
+                aimingMode = AimingMode.TARGET;
+            }
+
+            rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+        } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
+            boolean haveNote = IndexSubsystem.getInstance().haveNote();
+
+            if (haveNote && s_Vision.haveSpeakerTarget()) {              
                 if (aimingMode != AimingMode.TARGET) {
                     PoseSubsystem.angleErrorReset();
                     aimingMode = AimingMode.TARGET;
                 }
-                if (s_Shooter.usingVision() && !s_Vision.haveTarget()) {
-                    rotationVal = 0.0;
-                } else {
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                rotationVal = PoseSubsystem.angleErrorToSpeed(optShootWithVision.get () ? s_Vision.angleError() : s_Pose.targetAngleError(Target.SPEAKER));
+            } else if (haveNote && optFullFieldAiming.get()) {
+                PoseSubsystem.Zone zone = PoseSubsystem.getZone();
+                Target target = ShootCommand.zoneToTarget(zone);
+                Rotation2d angleError = s_Pose.targetAngleError(target);
+                rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+            } else if (PoseSubsystem.getTargetAngle() != null) {
+                // Move to a fixed angle
+                if (aimingMode != AimingMode.TARGET) {
+                    PoseSubsystem.angleErrorReset();
+                    aimingMode = AimingMode.TARGET;
                 }
-            } else if (Math.abs(rotationVal) < Constants.aimingOverride) {
-                boolean haveNote = IndexSubsystem.getInstance().haveNote();
-
-                if (haveNote && optFullFieldAiming.get()) {
-                    PoseSubsystem.Zone zone = PoseSubsystem.getZone();
-                    Rotation2d targetAngle;
-
-                    if (zone == PoseSubsystem.Zone.SPEAKER) {
-                        targetAngle = s_Pose.angleToTarget(Target.SPEAKER);
-                    } else if (zone == PoseSubsystem.Zone.FAR) {
-                        targetAngle = s_Pose.angleToTarget(Target.FAR_SHUTTLE);
-                    } else {
-                        targetAngle = s_Pose.angleToTarget(Target.SHUTTLE);
-                    }
-
-                    Rotation2d angleError = targetAngle.minus(s_Pose.getPose().getRotation());
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
-                } else if (haveNote && s_Vision.haveSpeakerTarget()) {              
-                    if (aimingMode != AimingMode.TARGET) {
-                        PoseSubsystem.angleErrorReset();
-                        aimingMode = AimingMode.TARGET;
-                    }
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(s_Vision.angleError());
-                } else if (PoseSubsystem.getTargetAngle() != null) {
-                    if (aimingMode != AimingMode.TARGET) {
-                        PoseSubsystem.angleErrorReset();
-                        aimingMode = AimingMode.TARGET;
-                    }
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(PoseSubsystem.getTargetAngle().minus(PoseSubsystem.getInstance().getPose().getRotation()));
-                } else {
-                    if (aimingMode == AimingMode.TARGET) {
-                        aimingMode = AimingMode.MANUAL;
-                    }
-                }
+                rotationVal = PoseSubsystem.angleErrorToSpeed(PoseSubsystem.getTargetAngle().minus(PoseSubsystem.getInstance().getPose().getRotation()));
             } else {
                 if (aimingMode == AimingMode.TARGET) {
                     aimingMode = AimingMode.MANUAL;
@@ -154,12 +138,11 @@ public class TeleopSwerve extends Command {
             aimingMode = AimingMode.MANUAL;
         }
 
-        /* Drive */
+        // Drive
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
             rotationVal * Constants.Swerve.maxAngularVelocity * speedLimitRotSupplier.getAsDouble(), 
             true
         );
-        // SmartDashboard.putNumber("rotationValue", speedLimitRotSupplier.getAsDouble());
     }
 }

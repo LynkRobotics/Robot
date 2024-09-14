@@ -134,7 +134,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("Fixed AS shot",
             Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin AS shot");})
-            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.AMPSIDE); }))
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(ShotType.AMPSIDE); }))
             .andThen(
                 (new ShootCommand(s_Shooter, s_Index, false)
                 .raceWith(Commands.waitSeconds(1.50))))

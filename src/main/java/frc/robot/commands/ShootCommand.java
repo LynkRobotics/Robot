@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import static frc.robot.Options.optAimingEnabled;
-
 import java.util.function.DoubleSupplier;
 
 import dev.doglog.DogLog;
@@ -16,12 +14,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.TunableOption;
 import frc.robot.Constants;
+import static frc.robot.Options.*;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.LEDSubsystem.TempState;
 import frc.robot.subsystems.PoseSubsystem.Target;
 import frc.robot.subsystems.PoseSubsystem.Zone;
@@ -40,7 +39,7 @@ public class ShootCommand extends Command {
   private boolean autoAim = true;
   private boolean shooterReady = false;
   private boolean seenTarget = false;
-  private ShotType shot = ShotType.AUTOSPEAKER;
+  private ShotType shot = ShotType.AUTOMATIC;
   private Target target = Target.SPEAKER;
   private static final TunableOption optSetPoseWhenShooting = new TunableOption("Set pose when shooting", true);
 
@@ -63,7 +62,7 @@ public class ShootCommand extends Command {
     this.autoAim = false;
   }
 
-  Target zoneToTarget(Zone zone) {
+  public static Target zoneToTarget(Zone zone) {
     if (zone == Zone.FAR) {
       return Target.FAR_SHUTTLE;
     } else if (zone == Zone.MIDDLE) {
@@ -79,8 +78,8 @@ public class ShootCommand extends Command {
     DogLog.log("Shooter/Status", "Shot triggered");
 
     shot = shooter.nextShot();
-    if (shot == ShotType.AUTOSPEAKER) {
-      target = zoneToTarget(PoseSubsystem.getZone());
+    if (shot == ShotType.AUTOMATIC && optAutoTarget.get()) {
+      target =  zoneToTarget(PoseSubsystem.getZone());
     } else if (shot == ShotType.DUMP) {
       target = Target.FIXED_DUMP;
     } else if (shot == ShotType.SLIDE) {
@@ -90,6 +89,15 @@ public class ShootCommand extends Command {
     } else {
       target = Target.SPEAKER;
     }
+
+    if (autoAim && !ShooterSubsystem.requiresAlignment(shot)) {
+      DogLog.log("Shooter/Status", "Cancelling automatic aiming due to shot type " + shot);
+      autoAim = false;
+    }
+    if (autoAim) {
+      Swerve.startAiming();
+    }
+
     LEDSubsystem.setTempState(TempState.SHOOTING);
     shooterReady = false;
     cancelled = false;
@@ -101,7 +109,7 @@ public class ShootCommand extends Command {
       shooter.setCurrentSpeed(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
       if (!shooter.setCurrentSpeed(shot)) {
-        DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
+        DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to failure to set current speed");
         LEDSubsystem.setTempState(TempState.ERROR);
         cancelled = true;
         cancel();
@@ -117,54 +125,65 @@ public class ShootCommand extends Command {
     if (cancelled) {
       return;
     }
-    if (shooter.requireVision() && !seenTarget) {
+
+    if (ShooterSubsystem.requiresVision(shot, target) && !seenTarget) {
       seenTarget = vision.haveSpeakerTarget();
       if (!seenTarget) {
         DogLog.log("Shooter/Status", "Shoot Command waiting for speaker target");
         return;
       }
     }
+
     boolean precise = target == Target.SPEAKER && s_Pose.getDistance(Target.SPEAKER) > Constants.Shooter.farDistance;
     if (!feeding && shooter.isReady(target, precise)) {
-      boolean aligned = !autoAim || !optAimingEnabled.get(); // "Aligned" if not automatic aiming
       if (!shooterReady) {
         DogLog.log("Shooter/Status", "Shooter is ready");
         shooterReady = true;
       }
 
-      if (!aligned) {
-        // TODO Simplify this if/else sequence
-        if (shooter.usingVision()) {
-          // TODO Revisit this conditional
-          // Aligned if vision is aligned with target
-          aligned = vision.haveTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Shooter.maxAngleError.get(Target.SPEAKER);
+      boolean aligned;
+      if (autoAim) {
+        if (ShooterSubsystem.requiresVision(shot, target)) {
+          aligned = vision.haveSpeakerTarget() && Math.abs(vision.angleError().getDegrees()) < Constants.Shooter.maxAngleError.get(Target.SPEAKER);
         } else {
           aligned = PoseSubsystem.getInstance().targetAligned(target);
         }
+      } else {
+        aligned = true;
       }
+
       if (aligned) {
         index.feed();
         feeding = true;
         DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches",
           vision.angleToTarget(Target.SPEAKER).getDegrees(), Units.metersToInches(vision.distanceToTarget(Target.SPEAKER))));
         DogLog.log("Shooter/Shot Pose", s_Pose.getPose());
-        if (shooter.usingVision() && DriverStation.isAutonomousEnabled() && optSetPoseWhenShooting.get()) {
-          Pose2d pose = vision.lastPose();
-          Pose2d oldPose = s_Pose.getPose();
-          DogLog.log("Shooter/Status", "Setting pose based on vision: " + PoseSubsystem.prettyPose(pose) + ", was " + PoseSubsystem.prettyPose(oldPose));
-          s_Pose.setPose(pose);
+        if (optSetPoseWhenShooting.get()) {
+          if (DriverStation.isAutonomousEnabled()) {
+            DogLog.log("Shoter/Status", "Not automatically setting pose in autonmous period");
+          } else if (!vision.haveSpeakerTarget()) {
+            DogLog.log("Shoter/Status", "Cannot automatically set pose without a speaker AprilTag");
+          } else {
+            Pose2d pose = vision.lastPose();
+            Pose2d oldPose = s_Pose.getPose();
+            DogLog.log("Shooter/Status", "Setting pose based on vision: " + PoseSubsystem.prettyPose(pose) + ", was " + PoseSubsystem.prettyPose(oldPose));
+            s_Pose.setPose(pose);
+          }
         }
       }
     }
+
+    // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
     if (topSupplier == null || bottomSupplier == null) {
-      // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
       if (!shooter.setCurrentSpeed(shot)) {
-        DogLog.log("Shooter/Status", "Cancelling ShootCommand due to failure to set current speed [2]");
+        DogLog.log("Shooter/Status", "Cancelling ShootCommand due to failure to update current speed");
         cancelled = true;
         cancel();
         LEDSubsystem.setTempState(TempState.ERROR);
       }
     }
+
+    // If we are feeding the note into the shooter, detect when it is gone
     if (feeding) {
       if (!gone && !index.haveNote()) {
         postShotTimer.restart();
@@ -184,6 +203,11 @@ public class ShootCommand extends Command {
 
     // Restore default shot
     shooter.setNextShot(null);
+
+    // Tell swerve to stop aiming
+    if (autoAim) {
+      Swerve.stopAiming();
+    }
 
     // Adjust LED state
     if (interrupted) {

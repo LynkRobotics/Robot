@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import java.util.EnumMap;
 import java.util.Map;
 
-import javax.swing.SortOrder;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -33,7 +31,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private double topCurrentTarget = 0.0;
   private double bottomCurrentTarget = 0.0;
   SendableChooser<ShotType> defaultShotChooser = new SendableChooser<>();
-  private boolean autoAimingActive = false;
   private static final TunableOption optAlwaysReady = new TunableOption("shooter/Always ready", false);
 
   private class ShooterSpeed {
@@ -74,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
     DUMP,
     EJECT,
     BLOOP,
-    AUTOSPEAKER,
+    AUTOMATIC,
     SHUTTLE,
     FARSHUTTLE,
   };
@@ -130,9 +127,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Top RPM adjustment", 0.0);
     SmartDashboard.putNumber("shooter/Bottom RPM adjustment", 0.0);
 
-    defaultShotChooser.setDefaultOption("== AUTO SPEAKER ==", ShotType.AUTOSPEAKER);
+    defaultShotChooser.setDefaultOption("== AUTO SPEAKER ==", ShotType.AUTOMATIC);
     for (ShotType shot : ShotType.values()) {
-      if (shot != ShotType.AUTOSPEAKER) {
+      if (shot != ShotType.AUTOMATIC) {
         defaultShotChooser.addOption(shot.toString(), shot);
       }
     }
@@ -174,10 +171,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setNextShot(ShotType speed) {
     nextShot = speed;
-  }
-
-  public boolean isAutoAimingActive() {
-    return autoAimingActive;
   }
 
   private ShooterSpeed speedFromDistance(double meters, ShooterCalibration[] calibrationTable) {
@@ -226,12 +219,12 @@ public class ShooterSubsystem extends SubsystemBase {
     if (shooterSpeeds.containsKey(shot)) {
       shooterSpeed = shooterSpeeds.get(shot);
     } else {
-      if (shot == ShotType.AUTOSPEAKER && optShootWithVision.get()) {
+      if (shot == ShotType.AUTOMATIC && optShootWithVision.get()) {
         distance = VisionSubsystem.getInstance().distanceToTarget(Target.SPEAKER);
       } else {
         distance = PoseSubsystem.getInstance().getDistance(Target.SPEAKER);
       }
-      shooterSpeed = speedFromDistance(distance, shot == ShotType.AUTOSPEAKER ? shooterCalibration : shuttleCalibration);
+      shooterSpeed = speedFromDistance(distance, shot == ShotType.AUTOMATIC ? shooterCalibration : shuttleCalibration);
       if (shooterSpeed == null) {
         DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f inches", shot.toString(), Units.metersToInches(distance)));
         return false;
@@ -300,8 +293,16 @@ public class ShooterSubsystem extends SubsystemBase {
     return nextShot == null ? defaultShot() : nextShot;
   }
 
-  public boolean usingVision() { 
-    return nextShot() == ShotType.VISION && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
+  public static boolean requiresAlignment(ShotType shot) {
+    return (shot == ShotType.DUMP || shot == ShotType.SLIDE || shot == ShotType.AMP || shot == ShotType.SHUTTLE || shot == ShotType.FARSHUTTLE);
+  }
+
+  public static boolean requiresVision(ShotType shot, Target target) {
+    return shot == ShotType.AUTOMATIC && target == Target.SPEAKER && optShootWithVision.get(); 
+  }
+
+  public boolean requiresVision() {
+    return requiresVision(nextShot(), currentTarget());
   }
 
   public Target shotToTarget(ShotType shot) {
@@ -336,7 +337,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
     SmartDashboard.putString("shooter/Next shot", nextShot().toString());
-    SmartDashboard.putBoolean("shooter/usingVision", usingVision());
 
     DogLog.log("Shooter/Top RPM", topVel);
     DogLog.log("Shooter/Bottom RPM", bottomVel);
@@ -344,6 +344,5 @@ public class ShooterSubsystem extends SubsystemBase {
     DogLog.log("Shooter/Bottom RPM tgt", bottomCurrentTarget);
     DogLog.log("Shooter/Top RPM err", topVel - topCurrentTarget);
     DogLog.log("Shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
-    DogLog.log("Shooter/usingVision", usingVision());
   }
 }

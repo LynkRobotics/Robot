@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
+    private static boolean aiming = false;
     private boolean speedLimit = false;
 
     public SwerveModule[] mSwerveMods;
@@ -27,6 +28,18 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
+    }
+
+    public static void startAiming() {
+        aiming = true;
+    }
+
+    public static void stopAiming() {
+        aiming = false;
+    }
+
+    public static boolean isAimingActive() {
+        return aiming;
     }
 
     public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {

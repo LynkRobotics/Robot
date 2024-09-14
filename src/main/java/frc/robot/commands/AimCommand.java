@@ -41,7 +41,7 @@ public class AimCommand extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        s_Swerve.drive(new Translation2d(0, 0), 0.0, false);
+        s_Swerve.stopSwerve();
     }
 
     // Returns true when the command should end.

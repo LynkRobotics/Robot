@@ -100,7 +100,7 @@ public class ShootCommand extends Command {
     if (topSupplier != null && bottomSupplier != null) {
       shooter.setCurrentSpeed(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (!shooter.shoot()) {
+      if (!shooter.setCurrentSpeed(shot)) {
         DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
         LEDSubsystem.setTempState(TempState.ERROR);
         cancelled = true;
@@ -125,7 +125,7 @@ public class ShootCommand extends Command {
       }
     }
     boolean precise = target == Target.SPEAKER && s_Pose.getDistance(Target.SPEAKER) > Constants.Shooter.farDistance;
-    if (!feeding && shooter.isReady(precise)) {
+    if (!feeding && shooter.isReady(target, precise)) {
       boolean aligned = !autoAim || !optAimingEnabled.get(); // "Aligned" if not automatic aiming
       if (!shooterReady) {
         DogLog.log("Shooter/Status", "Shooter is ready");
@@ -157,8 +157,8 @@ public class ShootCommand extends Command {
     }
     if (topSupplier == null || bottomSupplier == null) {
       // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
-      if (!shooter.shoot()) {
-        DogLog.log("Shooter/Status", "Cancelling ShootCommand due to shoot() failure [2]");
+      if (!shooter.setCurrentSpeed(shot)) {
+        DogLog.log("Shooter/Status", "Cancelling ShootCommand due to failure to set current speed [2]");
         cancelled = true;
         cancel();
         LEDSubsystem.setTempState(TempState.ERROR);

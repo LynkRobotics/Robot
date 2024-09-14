@@ -19,6 +19,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseSubsystem.Target;
 import static frc.robot.Options.*;
@@ -33,6 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double bottomCurrentTarget = 0.0;
   SendableChooser<ShotType> defaultShotChooser = new SendableChooser<>();
   private boolean autoAimingActive = false;
+  private static final TunableOption optAlwaysReady = new TunableOption("shooter/Always ready", false);
 
   private class ShooterSpeed {
     double topMotorSpeed;
@@ -229,7 +231,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
       shooterSpeed = speedFromDistance(distance, shot == ShotType.AUTOSPEAKER ? shooterCalibration : shuttleCalibration);
       if (shooterSpeed == null) {
-        DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f", shot.toString(), Units.metersToInches(distance)));
+        DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f inches", shot.toString(), Units.metersToInches(distance)));
         return false;
       }
     }
@@ -259,7 +261,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void idle() {
-    setCurrentSpeed(ShotType.IDLE);
+    if (optAlwaysReady.get()) {
+      setCurrentSpeed(nextShot());
+    } else {
+      setCurrentSpeed(ShotType.IDLE);
+    }
   }
 
   public void intake() {
@@ -289,18 +295,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public ShotType nextShot() {
-    ShotType shot = nextShot;
-
-    if (shot == null) {
-      // TODO Handle Vision / Automatic
-      shot = defaultShot();
-    }
-
-    return shot;
+    return nextShot == null ? defaultShot() : nextShot;
   }
 
   public boolean usingVision() { 
-    return (nextShot == ShotType.VISION || (nextShot == null && defaultShot() == ShotType.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
+    return nextShot() == ShotType.VISION && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
   }
 
   public Target shotToTarget(ShotType shot) {
@@ -320,7 +319,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Target currentTarget() {
-    return shotToTarget(nextShot);
+    return shotToTarget(nextShot());
   }
 
   @Override
@@ -334,8 +333,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooter/Bottom RPM tgt", bottomCurrentTarget);
     SmartDashboard.putNumber("shooter/Top RPM err", topVel - topCurrentTarget);
     SmartDashboard.putNumber("shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
-    SmartDashboard.putBoolean("shooter/ready", isReady(false));
-    SmartDashboard.putString("shooter/Next shot", nextShot == null ? defaultShot().toString() : nextShot.toString());
+    SmartDashboard.putString("shooter/Next shot", nextShot().toString());
     SmartDashboard.putBoolean("shooter/usingVision", usingVision());
 
     DogLog.log("Shooter/Top RPM", topVel);
@@ -344,7 +342,6 @@ public class ShooterSubsystem extends SubsystemBase {
     DogLog.log("Shooter/Bottom RPM tgt", bottomCurrentTarget);
     DogLog.log("Shooter/Top RPM err", topVel - topCurrentTarget);
     DogLog.log("Shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
-    DogLog.log("Shooter/Ready", isReady(false));
     DogLog.log("Shooter/usingVision", usingVision());
   }
 }

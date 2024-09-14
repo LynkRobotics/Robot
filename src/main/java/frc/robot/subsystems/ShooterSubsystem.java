@@ -207,6 +207,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean setCurrentSpeed(ShotType shot) {
+    return setCurrentSpeed(shot, null);
+  }
+
+  public boolean setCurrentSpeed(ShotType shot, Target target) {
     ShooterSpeed shooterSpeed;
     double distance;
 
@@ -219,14 +223,19 @@ public class ShooterSubsystem extends SubsystemBase {
     if (shooterSpeeds.containsKey(shot)) {
       shooterSpeed = shooterSpeeds.get(shot);
     } else {
+      if (target == null) {
+        DogLog.logFault("Shot type " + shot + " without target; presuming speaker");
+        target = Target.SPEAKER;
+      }
       if (shot == ShotType.AUTOMATIC && optShootWithVision.get()) {
-        distance = VisionSubsystem.getInstance().distanceToTarget(Target.SPEAKER);
+        distance = VisionSubsystem.getInstance().distanceToTarget(target);
       } else {
-        distance = PoseSubsystem.getInstance().getDistance(Target.SPEAKER);
+        distance = PoseSubsystem.getInstance().getDistance(target);
       }
       shooterSpeed = speedFromDistance(distance, shot == ShotType.AUTOMATIC ? shooterCalibration : shuttleCalibration);
       if (shooterSpeed == null) {
         DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f inches", shot.toString(), Units.metersToInches(distance)));
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f inches", shot.toString(), Units.metersToInches(distance)));
         return false;
       }
     }
@@ -257,7 +266,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void idle() {
     if (optAlwaysReady.get()) {
-      setCurrentSpeed(nextShot());
+      setCurrentSpeed(nextShot(), currentTarget());
     } else {
       setCurrentSpeed(ShotType.IDLE);
     }

@@ -79,7 +79,7 @@ public class ShootCommand extends Command {
 
     shot = shooter.nextShot();
     if (shot == ShotType.AUTOMATIC && optAutoTarget.get()) {
-      target =  zoneToTarget(PoseSubsystem.getZone());
+      target = zoneToTarget(PoseSubsystem.getZone());
     } else if (shot == ShotType.DUMP) {
       target = Target.FIXED_DUMP;
     } else if (shot == ShotType.SLIDE) {
@@ -108,7 +108,7 @@ public class ShootCommand extends Command {
     if (topSupplier != null && bottomSupplier != null) {
       shooter.setCurrentSpeed(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (!shooter.setCurrentSpeed(shot)) {
+      if (!shooter.setCurrentSpeed(shot, target)) {
         DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to failure to set current speed");
         LEDSubsystem.setTempState(TempState.ERROR);
         cancelled = true;
@@ -160,9 +160,9 @@ public class ShootCommand extends Command {
         DogLog.log("Shooter/Shot Pose", s_Pose.getPose());
         if (optSetPoseWhenShooting.get()) {
           if (DriverStation.isAutonomousEnabled()) {
-            DogLog.log("Shoter/Status", "Not automatically setting pose in autonmous period");
+            DogLog.log("Shooter/Status", "Not automatically setting pose in autonmous period");
           } else if (!vision.haveSpeakerTarget()) {
-            DogLog.log("Shoter/Status", "Cannot automatically set pose without a speaker AprilTag");
+            DogLog.log("Shooter/Status", "Cannot automatically set pose without a speaker AprilTag");
           } else {
             Pose2d pose = vision.lastPose();
             Pose2d oldPose = s_Pose.getPose();
@@ -175,7 +175,7 @@ public class ShootCommand extends Command {
 
     // Update shooter speed every iteration, unless we specifically set a certain speed at the onset of the command
     if (topSupplier == null || bottomSupplier == null) {
-      if (!shooter.setCurrentSpeed(shot)) {
+      if (!shooter.setCurrentSpeed(shot, target)) {
         DogLog.log("Shooter/Status", "Cancelling ShootCommand due to failure to update current speed");
         cancelled = true;
         cancel();

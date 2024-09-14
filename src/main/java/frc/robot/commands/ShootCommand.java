@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static frc.robot.Options.optAimingEnabled;
+
 import java.util.function.DoubleSupplier;
 
 import dev.doglog.DogLog;
@@ -11,8 +13,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -36,14 +38,13 @@ public class ShootCommand extends Command {
   private boolean autoAim = true;
   private boolean shooterReady = false;
   private boolean seenTarget = false;
+  private static final TunableOption optSetPoseWhenShooting = new TunableOption("Set pose when shooting", true);
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
     this.shooter = shooter;
     this.index = index;
     assert(vision != null);
-
-    SmartDashboard.putBoolean("pose/Update when shooting", false);
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, Swerve swerve) {
@@ -111,7 +112,7 @@ public class ShootCommand extends Command {
     }
     boolean precise = shooter.usingVision() && vision.distanceToSpeaker() > Constants.Shooter.farDistance;
     if (!feeding && shooter.isReady(precise)) {
-      boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
+      boolean aligned = !autoAim || !optAimingEnabled.get(); // "Aligned" if not automatic aiming
       if (!shooterReady) {
         DogLog.log("Shooter/Status", "Shooter is ready");
         shooterReady = true;
@@ -142,13 +143,11 @@ public class ShootCommand extends Command {
           Pose2d pose = vision.lastPose();
           if (swerve == null) {
             DogLog.log("Shooter/Status", "Unable to set pose due to lack of Swerve subsystem");
-          } else {
+          } else if (optSetPoseWhenShooting.get()) {
             Pose2d oldPose = PoseSubsystem.getInstance().getPose();
             DogLog.log("Shooter/Status", "Setting pose based on vision: " + String.format("%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)",
               pose.getX(), pose.getY(), pose.getRotation().getDegrees(), oldPose.getX(), oldPose.getY(), oldPose.getRotation().getDegrees()));
-            if (SmartDashboard.getBoolean("pose/Update when shooting", false)) {
-              PoseSubsystem.getInstance().setPose(pose);
-            }
+            PoseSubsystem.getInstance().setPose(pose);
           }
         }
       }

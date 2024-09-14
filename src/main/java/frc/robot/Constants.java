@@ -23,8 +23,6 @@ public final class Constants {
     public static final double turnStickSensitivity = 1.00;
     public static final double aimingOverride = 0.001;
 
-    public static final boolean tuningMode = true;
-
     public static final class Swerve {
         public static final String swerveCanBus = "lynk";
 

@@ -94,6 +94,10 @@ public class PoseSubsystem extends SubsystemBase {
         return instance;
     }
     
+    public static String prettyPose(Pose2d pose) {
+        return String.format("(%01.2f, %01.2f @ %01.1f)", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+    }
+    
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }

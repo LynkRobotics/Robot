@@ -145,8 +145,7 @@ public class ShootCommand extends Command {
             DogLog.log("Shooter/Status", "Unable to set pose due to lack of Swerve subsystem");
           } else if (optSetPoseWhenShooting.get()) {
             Pose2d oldPose = PoseSubsystem.getInstance().getPose();
-            DogLog.log("Shooter/Status", "Setting pose based on vision: " + String.format("%01.2f, %01.2f @ %01.1f), was (%01.2f, %01.2f @ %01.1f)",
-              pose.getX(), pose.getY(), pose.getRotation().getDegrees(), oldPose.getX(), oldPose.getY(), oldPose.getRotation().getDegrees()));
+            DogLog.log("Shooter/Status", "Setting pose based on vision: " + PoseSubsystem.prettyPose(pose) + ", was " + PoseSubsystem.prettyPose(oldPose));
             PoseSubsystem.getInstance().setPose(pose);
           }
         }

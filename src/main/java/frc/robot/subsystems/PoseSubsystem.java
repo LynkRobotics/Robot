@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.Constants.Pose;
 import frc.robot.Robot;
@@ -35,6 +36,9 @@ public class PoseSubsystem extends SubsystemBase {
     private final Pigeon2 gyro;
     private static Rotation2d targetAngle = null;
     private static Zone zone = Zone.SPEAKER;
+
+    private static final TunableOption optUpdatePoseWithVisionAuto = new TunableOption("pose/Update with vision in Auto", false);
+    private static final TunableOption optUpdatePoseWithVisionTeleop = new TunableOption("pose/Update with vision in Teleop", true);
 
     public enum Zone {
         SPEAKER,
@@ -70,10 +74,6 @@ public class PoseSubsystem extends SubsystemBase {
 
         field = new Field2d();
         SmartDashboard.putData("pose/Field", field);
-
-        SmartDashboard.putBoolean("pose/Update from vision in Teleop", true);
-        SmartDashboard.putBoolean("pose/Update from vision in Auto", false);
-        SmartDashboard.putBoolean("pose/Require target to aim", true);
 
         AutoBuilder.configureHolonomic(
             this::getPose,
@@ -220,8 +220,8 @@ public class PoseSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
-        if ((DriverStation.isTeleop() && SmartDashboard.getBoolean("pose/Update from vision in Teleop", true))
-            || (DriverStation.isAutonomous() && SmartDashboard.getBoolean("pose/Update from vision in Auto", false))) {
+        if ((DriverStation.isTeleop() && optUpdatePoseWithVisionTeleop.get())
+            || (DriverStation.isAutonomous() && optUpdatePoseWithVisionAuto.get())) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {
             s_Vision.updatePoseEstimate(null);

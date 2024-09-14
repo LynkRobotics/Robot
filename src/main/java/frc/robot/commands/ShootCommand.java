@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static frc.robot.Options.optAimingEnabled;
+
 import java.util.function.DoubleSupplier;
 
 import dev.doglog.DogLog;
@@ -11,8 +13,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -40,14 +42,13 @@ public class ShootCommand extends Command {
   private boolean seenTarget = false;
   private ShotType shot = ShotType.AUTOSPEAKER;
   private Target target = Target.SPEAKER;
+  private static final TunableOption optSetPoseWhenShooting = new TunableOption("Set pose when shooting", true);
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index) {
     addRequirements(shooter, index);
     this.shooter = shooter;
     this.index = index;
     assert(vision != null);
-
-    SmartDashboard.putBoolean("pose/Update when shooting", true);
   }
 
   public ShootCommand(ShooterSubsystem shooter, IndexSubsystem index, boolean autoAim) {
@@ -125,7 +126,7 @@ public class ShootCommand extends Command {
     }
     boolean precise = target == Target.SPEAKER && s_Pose.getDistance(Target.SPEAKER) > Constants.Shooter.farDistance;
     if (!feeding && shooter.isReady(precise)) {
-      boolean aligned = !autoAim || !SmartDashboard.getBoolean("Aiming enabled", true); // "Aligned" if not automatic aiming
+      boolean aligned = !autoAim || !optAimingEnabled.get(); // "Aligned" if not automatic aiming
       if (!shooterReady) {
         DogLog.log("Shooter/Status", "Shooter is ready");
         shooterReady = true;
@@ -147,7 +148,7 @@ public class ShootCommand extends Command {
         DogLog.log("Shooter/Status", String.format("Shooting from vision angle %01.1f deg @ %01.1f inches",
           vision.angleToTarget(Target.SPEAKER).getDegrees(), Units.metersToInches(vision.distanceToTarget(Target.SPEAKER))));
         DogLog.log("Shooter/Shot Pose", s_Pose.getPose());
-        if (shooter.usingVision() && DriverStation.isAutonomousEnabled() && SmartDashboard.getBoolean("pose/Update when shooting", true)) {
+        if (shooter.usingVision() && DriverStation.isAutonomousEnabled() && optSetPoseWhenShooting.get()) {
           Pose2d pose = vision.lastPose();
           DogLog.log("Shooter/Status", "Setting pose based on vision: " + pose);
           s_Pose.setPose(pose);

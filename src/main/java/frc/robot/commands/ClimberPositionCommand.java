@@ -6,8 +6,8 @@ package frc.robot.commands;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -18,6 +18,7 @@ public class ClimberPositionCommand extends Command {
   private final double position;
   private final LEDSubsystem.TempState ledState;
   private boolean cancelled = false;
+  private static final TunableOption optClimbersEnabled = new TunableOption("Climbers enabled", true);
   
   /** Creates a new PushClimberCommand. */
   public ClimberPositionCommand(double position, LEDSubsystem.TempState ledState, ClimberSubsystem s_Climber) {
@@ -35,7 +36,7 @@ public class ClimberPositionCommand extends Command {
     if (DriverStation.getMatchTime() > Constants.Climber.timeCutOff) {
       DogLog.log("Climber/Status", "ERROR: Current match time " + DriverStation.getMatchTime() + " exceeds the cutoff time of " + Constants.Climber.timeCutOff);
       cancelled = true;
-    } else if (!SmartDashboard.getBoolean("climber/Climbers enabled", false)) {
+    } else if (!optClimbersEnabled.get()) {
       DogLog.log("Climber/Status", "ERROR: Attempt to use climbers, but they are disabled");
       cancelled = true;
     } else {

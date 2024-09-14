@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.PoseSubsystem.Target;
@@ -54,6 +55,7 @@ public class VisionSubsystem extends SubsystemBase {
   private final int calibrateMax = 30;
   private double calibrateSpeakerSum = 0.0;
   private double calibrateRawSum = 0.0;
+  private static final TunableOption optUpdateVisionDashboard = new TunableOption("Update vision dashboard", false);
 
   public VisionSubsystem() {
     assert(instance == null);
@@ -79,7 +81,6 @@ public class VisionSubsystem extends SubsystemBase {
     PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
     SmartDashboard.putData("vision/Field", field);
-    SmartDashboard.putBoolean("vision/Update dashboard", updateDashboard);
     SmartDashboard.putData("vision/Calibrate", Commands.runOnce(this::calibrate, this).withName("Calibrate Vision").ignoringDisable(true));
   }
 
@@ -294,8 +295,7 @@ public class VisionSubsystem extends SubsystemBase {
     DogLog.log("Vision/speakerOffset angle", angleToTarget(Target.SPEAKER).getDegrees());
     DogLog.log("Vision/Angle error", angleError().getDegrees());
 
-    updateDashboard = SmartDashboard.getBoolean("vision/Update dashboard", false);
-    if (updateDashboard) {
+    if (optUpdateVisionDashboard.get()) {
       SmartDashboard.putString("vision/Result", result.toString());
       SmartDashboard.putBoolean("vision/Have target(s)", haveTarget);
       SmartDashboard.putBoolean("vision/Have speaker target", haveSpeakerTarget);

@@ -12,6 +12,7 @@ import dev.doglog.DogLog;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.LEDSubsystem.BaseState;
 
@@ -22,6 +23,8 @@ public class IndexSubsystem extends SubsystemBase {
   private final DigitalInput leftIndexSensor;
   private final DigitalInput rightIndexSensor;
   private boolean haveNote = false;
+  private static final TunableOption optLeftIndexSensorEnabled = new TunableOption("indexer/Left index sensor enabled", false);
+  private static final TunableOption optRightIndexSensorEnabled = new TunableOption("indexer/Right index sensor enabled", true);
 
   public IndexSubsystem() {
     assert(instance == null);
@@ -33,8 +36,6 @@ public class IndexSubsystem extends SubsystemBase {
 
     leftIndexSensor = new DigitalInput(Constants.Index.leftIndexSensorID);
     rightIndexSensor = new DigitalInput(Constants.Index.rightIndexSensorID);
-    SmartDashboard.putBoolean("indexer/Left sensor enabled", true);
-    SmartDashboard.putBoolean("indexer/Right sensor enabled", true);
   }
 
   public static IndexSubsystem getInstance() {
@@ -42,8 +43,8 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public boolean haveNote() {
-    return (SmartDashboard.getBoolean("indexer/Left sensor enabled", true) && !leftIndexSensor.get()) ||
-      (SmartDashboard.getBoolean("indexer/Right sensor enabled", true) && !rightIndexSensor.get());
+    return (optLeftIndexSensorEnabled.get() && !leftIndexSensor.get()) ||
+      (optRightIndexSensorEnabled.get() && !rightIndexSensor.get());
   }
 
   public void applyConfigs() {

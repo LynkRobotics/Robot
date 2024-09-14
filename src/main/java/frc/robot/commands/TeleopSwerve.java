@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
+import frc.lib.util.TunableOption;
 import frc.robot.Constants;
 import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.Robot;
-import frc.robot.Constants.Pose;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.PoseSubsystem.Target;
+import static frc.robot.Options.*;
 
 import java.util.function.DoubleSupplier;
 
@@ -27,6 +28,7 @@ public class TeleopSwerve extends Command {
     private final DoubleSupplier rotationSup;
     private DoubleSupplier speedLimitRotSupplier;
     private boolean inProgress = false;
+    private static final TunableOption optFullFieldAiming = new TunableOption("Full field aiming", true);
 
     public TeleopSwerve(Swerve s_Swerve, ShooterSubsystem s_Shooter, VisionSubsystem s_Vision, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier speedLimitRotSupplier) {
         this.s_Swerve = s_Swerve;
@@ -38,8 +40,6 @@ public class TeleopSwerve extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.speedLimitRotSupplier = speedLimitRotSupplier;
-
-        SmartDashboard.putBoolean("Aiming enabled", true);
     }
 
     @Override
@@ -56,13 +56,13 @@ public class TeleopSwerve extends Command {
         }
 
         /* Override rotation if using vision to aim */
-        if (SmartDashboard.getBoolean("Aiming enabled", true)) {
+        if (optAimingEnabled.get()) {
             if (s_Shooter.isAutoAimingActive()) {
                 Rotation2d angleError;
                 
                 SmartDashboard.putString("Debug", "autoAimingActive");
                 if (s_Shooter.usingVision()) {
-                    if (SmartDashboard.getBoolean("Shoot with Vision", true)) {
+                    if (optShootWithVision.get()) {
                         angleError = s_Vision.angleError();
                     } else {
                         angleError = PoseSubsystem.getInstance().targetAngleError(Target.SPEAKER);
@@ -84,7 +84,7 @@ public class TeleopSwerve extends Command {
                 SmartDashboard.putString("Debug", "auto aiming");
                 boolean haveNote = IndexSubsystem.getInstance().haveNote();
 
-                if (haveNote && SmartDashboard.getBoolean("pose/Full field aiming", true)) {
+                if (haveNote && optFullFieldAiming.get()) {
                     PoseSubsystem s_Pose = PoseSubsystem.getInstance();
                     PoseSubsystem.Zone zone = PoseSubsystem.getZone();
                     Rotation2d targetAngle;

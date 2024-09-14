@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import static frc.robot.Options.*;
 import frc.robot.subsystems.ClimberSubsystem.ClimberSelection;
 import frc.robot.subsystems.ShooterSubsystem.ShotType;
 
@@ -208,7 +209,6 @@ public class RobotContainer {
         //SmartDashboard.putData("Stop shooter", s_Shooter.runOnce(() -> { s_Shooter.setVoltage(0); }));
 
         // Allow for direct RPM setting
-        SmartDashboard.putBoolean("Direct set RPM", false);
         SmartDashboard.putNumber("Shooter top RPM", 1000.0);
         SmartDashboard.putNumber("Shooter bottom RPM", 1000.0);
         SmartDashboard.putData("Idle shooter", s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }));
@@ -225,7 +225,6 @@ public class RobotContainer {
         SmartDashboard.putNumber("Right climber voltage", 0.0);
         SmartDashboard.putData("Set climber voltage", Commands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber));
         SmartDashboard.putData("Zero climbers", Commands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber));
-        SmartDashboard.putBoolean("climber/Climbers enabled", true);
 
         SmartDashboard.putNumber("Left climber target position", 0.0);
         SmartDashboard.putData("Set left climber position", new ClimberPositionCommand(SmartDashboard.getNumber("Left climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_LeftClimber));
@@ -244,11 +243,6 @@ public class RobotContainer {
             1000 //The size of the log message queue to use
             ).withCaptureDs(true).withLogExtras(true).withCaptureNt(false).withNtPublish(false));
 
-        // Testing...
-        SmartDashboard.putBoolean("Shoot with Vision", true);
-        SmartDashboard.getBoolean("Use Vision Pose in Auto", false);
-        SmartDashboard.getBoolean("Disable Vision Pose in Teleop", false);
-        
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -262,8 +256,6 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        SmartDashboard.putBoolean("Shooter intake", false);
-
         /* Driver Buttons */
         intakeButton.whileTrue(
             Commands.sequence(
@@ -271,7 +263,7 @@ public class RobotContainer {
                 Commands.either(
                     new ShooterIntakeCommand(s_Shooter, s_Index, driver.getHID()),
                     new IntakeCommand(s_Intake, s_Index, driver.getHID()),
-                    () -> SmartDashboard.getBoolean("Shooter intake", false)),
+                    optShooterIntake),
                 Commands.runOnce(s_Swerve::disableSpeedLimit))
             .handleInterrupt(s_Swerve::disableSpeedLimit)
             .withName("Intake"));
@@ -280,7 +272,7 @@ public class RobotContainer {
                 () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
                 () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
             new ShootCommand(s_Shooter, s_Index),
-            () -> SmartDashboard.getBoolean("Direct set RPM", false))
+            optDirectRPM)
             .withName("Shoot"));
         climberExtendButton.onTrue(
             Commands.sequence(

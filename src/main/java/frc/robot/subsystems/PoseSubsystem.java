@@ -155,19 +155,19 @@ public class PoseSubsystem extends SubsystemBase {
 
     public double distanceToSpeaker() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().speakerLocation()); // distance from center of robot to speaker 
-        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+        distance += Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
 
     public double distanceToShuttle() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().shuttleLocation()); // distance from center of robot to shuttle location
-        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+        distance += Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
 
     public double distanceToFarShuttle() {
         double distance = getPose().getTranslation().getDistance(PoseSubsystem.getInstance().farShuttleLocation()); // distance from center of robot to far shuttle location
-        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+        distance += Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
 
@@ -343,13 +343,14 @@ public class PoseSubsystem extends SubsystemBase {
         }
         DogLog.log("Pose/Zone", zone);
         SmartDashboard.putString("pose/Zone", zone.toString());
-        SmartDashboard.putNumber("pose/Distance to shuttle", Units.metersToInches(distanceToShuttle()));
-        SmartDashboard.putNumber("pose/Distance to far shuttle", Units.metersToInches(distanceToFarShuttle()));
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
-        SmartDashboard.putString("pose/Pose", pose.toString());
+        SmartDashboard.putString("pose/Pose", prettyPose(pose));
 
         DogLog.log("Pose/Pose", pose);
+        DogLog.log("Pose/Distance to speaker", Units.metersToInches(distanceToSpeaker()));
+        DogLog.log("Pose/Distance to shuttle", Units.metersToInches(distanceToShuttle()));
+        DogLog.log("Pose/Distance to far shuttle", Units.metersToInches(distanceToFarShuttle()));
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }

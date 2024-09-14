@@ -111,11 +111,11 @@ public class ShooterSubsystem extends SubsystemBase {
   };
 
   private final ShooterCalibration[] shuttleCalibration = {
-    new ShooterCalibration(210, new ShooterSpeed(1450, 1450)),
-    new ShooterCalibration(292, new ShooterSpeed(2100, 2200)),
-    new ShooterCalibration(384, new ShooterSpeed(2700, 3000)),
-    new ShooterCalibration(449, new ShooterSpeed(2900, 3200)), // Blair Robot Project FTW!
-    new ShooterCalibration(506, new ShooterSpeed(3200, 3506)), // Thanks, YETI!
+    new ShooterCalibration(210-33, new ShooterSpeed(1450, 1450)),
+    new ShooterCalibration(292-33, new ShooterSpeed(2100, 2200)),
+    new ShooterCalibration(384-33, new ShooterSpeed(2700, 3000)),
+    new ShooterCalibration(449-33, new ShooterSpeed(2900, 3200)), // Blair Robot Project FTW!
+    new ShooterCalibration(506-33, new ShooterSpeed(3200, 3506)), // Thanks, YETI!
   };
 
   public ShooterSubsystem() {
@@ -282,6 +282,8 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomCurrentTarget = speed.bottomMotorSpeed + SmartDashboard.getNumber("shooter/Bottom RPM adjustment", 0.0);
     top.setControl(topControl.withVelocity(toRPS(topCurrentTarget)));
     bottom.setControl(bottomControl.withVelocity(toRPS(bottomCurrentTarget)));
+    DogLog.log("Shooter/TopRPM", topCurrentTarget);
+    DogLog.log("Shooter/BottomRPM", bottomCurrentTarget);
   }
 
   public void setVoltage(double voltage) {

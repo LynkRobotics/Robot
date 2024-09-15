@@ -232,10 +232,10 @@ public class ShooterSubsystem extends SubsystemBase {
       } else {
         distance = PoseSubsystem.getInstance().getDistance(target);
       }
-      shooterSpeed = speedFromDistance(distance, shot == ShotType.AUTOMATIC ? shooterCalibration : shuttleCalibration);
+      shooterSpeed = speedFromDistance(distance, target == Target.SPEAKER ? shooterCalibration : shuttleCalibration);
       if (shooterSpeed == null) {
-        DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f inches", shot.toString(), Units.metersToInches(distance)));
-        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot at %01.1f inches", shot.toString(), Units.metersToInches(distance)));
+        DogLog.logFault(String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot and target %s at %01.1f inches", shot.toString(), target.toString(), Units.metersToInches(distance)));
+        DogLog.log("Shooter/Status", String.format("ShooterSubsystem::setCurrentSpeed: distance lookup failure for %s shot  and target %s at %01.1f inches", shot.toString(), target.toString(), Units.metersToInches(distance)));
         return false;
       }
     }

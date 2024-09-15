@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import dev.doglog.DogLog;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -96,6 +98,16 @@ public class PoseSubsystem extends SubsystemBase {
             s_Swerve // Reference to Swerve subsystem to set requirements
         );
 
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> {
+            DogLog.log("Pose/Auto Target Pose", targetPose);
+        });
+        PathPlannerLogging.setLogActivePathCallback((activePath) -> {
+            DogLog.log("Pose/Active Path", activePath.toArray(Pose2d[]::new)); //we have to convert the List of poses PathPlanner gives us to an array because DogLog does not support list, fourtunetely aScope doesn't care whether its a list or an array
+        });
+        PathPlannerLogging.setLogCurrentPoseCallback((currentPose) -> {
+            DogLog.log("Pose/PP Current Pose", currentPose);
+        });
+
     }
 
     public static PoseSubsystem getInstance() {
@@ -151,7 +163,7 @@ public class PoseSubsystem extends SubsystemBase {
 
     public double getDistance(Target target) {
         double distance = getPose().getTranslation().getDistance(getLocation(target)); // distance from center of robot to target 
-        distance -= Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
+        distance += Constants.Vision.centerToReferenceOffset; // distance from center of robot to reference point
         return distance;
     }
 
@@ -265,9 +277,12 @@ public class PoseSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("pose/Distance to far shuttle", Units.metersToInches(getDistance(Target.FAR_SHUTTLE)));
 
         SmartDashboard.putNumber("pose/Gyro", getHeading().getDegrees());
-        SmartDashboard.putString("pose/Pose", pose.toString());
+        SmartDashboard.putString("pose/Pose", prettyPose(pose));
 
         DogLog.log("Pose/Pose", pose);
+        DogLog.log("Pose/Distance to speaker", Units.metersToInches(getDistance(Target.SPEAKER)));
+        DogLog.log("Pose/Distance to shuttle", Units.metersToInches(getDistance(Target.SHUTTLE)));
+        DogLog.log("Pose/Distance to far shuttle", Units.metersToInches(getDistance(Target.FAR_SHUTTLE)));
         DogLog.log("Pose/Gyro/Heading", getHeading().getDegrees());
         DogLog.log("Pose/Gyro/Raw Yaw", getGyroYaw());
     }

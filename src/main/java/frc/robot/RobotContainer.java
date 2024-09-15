@@ -205,7 +205,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
         NamedCommands.registerCommand("Stop", Commands.runOnce(s_Swerve::stopSwerve));
-        NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() -> { s_Pose.setPose(s_Vision.lastPose()); } ));
+        NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() ->
+            {
+                if (s_Vision.haveSpeakerTarget()) {
+                    s_Pose.setPose(s_Vision.lastPose());
+                } else {
+                    DogLog.log("Auto/Status", "Refusing to update post from vision with a current speaker target");
+                }
+            } ));
         NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
 
         // Build an autoChooser (defaults to none)

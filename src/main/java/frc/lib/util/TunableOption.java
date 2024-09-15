@@ -22,7 +22,7 @@ public class TunableOption implements BooleanSupplier {
       key = tableKey + "/" + name;
     }
     this.defaultValue = defaultValue;
-    SmartDashboard.putBoolean(name, defaultValue);
+    SmartDashboard.putBoolean(key, defaultValue);
   }
 
   public boolean get() {

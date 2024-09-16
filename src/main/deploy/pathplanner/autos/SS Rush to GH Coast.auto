@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Rush to H"
+                        "pathName": "SS Rush to G"
                       }
                     },
                     {
@@ -56,7 +56,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "H to SS Dump"
+                  "pathName": "G to SS Dump"
                 }
               },
               {
@@ -71,7 +71,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Slide Shot"
+            "name": "Special Shot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 99.0
           }
         },
         {
@@ -91,7 +97,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Dump to G"
+                        "pathName": "SS Dump to H"
                       }
                     },
                     {
@@ -113,7 +119,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "G to close shot"
+                  "pathName": "H to close shot"
                 }
               },
               {
@@ -201,19 +207,25 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "SS Close to Sprint"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SS Close to H"
+                  "pathName": "SS Sprint to Coast"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Coast after auto"
+                  "name": "Coast drive motors"
                 }
               }
             ]

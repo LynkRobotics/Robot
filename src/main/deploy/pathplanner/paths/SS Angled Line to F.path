@@ -3,72 +3,72 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.74,
-        "y": 4.23
+        "x": 1.31,
+        "y": 4.05
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2079141940102063,
-        "y": 4.916249105225484
+        "x": 2.7009952201722585,
+        "y": 2.70533631976355
       },
       "isLocked": false,
-      "linkedName": "C Note"
+      "linkedName": "Source-side Angled Line"
     },
     {
       "anchor": {
-        "x": 2.019996767266262,
-        "y": 5.681206271503453
+        "x": 4.174937077146882,
+        "y": 3.255732329646478
       },
       "prevControl": {
-        "x": 2.0141965649306486,
-        "y": 5.247288252426383
+        "x": 3.5302837660804895,
+        "y": 2.6793364279871157
       },
       "nextControl": {
-        "x": 2.0257969696018754,
-        "y": 6.115124290580523
+        "x": 4.9678804812155075,
+        "y": 3.964717020343132
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.018172581799709,
-        "y": 6.931258226152816
+        "x": 8.35,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.654351490521163,
-        "y": 6.632738356385804
+        "x": 5.4436465236566836,
+        "y": 4.104648209296419
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A Pickup"
+      "linkedName": "F Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.2,
-      "rotationDegrees": 45.0,
+      "waypointRelativePos": 1.8,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 6.5,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 9.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note to Note",
+  "folder": "Source Side",
   "previewStartingState": {
-    "rotation": -30.0,
+    "rotation": -50.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

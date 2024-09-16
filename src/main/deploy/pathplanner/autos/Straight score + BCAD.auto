@@ -24,19 +24,32 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Subwoofer to B"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Subwoofer to B"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -49,19 +62,32 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "B to C"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "B to C"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -80,19 +106,38 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "B to A"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "B to A"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -105,6 +150,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -117,7 +168,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A to D Real"
+                  "pathName": "A to D"
                 }
               }
             ]
@@ -126,13 +177,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "D Real to A"
+            "pathName": "D to Amp-side shot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp-side shot to E"
+                }
+              }
+            ]
           }
         }
       ]

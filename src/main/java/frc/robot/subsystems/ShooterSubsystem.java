@@ -70,6 +70,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SHORTSLIDE,
     SLIDE,
     DUMP,
+    SPECIAL,
     EJECT,
     BLOOP,
     SHUTTLE,
@@ -94,6 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(Speed.SLIDE, new ShooterSpeed(2500, 1000)),
       Map.entry(Speed.SHORTSLIDE, new ShooterSpeed(2250, 900)),
       Map.entry(Speed.DUMP, new ShooterSpeed(2650, 2650)),
+      Map.entry(Speed.SPECIAL, new ShooterSpeed(1180, 1180)),
       Map.entry(Speed.EJECT, new ShooterSpeed(-800, -800)),
       Map.entry(Speed.BLOOP, new ShooterSpeed(400, 400))
   ));
@@ -359,6 +361,7 @@ public class ShooterSubsystem extends SubsystemBase {
     DogLog.log("Shooter/Top RPM err", topVel - topCurrentTarget);
     DogLog.log("Shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
     DogLog.log("Shooter/Ready", isReady(false));
+    DogLog.log("Shooter/Next shot", nextShot == null ? defaultSpeed().toString() : nextShot.toString());
     DogLog.log("Shooter/usingVision", usingVision());
   }
 }

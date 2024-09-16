@@ -14,6 +14,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import dev.doglog.DogLog;
 import dev.doglog.DogLogOptions;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -202,18 +203,35 @@ public class RobotContainer {
                 .raceWith(Commands.waitSeconds(1.00))))
             .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Short Slide shot complete");}))
         );
+        NamedCommands.registerCommand("Special Shot",
+            Commands.runOnce(() -> { DogLog.log("Auto/Status", "Begin Special shot");})
+            .andThen(Commands.runOnce(() -> { s_Shooter.setNextShot(Speed.SPECIAL); }))
+            .andThen(
+                (new ShootCommand(s_Shooter, s_Index, false)
+                .raceWith(Commands.waitSeconds(1.00))))
+            .andThen(Commands.runOnce(() -> { DogLog.log("Auto/Status", "Special shot complete");}))
+        );
         NamedCommands.registerCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
         NamedCommands.registerCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
         NamedCommands.registerCommand("Stop", Commands.runOnce(s_Swerve::stopSwerve));
         NamedCommands.registerCommand("Set Instant Pose", Commands.runOnce(() ->
             {
                 if (s_Vision.haveSpeakerTarget()) {
-                    s_Pose.setPose(s_Vision.lastPose());
+                    Pose2d pose = s_Vision.lastPose();
+                    s_Pose.setPose(pose);
+                    DogLog.log("Auto/Status", "Pose updated from vision: " + PoseSubsystem.prettyPose(pose));
                 } else {
-                    DogLog.log("Auto/Status", "Refusing to update post from vision with a current speaker target");
+                    DogLog.log("Auto/Status", "Refusing to update pose from vision without a current speaker target");
                 }
             } ));
-        NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
+        // TODO Enable after THOR
+        if (false) {
+            NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
+            NamedCommands.registerCommand("Coast drive motors", Commands.runOnce(s_Swerve::setDriveMotorsToCoast));
+        } else {
+            NamedCommands.registerCommand("Coast after auto", new PrintCommand("No coasting for THOR"));
+            NamedCommands.registerCommand("Coast drive motors", new PrintCommand("No coasting for THOR"));
+        }
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();

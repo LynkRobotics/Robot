@@ -146,7 +146,7 @@ public class TeleopSwerve extends Command {
 
         // Maintain angle when not explicitly changing
         Rotation2d currentAngle = s_Pose.getPose().getRotation();
-        if (Math.abs(rotationVal) < Constants.aimingOverride) {
+        if (optMaintainAngle.get() && Math.abs(rotationVal) < Constants.aimingOverride) {
             if (lastAngle != null && aimingMode != AimingMode.TARGET) {
                 if (aimingMode != AimingMode.MAINTAIN) {
                     PoseSubsystem.angleErrorReset(Pose.maintainPID);

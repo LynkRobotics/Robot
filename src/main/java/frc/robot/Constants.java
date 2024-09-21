@@ -184,8 +184,8 @@ public final class Constants {
         public static final double fieldLength = 16.54;
         public static final double zoneMiddleStart = 5.3;
         public static final double zoneSpeakerEnd = 5.8;
-        public static final double zoneSourceStart = 10.2;
-        public static final double zoneMiddleEnd = 11.2;
+        public static final double zoneSourceStart = 11.5;
+        public static final double zoneMiddleEnd = 12.5;
     }
 
     public class Intake {

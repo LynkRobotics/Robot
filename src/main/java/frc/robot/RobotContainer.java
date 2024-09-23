@@ -224,14 +224,8 @@ public class RobotContainer {
                     DogLog.log("Auto/Status", "Refusing to update pose from vision without a current speaker target");
                 }
             } ));
-        // TODO Enable after THOR
-        if (false) {
-            NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
-            NamedCommands.registerCommand("Coast drive motors", Commands.runOnce(s_Swerve::setDriveMotorsToCoast));
-        } else {
-            NamedCommands.registerCommand("Coast after auto", new PrintCommand("No coasting for THOR"));
-            NamedCommands.registerCommand("Coast drive motors", new PrintCommand("No coasting for THOR"));
-        }
+        NamedCommands.registerCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
+        NamedCommands.registerCommand("Coast drive motors", Commands.runOnce(s_Swerve::setDriveMotorsToCoast));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();

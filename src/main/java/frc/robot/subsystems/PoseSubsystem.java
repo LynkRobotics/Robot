@@ -152,6 +152,10 @@ public class PoseSubsystem extends SubsystemBase {
         }
     }
 
+    public Translation2d ampLocation() {
+        return (Robot.isRed() ? Pose.redAmpLocation : Pose.blueAmpLocation);
+    }
+
     public Translation2d speakerLocation() {
         return (Robot.isRed() ? Pose.redSpeakerLocation : Pose.blueSpeakerLocation);
     }
@@ -270,6 +274,14 @@ public class PoseSubsystem extends SubsystemBase {
 
     public Rotation2d angleToSpeaker() {
         return speakerOffset().getAngle();
+    }
+
+    public Rotation2d angleToAmp() {
+        return ampOffset().getAngle();
+    }
+
+    private Translation2d ampOffset() {
+        return getPose().getTranslation().minus(ampLocation());
     }
 
     private Translation2d shuttleOffset() {

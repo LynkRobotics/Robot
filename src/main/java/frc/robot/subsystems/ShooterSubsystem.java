@@ -330,6 +330,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public boolean amping() {
+    return nextShot == Speed.AMP || (nextShot == null && defaultSpeed() == Speed.AMP);
+  }
+
   public boolean dumping() {
     return nextShot == Speed.DUMP || (nextShot == null && defaultSpeed() == Speed.DUMP);
   }

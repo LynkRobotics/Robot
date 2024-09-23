@@ -107,15 +107,25 @@ public class TeleopSwerve extends Command {
                     Rotation2d targetAngle;
 
                     if (zone == PoseSubsystem.Zone.SPEAKER) {
-                        targetAngle = s_Pose.angleToSpeaker();
+                        if (s_Shooter.amping()) {
+                            if (optAimAtAmp.get()) {
+                                targetAngle = s_Pose.angleToAmp();
+                            } else {
+                                targetAngle = null; // Don't override aiming
+                            }
+                        } else {
+                            targetAngle = s_Pose.angleToSpeaker();
+                        }
                     } else if (zone == PoseSubsystem.Zone.FAR) {
                         targetAngle = s_Pose.angleToFarShuttle();
                     } else {
                         targetAngle = s_Pose.angleToShuttle();
                     }
 
-                    Rotation2d angleError = targetAngle.minus(s_Pose.getPose().getRotation());
-                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                    if (targetAngle != null) {
+                        Rotation2d angleError = targetAngle.minus(s_Pose.getPose().getRotation());
+                        rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                    }
                 } else if (haveNote && s_Vision.haveSpeakerTarget()) {              
                     if (aimingMode != AimingMode.TARGET) {
                         PoseSubsystem.angleErrorReset();

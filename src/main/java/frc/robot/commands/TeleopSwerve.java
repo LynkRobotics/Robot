@@ -85,6 +85,17 @@ public class TeleopSwerve extends Command {
                     angleError = PoseSubsystem.getInstance().shuttleShotError();
                 } else if (s_Shooter.farShuttling()) {
                     angleError = PoseSubsystem.getInstance().farShuttleShotError();
+                } else if (s_Shooter.shootingDefault()) {
+                    PoseSubsystem.Zone zone = PoseSubsystem.getZone();
+        
+                    if (zone == PoseSubsystem.Zone.FAR) {
+                      angleError = PoseSubsystem.getInstance().farShuttleShotError();
+                    } else if (zone == PoseSubsystem.Zone.MIDDLE) {
+                      angleError = PoseSubsystem.getInstance().shuttleShotError();
+                    } else {
+                      System.out.println("Unexpect case of isAutoAimingActive with default shot but in zone " + zone.toString());
+                      angleError = new Rotation2d();
+                    }
                 } else {
                     System.out.println("Unexpected case of isAutoAimingActive but not usingVision nor dumping nor sliding nor (far)shuttling");
                     angleError = new Rotation2d();

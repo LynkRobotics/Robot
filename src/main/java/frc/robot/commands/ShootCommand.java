@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -83,11 +84,13 @@ public class ShootCommand extends Command {
     if (topSupplier != null && bottomSupplier != null) {
       shooter.shoot(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
-      if (!cancelled) {
-        if (!shooter.shoot()) {
-          DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
-          cancelled = true;
-        }
+      if (!index.haveNote()) {
+        DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand without note");
+        cancelled = true;
+      }
+      if (!shooter.shoot()) {
+        DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to shoot() failure");
+        cancelled = true;
       }
       if (cancelled) {
         LEDSubsystem.setTempState(TempState.ERROR);
@@ -130,6 +133,17 @@ public class ShootCommand extends Command {
           aligned = PoseSubsystem.getInstance().shuttleShotAligned();
         } else if (shooter.farShuttling()) {
           aligned = PoseSubsystem.getInstance().farShuttleShotAligned();
+        } else if (shooter.shootingDefault()) {
+            PoseSubsystem.Zone zone = PoseSubsystem.getZone();
+
+            if (zone == PoseSubsystem.Zone.FAR) {
+              aligned = PoseSubsystem.getInstance().farShuttleShotAligned();
+            } else if (zone == PoseSubsystem.Zone.MIDDLE) {
+              aligned = PoseSubsystem.getInstance().shuttleShotAligned();
+            } else {
+              System.out.println("Unexpect case of shooting default without vision but in zone " + zone.toString());
+              aligned = true;
+            }
         } else {
           // "Aligned" because all other shots don't require alignment
           aligned = true;

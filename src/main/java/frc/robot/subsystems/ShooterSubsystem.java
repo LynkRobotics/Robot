@@ -322,6 +322,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return (nextShot == Speed.VISION || (nextShot == null && defaultSpeed() == Speed.VISION)) && PoseSubsystem.getZone() == PoseSubsystem.Zone.SPEAKER;
   }
 
+  public boolean shootingDefault() { 
+    return nextShot == null;
+  }
+
   public void toggleAmp() {
     if (nextShot == null || nextShot != Speed.AMP) {
       nextShot = Speed.AMP;

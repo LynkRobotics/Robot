@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.85,
-        "y": 6.7
+        "x": 5.65,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.327001785837089,
-        "y": 6.222998214162911
+        "x": 8.718036345163599,
+        "y": 3.9367307825524747
       },
       "isLocked": false,
-      "linkedName": "AS Dump"
+      "linkedName": "Stage Dump"
     },
     {
       "anchor": {
-        "x": 8.35,
-        "y": 4.1
+        "x": 8.2795852864433,
+        "y": 0.7462996744175311
       },
       "prevControl": {
-        "x": 7.642893218813452,
-        "y": 4.8071067811865476
+        "x": 8.27025654051308,
+        "y": 4.020689495924446
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "F Note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7,
-      "rotationDegrees": -45.0,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -90.0,
       "rotateFast": false
     }
   ],
@@ -45,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -90.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Amp Side",
   "previewStartingState": {
-    "rotation": -5.0,
+    "rotation": -35.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -298,10 +298,10 @@ public final class Constants {
             new Rotation3d(Units.degreesToRadians(1.2), Units.degreesToRadians(-30.7), Math.PI)); // As measured by PhotonVision
         public static final double centerToReferenceOffset = -Units.inchesToMeters(27.0/2.0 + 3.0); // Reference point is outside of bumper
         public static final double maxAngleError = 1.0; // degrees
-        public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
-        public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
+        public static final double calibrationFactorBlue = atHQ ? 0.98 : 0.985;
+        public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(-.8);
         public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;
-        public static final double calibrationOffsetRed  = atHQ ? calibrationOffsetBlue : Units.inchesToMeters(0.0);
+        public static final double calibrationOffsetRed  = atHQ ? calibrationOffsetBlue : Units.inchesToMeters(-1.0);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

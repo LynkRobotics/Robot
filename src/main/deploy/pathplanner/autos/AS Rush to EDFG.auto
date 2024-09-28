@@ -34,6 +34,50 @@
                     {
                       "type": "path",
                       "data": {
+                        "pathName": "AS Rush to E"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E to AS Dump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Slide Shot"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
                         "pathName": "AS Rush to D"
                       }
                     },
@@ -78,50 +122,6 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AS Dump to E"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "E to AS Dump"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Slide Shot"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
                         "pathName": "AS Dump to F"
                       }
                     },
@@ -141,6 +141,50 @@
           "type": "path",
           "data": {
             "pathName": "F to Stage Dump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Slide Shot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Stage Dump to G"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G to Stage Dump"
           }
         },
         {

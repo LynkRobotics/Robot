@@ -177,8 +177,8 @@ public final class Constants {
 
         public static final Translation2d blueSpeakerLocation = new Translation2d(0.0, 5.548);
         public static final Translation2d redSpeakerLocation = new Translation2d(16.579, 5.548);
-        public static final Translation2d blueShuttleLocation = new Translation2d(0.5, 7.0);
-        public static final Translation2d redShuttleLocation = new Translation2d(16.0, 7.0);
+        public static final Translation2d blueShuttleLocation = new Translation2d(1.25, 6.7);
+        public static final Translation2d redShuttleLocation = new Translation2d(15.25, 6.7);
         public static final Translation2d blueFarShuttleLocation = new Translation2d(7.5, 7.0);
         public static final Translation2d redFarShuttleLocation = new Translation2d(9.1, 7.0);
         public static final Translation2d blueAmpLocation = new Translation2d(1.84, 8.2);

@@ -77,6 +77,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
+      DogLog.log("Misc/Robot Status", "Running auto command " + m_autonomousCommand.getName());
       m_autonomousCommand.schedule();
     }
   }

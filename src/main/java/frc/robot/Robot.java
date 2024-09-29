@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+    DogLog.log("Misc/FMS Match Time", DriverStation.getMatchTime());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

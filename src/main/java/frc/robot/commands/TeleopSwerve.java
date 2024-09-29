@@ -122,7 +122,7 @@ public class TeleopSwerve extends Command {
                         if (s_Shooter.amping()) {
                             if (optAimAtAmp.get()) {
                                 //targetAngle = s_Pose.angleToAmp();
-                                targetAngle = new Rotation2d(Units.degreesToRadians(90.0));
+                                targetAngle = new Rotation2d(Units.degreesToRadians(-90.0));
                             } else {
                                 targetAngle = null; // Don't override aiming
                             }

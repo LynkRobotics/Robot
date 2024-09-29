@@ -16,6 +16,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class TeleopSwerve extends Command {
@@ -120,7 +121,8 @@ public class TeleopSwerve extends Command {
                     if (zone == PoseSubsystem.Zone.SPEAKER) {
                         if (s_Shooter.amping()) {
                             if (optAimAtAmp.get()) {
-                                targetAngle = s_Pose.angleToAmp();
+                                //targetAngle = s_Pose.angleToAmp();
+                                targetAngle = new Rotation2d(Units.degreesToRadians(90.0));
                             } else {
                                 targetAngle = null; // Don't override aiming
                             }

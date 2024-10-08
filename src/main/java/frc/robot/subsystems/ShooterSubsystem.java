@@ -69,6 +69,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SHORTSLIDE,
     SLIDE,
     DUMP,
+    SPECIAL,
     EJECT,
     BLOOP,
     AUTOMATIC,
@@ -82,7 +83,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(ShotType.STOP, new ShooterSpeed(Constants.Shooter.stopSpeed, Constants.Shooter.stopSpeed)),
       Map.entry(ShotType.INTAKE, new ShooterSpeed(Constants.Shooter.intakeSpeed, Constants.Shooter.intakeSpeed)),
       Map.entry(ShotType.IDLE, new ShooterSpeed(Constants.Shooter.idleSpeed, Constants.Shooter.idleSpeed)),
-      Map.entry(ShotType.AMP, new ShooterSpeed(350, 950)),
+      Map.entry(ShotType.AMP, new ShooterSpeed(375, 1000)),
       Map.entry(ShotType.SUBWOOFER, new ShooterSpeed(1360, 2830)),
       Map.entry(ShotType.AMPSIDE, new ShooterSpeed(2850, 2050)),
       Map.entry(ShotType.MIDLINE, new ShooterSpeed(2800, 2300)),
@@ -94,6 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
       Map.entry(ShotType.SLIDE, new ShooterSpeed(2500, 1000)),
       Map.entry(ShotType.SHORTSLIDE, new ShooterSpeed(2250, 900)),
       Map.entry(ShotType.DUMP, new ShooterSpeed(2650, 2650)),
+      Map.entry(ShotType.SPECIAL, new ShooterSpeed(1180, 1180)),
       Map.entry(ShotType.EJECT, new ShooterSpeed(-800, -800)),
       Map.entry(ShotType.BLOOP, new ShooterSpeed(400, 400))
       // Auto types: AUTOSPEAKER, SHUTTLE, FARSHUTTLE
@@ -304,6 +306,14 @@ public class ShooterSubsystem extends SubsystemBase {
     return nextShot == null ? defaultShot() : nextShot;
   }
 
+  public void toggleAmp() {
+    if (nextShot() != ShotType.AMP) {
+      nextShot = ShotType.AMP;
+    } else {
+      nextShot = null;
+    }
+  }
+
   public static boolean requiresAlignment(ShotType shot) {
     return (shot == ShotType.DUMP || shot == ShotType.SLIDE || shot == ShotType.AMP || shot == ShotType.SHUTTLE || shot == ShotType.FARSHUTTLE);
   }
@@ -322,6 +332,7 @@ public class ShooterSubsystem extends SubsystemBase {
     } else if (shot == ShotType.SLIDE) {
       return Target.FIXED_SLIDE;
     } else if (shot == ShotType.AMP) {
+      // return Target.AMP;
       return Target.FIXED_AMP;
     } else if (shot == ShotType.SHUTTLE) {
       return Target.SHUTTLE;
@@ -355,5 +366,6 @@ public class ShooterSubsystem extends SubsystemBase {
     DogLog.log("Shooter/Bottom RPM tgt", bottomCurrentTarget);
     DogLog.log("Shooter/Top RPM err", topVel - topCurrentTarget);
     DogLog.log("Shooter/Bottom RPM err", bottomVel - bottomCurrentTarget);
+    DogLog.log("Shooter/Next shot", nextShot().toString());
   }
 }

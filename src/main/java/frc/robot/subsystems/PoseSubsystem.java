@@ -52,6 +52,7 @@ public class PoseSubsystem extends SubsystemBase {
         SPEAKER,
         SHUTTLE,
         FAR_SHUTTLE,
+        AMP,
         FIXED_AMP,
         FIXED_SLIDE,
         FIXED_DUMP

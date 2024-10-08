@@ -28,7 +28,13 @@
       "linkedName": "G Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 35.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,7 +51,7 @@
   "reversed": false,
   "folder": "Source Side",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -10.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

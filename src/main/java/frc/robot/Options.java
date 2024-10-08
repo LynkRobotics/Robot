@@ -22,4 +22,10 @@ public final class Options {
 
     // When enabled, the robot will brake at the end of teleOp; disable to coast the motors as teleOp ends
     public static final TunableOption optBrakeAfterTeleop = new TunableOption("Brake after teleOp", true);
+
+    // When enabled, the robot will attempt to hold the last manually adjusted angle when the joystick is at rest
+    public static final TunableOption optMaintainAngle = new TunableOption("Maintain angle", true);
+
+    // When enabled, the robot will aim at the amp as appropriate
+    public static final TunableOption optAimAtAmp = new TunableOption("Aim at Amp", true);
 }

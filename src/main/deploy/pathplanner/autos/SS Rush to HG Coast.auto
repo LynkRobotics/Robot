@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.44,
-      "y": 7.32
+      "x": 1.48,
+      "y": 1.48
     },
     "rotation": 0.0
   },
@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AS Rush to D"
+                        "pathName": "SS Rush to H"
                       }
                     },
                     {
@@ -50,9 +50,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "D to AS Dump"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "H to SS Dump"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
           }
         },
         {
@@ -78,7 +91,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AS Dump to E"
+                        "pathName": "SS Dump to G"
                       }
                     },
                     {
@@ -94,15 +107,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "E to AS Dump"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "G to close shot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Slide Shot"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
           }
         },
         {
@@ -122,7 +154,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "AS Dump to F"
+                        "pathName": "SS Close to SS Drop"
                       }
                     },
                     {
@@ -138,20 +170,64 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "F to Stage Dump"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SS Drop to SS Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake note"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Slide Shot"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Instant Pose"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SS Close to Sprint"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SS Sprint to Coast"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Coast drive motors"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "folder": "Amp-side",
+  "folder": "Source-side",
   "choreoAuto": false
 }

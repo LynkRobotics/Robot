@@ -108,8 +108,15 @@ public class ShootCommand extends Command {
     if (topSupplier != null && bottomSupplier != null) {
       shooter.setCurrentSpeed(topSupplier.getAsDouble(), bottomSupplier.getAsDouble());
     } else {
+      if (!index.haveNote()) {
+        DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand without note");
+        cancelled = true;
+      }
       if (!shooter.setCurrentSpeed(shot, target)) {
         DogLog.log("Shooter/Status", "ERROR: Cancelling ShootCommand due to failure to set current speed");
+        cancelled = true;
+      }
+      if (cancelled) {
         LEDSubsystem.setTempState(TempState.ERROR);
         cancelled = true;
         cancel();

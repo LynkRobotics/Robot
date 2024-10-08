@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.48,
-      "y": 1.48
+      "x": 1.44,
+      "y": 7.32
     },
     "rotation": 0.0
   },
@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Rush to H"
+                        "pathName": "AS Rush to E"
                       }
                     },
                     {
@@ -50,22 +50,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "H to SS Dump"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              }
-            ]
+            "pathName": "E to AS Dump"
           }
         },
         {
@@ -91,7 +78,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Dump to G"
+                        "pathName": "AS Rush to D"
                       }
                     },
                     {
@@ -107,34 +94,15 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "G to close shot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake note"
-                }
-              }
-            ]
+            "pathName": "D to AS Dump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Set Instant Pose"
+            "name": "Slide Shot"
           }
         },
         {
@@ -154,7 +122,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SS Close to SS Drop"
+                        "pathName": "AS Dump to F"
                       }
                     },
                     {
@@ -170,58 +138,64 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "F to Stage Dump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Slide Shot"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SS Drop to SS Close"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake note"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Set Instant Pose"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SS Close to H"
-                }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Coast after auto"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Stage Dump to G"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    }
+                  ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "G to Stage Dump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Slide Shot"
           }
         }
       ]
     }
   },
-  "folder": "Source-side",
+  "folder": "Amp-side",
   "choreoAuto": false
 }

@@ -10,6 +10,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.PoseSubsystem.Target;
+import frc.robot.subsystems.PoseSubsystem.Zone;
+import frc.robot.subsystems.ShooterSubsystem.ShotType;
 
 import static frc.robot.Options.*;
 
@@ -100,8 +102,21 @@ public class TeleopSwerve extends Command {
             } else if (haveNote && optFullFieldAiming.get()) {
                 PoseSubsystem.Zone zone = PoseSubsystem.getZone();
                 Target target = ShootCommand.zoneToTarget(zone);
-                Rotation2d angleError = s_Pose.targetAngleError(target);
-                rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                Rotation2d angleError = null;
+
+                if (zone == Zone.SPEAKER && s_Shooter.nextShot() == ShotType.AMP) {
+                    if (optAimAtAmp.get()) {
+                        //angleError = s_Pose.targetAngleError(Target.AMP);
+                        angleError = Pose.ampAngle.minus(PoseSubsystem.getInstance().getPose().getRotation());
+                    } else {
+                        angleError = null; // Don't override aiming
+                    }
+                } else {
+                    angleError = s_Pose.targetAngleError(target);
+                }
+                if (angleError != null) {
+                    rotationVal = PoseSubsystem.angleErrorToSpeed(angleError);
+                }
             } else if (PoseSubsystem.getTargetAngle() != null) {
                 // Move to a fixed angle
                 if (aimingMode != AimingMode.TARGET) {
@@ -122,7 +137,7 @@ public class TeleopSwerve extends Command {
 
         // Maintain angle when not explicitly changing
         Rotation2d currentAngle = s_Pose.getPose().getRotation();
-        if (Math.abs(rotationVal) < Constants.aimingOverride) {
+        if (optMaintainAngle.get() && Math.abs(rotationVal) < Constants.aimingOverride) {
             if (lastAngle != null && aimingMode != AimingMode.TARGET) {
                 if (aimingMode != AimingMode.MAINTAIN) {
                     PoseSubsystem.angleErrorReset(Pose.maintainPID);

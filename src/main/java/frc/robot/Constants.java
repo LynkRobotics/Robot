@@ -22,7 +22,7 @@ import frc.robot.subsystems.PoseSubsystem;
 import frc.robot.subsystems.PoseSubsystem.Target;
 
 public final class Constants {
-    public static final boolean atHQ = true;
+    public static final boolean atHQ = false;
     public static final double stickDeadband = 0.1;
     public static final double driveStickSensitivity = 1.00; 
     public static final double turnStickSensitivity = 1.00;
@@ -168,31 +168,33 @@ public final class Constants {
     public class Pose {
         public static final int pigeonID = 1;
 
-        public static final Rotation2d ampAngle = Rotation2d.fromDegrees(90.0);
+        public static final Rotation2d ampAngle = Rotation2d.fromDegrees(-90.0);
         public static final Rotation2d blueDumpAngle = Rotation2d.fromDegrees(-38.0);
         public static final Rotation2d redDumpAngle = PoseSubsystem.reflect(blueDumpAngle, Rotation2d.fromDegrees(90.0));
         public static final Rotation2d blueSlideAngle = Rotation2d.fromDegrees(0.0);
         public static final Rotation2d redSlideAngle = Rotation2d.fromDegrees(180.0);
-        public static final PIDController rotationPID = new PIDController(0.0080, 0.000, 0.0); // kI was 0.050 for NCCMP
+        public static final PIDController rotationPID = new PIDController(0.0070, 0.000, 0.0); // kI was 0.050 for NCCMP
         public static final PIDController maintainPID = new PIDController(0.0040, 0.000, 0.0);
         public static final double rotationKS = 0.015;
         public static final double rotationIZone = 2.5; // degrees
 
         public static EnumMap <Target, Translation2d> redLocations = new EnumMap<>(Map.of(
             Target.SPEAKER, new Translation2d(16.579, 5.548),
-            Target.SHUTTLE, new Translation2d(16.0, 7.0),
-            Target.FAR_SHUTTLE, new Translation2d(9.1, 7.0)
+            Target.SHUTTLE, new Translation2d(15.25, 6.7),
+            Target.FAR_SHUTTLE, new Translation2d(9.1, 7.0),
+            Target.AMP, new Translation2d(14.7, 8.2)
         ));
         public static EnumMap <Target, Translation2d> blueLocations = new EnumMap<>(Map.of(
             Target.SPEAKER, new Translation2d(0.0, 5.548),
-            Target.SHUTTLE, new Translation2d(0.5, 7.0),
-            Target.FAR_SHUTTLE, new Translation2d(7.5, 7.0)
+            Target.SHUTTLE, new Translation2d(1.25, 6.7),
+            Target.FAR_SHUTTLE, new Translation2d(7.5, 7.0),
+            Target.AMP, new Translation2d(1.84, 8.2)
         ));
         public static final double fieldLength = 16.54;
         public static final double zoneMiddleStart = 5.3;
         public static final double zoneSpeakerEnd = 5.8;
-        public static final double zoneSourceStart = 10.2;
-        public static final double zoneMiddleEnd = 11.2;
+        public static final double zoneSourceStart = 11.5;
+        public static final double zoneMiddleEnd = 12.5;
     }
 
     public class Intake {
@@ -226,6 +228,7 @@ public final class Constants {
             Target.SPEAKER, 1.0,
             Target.SHUTTLE, 1.5,
             Target.FAR_SHUTTLE, 1.5,
+            Target.AMP, 1.0,
             Target.FIXED_AMP, 1.0,
             Target.FIXED_DUMP, 1.5,
             Target.FIXED_SLIDE, 2.0
@@ -234,7 +237,8 @@ public final class Constants {
             Target.SPEAKER, 60.0,
             Target.SHUTTLE, 75.0,
             Target.FAR_SHUTTLE, 75.0,
-            Target.FIXED_AMP, 60.0,
+            Target.AMP, 50.0,
+            Target.FIXED_AMP, 50.0,
             Target.FIXED_DUMP, 60.0,
             Target.FIXED_SLIDE, 100.0
         ));
@@ -251,8 +255,7 @@ public final class Constants {
         public static final double kS = 0.21;  // Voltage to overcome static friction
         public static final double RPMsPerVolt = 490;
         /* Time to complete shot once Note no longer detected */
-        // TODO Revisit this value -- we seem to be waiting longer than necessary
-        public static final double postShotTimeout = 0.4; // in seconds
+        public static final double postShotTimeout = 0.1; // in seconds
     }
 
     public class Index {
@@ -318,7 +321,7 @@ public final class Constants {
         public static final double calibrationFactorBlue = atHQ ? 0.98 : 1.0;
         public static final double calibrationOffsetBlue = atHQ ? Units.inchesToMeters(0.29) : Units.inchesToMeters(0.0);
         public static final double calibrationFactorRed  = atHQ ? calibrationFactorBlue : 1.0;
-        public static final double calibrationOffsetRed  = atHQ ? calibrationOffsetBlue : Units.inchesToMeters(0.0);
+        public static final double calibrationOffsetRed  = atHQ ? calibrationOffsetBlue : Units.inchesToMeters(-1.0);
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot

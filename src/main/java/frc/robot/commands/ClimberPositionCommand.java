@@ -18,7 +18,7 @@ public class ClimberPositionCommand extends Command {
   private final double position;
   private final LEDSubsystem.TempState ledState;
   private boolean cancelled = false;
-  private static final TunableOption optClimbersEnabled = new TunableOption("Climbers enabled", true);
+  private static final TunableOption optClimbersEnabled = new TunableOption("Climbers enabled", false);
   
   /** Creates a new PushClimberCommand. */
   public ClimberPositionCommand(double position, LEDSubsystem.TempState ledState, ClimberSubsystem s_Climber) {

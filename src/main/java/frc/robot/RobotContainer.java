@@ -105,9 +105,9 @@ public class RobotContainer {
     public RobotContainer() {
     // Set the scheduler to log when a command initializes, interrupts, or finishes
         CommandScheduler scheduler = CommandScheduler.getInstance();
-        scheduler.onCommandInitialize(command -> DogLog.log("Misc/Robot status", "Initialized: " + command.getName()));
-        scheduler.onCommandInterrupt(command -> DogLog.log("Misc/Robot status", "Interrupted: " + command.getName()));
-        scheduler.onCommandFinish(command -> DogLog.log("Misc/Robot status", "Finished: " + command.getName()));
+        scheduler.onCommandInitialize(command -> DogLog.log("Misc/Robot Status", "Initialized: " + command.getName()));
+        scheduler.onCommandInterrupt(command -> DogLog.log("Misc/Robot Status", "Interrupted: " + command.getName()));
+        scheduler.onCommandFinish(command -> DogLog.log("Misc/Robot Status", "Finished: " + command.getName()));
 
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(

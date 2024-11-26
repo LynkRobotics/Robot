@@ -30,7 +30,8 @@ public class IntakeCommand extends Command {
   @Override
   public void initialize() {
     intake.intake();
-    index.index();
+    // index.index();
+    index.special();
     LEDSubsystem.setTempState(TempState.INTAKING);
   }
 

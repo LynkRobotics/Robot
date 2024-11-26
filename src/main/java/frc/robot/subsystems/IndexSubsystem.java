@@ -25,6 +25,8 @@ public class IndexSubsystem extends SubsystemBase {
   private boolean haveNote = false;
   private static final TunableOption optLeftIndexSensorEnabled = new TunableOption("indexer/Left index sensor enabled", false);
   private static final TunableOption optRightIndexSensorEnabled = new TunableOption("indexer/Right index sensor enabled", true);
+  private boolean special = false;
+  private int specialCounter = 0;
 
   public IndexSubsystem() {
     assert(instance == null);
@@ -65,6 +67,11 @@ public class IndexSubsystem extends SubsystemBase {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.indexSpeed));
   }
 
+  public void special() {
+    index();
+    special = true;
+  }
+
   public void feed() {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.feedSpeed));
   }
@@ -81,13 +88,27 @@ public class IndexSubsystem extends SubsystemBase {
     indexMotor.setControl(indexSpeedDutyCycleOut.withOutput(Constants.Index.ejectSpeed));
   }
 
+  public void fasterPeriodic() {
+    if (special) {
+      DogLog.log("Index/Status", "Running fasterPeriodic: " + ++specialCounter);
+      if (haveNote()) {
+        DogLog.log("Index/Status", "Stopping faster");
+        stop();
+        special = false;
+      }
+    }
+  }
+  
   @Override
   public void periodic() {
     boolean currentVal = haveNote();
 
+    if (special) {
+      DogLog.log("Index/Status", "Running periodic");
+    }
     if (currentVal != haveNote) {
       if (currentVal) {
-        DogLog.log("Index/Status", "DEBUG: Note presence detected");
+        DogLog.log("Index/Status", "Note presence detected: " + special);
       }
       haveNote = currentVal;
       LEDSubsystem.setBaseState(haveNote ? BaseState.NOTE : BaseState.EMPTY);

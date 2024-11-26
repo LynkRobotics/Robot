@@ -17,6 +17,8 @@ import dev.doglog.DogLogOptions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -276,6 +278,12 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+    }
+
+    public void addPeriodic(Robot robot) {
+        // robot.addPeriodic(s_Index::fasterPeriodic, 1.0/250.0, 1.00/250.0);
+        robot.notifier = new Notifier(s_Index::fasterPeriodic);
+        robot.notifier.startPeriodic(1.0/250.0);
     }
 
     /**

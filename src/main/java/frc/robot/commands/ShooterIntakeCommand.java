@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -70,10 +69,10 @@ public class ShooterIntakeCommand extends Command {
 
     if (!interrupted) {
       CommandScheduler.getInstance().schedule(
-        Commands.startEnd(
+        LoggedCommands.startEnd(
           () -> { controller.setRumble(RumbleType.kLeftRumble, 1.0); controller.setRumble(RumbleType.kRightRumble, 1.0); },
           () -> { controller.setRumble(RumbleType.kLeftRumble, 0.0); controller.setRumble(RumbleType.kRightRumble, 0.0); })
-        .raceWith(Commands.waitSeconds(0.5)));
+        .raceWith(LoggedCommands.waitSeconds(0.5)));
     }
   }
 

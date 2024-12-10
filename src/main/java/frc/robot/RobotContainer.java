@@ -22,9 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -88,14 +85,14 @@ public class RobotContainer {
     }
 
     private Command setShotCommand(Speed speed) {
-        return Commands.runOnce(() -> { s_Shooter.setNextShot(speed); }).withName("Set " + (speed == null ? "default" : speed) + " shot");
+        return LoggedCommands.runOnce(() -> { s_Shooter.setNextShot(speed); }).withName("Set " + (speed == null ? "default" : speed) + " shot");
     }
 
     private Command fixedShotCommand(Speed speed) {
         return setShotCommand(speed)
             .andThen(
                 new ShootCommand(s_Shooter, s_Index, false)
-                .raceWith(Commands.waitSeconds(1.5)))
+                .raceWith(LoggedCommands.waitSeconds(1.5)))
             .withName("Fixed " + speed + " shot");
     }
 
@@ -120,24 +117,24 @@ public class RobotContainer {
                         s_Swerve::getSpeedLimitRot
                         ));
 
-        s_Shooter.setDefaultCommand(Commands.startEnd(s_Shooter::idle, () -> {}, s_Shooter).withName("Shooter Idle"));
-        s_Index.setDefaultCommand(Commands.startEnd(s_Index::stop, () -> {}, s_Index).withName("Index Stop"));
+        s_Shooter.setDefaultCommand(LoggedCommands.startEnd(s_Shooter::idle, () -> {}, s_Shooter).withName("Shooter Idle"));
+        s_Index.setDefaultCommand(LoggedCommands.startEnd(s_Index::stop, () -> {}, s_Index).withName("Index Stop"));
 
         SmartDashboard.putData("Command scheduler", CommandScheduler.getInstance());
         SmartDashboard.putData(new ShootCommand(s_Shooter, s_Index, s_Swerve).withTimeout(3.0).withName("Shoot Commmand"));
 
         // Default named commands for PathPlanner
         SmartDashboard.putNumber("auto/Startup delay", 0.0);
-        autoNamedCommand("Done", new PrintCommand("Done"));
-        autoNamedCommand("Start", new PrintCommand("Starting"));
-        autoNamedCommand("Startup delay", new DeferredCommand(() ->Commands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
+        autoNamedCommand("Done", LoggedCommands.print("Done"));
+        autoNamedCommand("Start", LoggedCommands.print("Starting"));
+        autoNamedCommand("Startup delay", LoggedCommands.defer(() ->LoggedCommands.waitSeconds(SmartDashboard.getNumber("auto/Startup delay", 0.0)), Set.of()));
         autoNamedCommand("Shoot",
             new ShootCommand(s_Shooter, s_Index, s_Swerve)
                 .raceWith(new AimCommand(s_Swerve, s_Vision))
-                .raceWith(Commands.waitSeconds(2.50)));
+                .raceWith(LoggedCommands.waitSeconds(2.50)));
         autoNamedCommand("Shoot without aiming",
             new ShootCommand(s_Shooter, s_Index, s_Swerve, false)
-                .raceWith(Commands.waitSeconds(1.50))
+                .raceWith(LoggedCommands.waitSeconds(1.50))
                 .withName("Shoot w/o aiming (Auto)"));
         autoNamedCommand("Fixed SW shot", fixedShotCommand(Speed.SUBWOOFER));
         autoNamedCommand("Fixed AS shot", fixedShotCommand(Speed.AMPSIDE));
@@ -150,10 +147,10 @@ public class RobotContainer {
         autoNamedCommand("Slide Shot", fixedShotCommand(Speed.SLIDE));
         autoNamedCommand("Short Slide Shot", fixedShotCommand(Speed.SHORTSLIDE));
         autoNamedCommand("Special Shot", fixedShotCommand(Speed.SPECIAL));
-        autoNamedCommand("Override rotation", Commands.runOnce(s_Vision::enableRotationTargetOverride));
-        autoNamedCommand("Restore rotation", Commands.runOnce(s_Vision::disableRotationTargetOverride));
-        autoNamedCommand("Stop", Commands.runOnce(s_Swerve::stopSwerve));
-        autoNamedCommand("Set Instant Pose", Commands.runOnce(() ->
+        autoNamedCommand("Override rotation", LoggedCommands.runOnce(s_Vision::enableRotationTargetOverride));
+        autoNamedCommand("Restore rotation", LoggedCommands.runOnce(s_Vision::disableRotationTargetOverride));
+        autoNamedCommand("Stop", LoggedCommands.runOnce(s_Swerve::stopSwerve));
+        autoNamedCommand("Set Instant Pose", LoggedCommands.runOnce(() ->
             {
                 if (s_Vision.haveSpeakerTarget()) {
                     Pose2d pose = s_Vision.lastPose();
@@ -164,7 +161,7 @@ public class RobotContainer {
                 }
             } ));
         autoNamedCommand("Coast after auto", new CoastAfterAuto(s_Swerve));
-        autoNamedCommand("Coast drive motors", Commands.runOnce(s_Swerve::setDriveMotorsToCoast));
+        autoNamedCommand("Coast drive motors", LoggedCommands.runOnce(s_Swerve::setDriveMotorsToCoast));
 
         // Build an autoChooser (defaults to none)
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -180,18 +177,18 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter top RPM", 1000.0);
         SmartDashboard.putNumber("Shooter bottom RPM", 1000.0);
         SmartDashboard.putData(s_Shooter.runOnce(() -> { s_Shooter.setRPM(500); }).withName("Idle shooter"));
-        SmartDashboard.putData(Commands.runOnce(s_Pose::zeroGyro, s_Swerve).withName("Zero Gyro"));
-        SmartDashboard.putData(Commands.runOnce(s_Pose::resetHeading, s_Swerve).withName("Reset heading"));
+        SmartDashboard.putData(LoggedCommands.runOnce(s_Pose::zeroGyro, s_Swerve).withName("Zero Gyro"));
+        SmartDashboard.putData(LoggedCommands.runOnce(s_Pose::resetHeading, s_Swerve).withName("Reset heading"));
 
         // Allow for direct climber control
-        SmartDashboard.putData(Commands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber).withName("Stop climbers"));
+        SmartDashboard.putData(LoggedCommands.runOnce(() -> { s_LeftClimber.stop(); s_RightClimber.stop(); }, s_LeftClimber, s_RightClimber).withName("Stop climbers"));
         SmartDashboard.putData(s_LeftClimber.runOnce(() -> { s_LeftClimber.applyVoltage(Constants.Climber.slowVoltage); }).withName("Left down slow"));
         SmartDashboard.putData(s_RightClimber.runOnce(() -> { s_RightClimber.applyVoltage(Constants.Climber.slowVoltage); }).withName("Right down slow"));
 
         SmartDashboard.putNumber("Left climber voltage", 0.0);
         SmartDashboard.putNumber("Right climber voltage", 0.0);
-        SmartDashboard.putData(Commands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber).withName("Set climber voltage"));
-        SmartDashboard.putData(Commands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber).withName("Zero climbers"));
+        SmartDashboard.putData(LoggedCommands.runOnce(() -> { s_LeftClimber.applyVoltage(SmartDashboard.getNumber("Left climber voltage", 0.0)); s_RightClimber.applyVoltage(SmartDashboard.getNumber("Right climber voltage", 0.0));}, s_LeftClimber, s_RightClimber).withName("Set climber voltage"));
+        SmartDashboard.putData(LoggedCommands.runOnce(() -> { s_LeftClimber.zero(); s_RightClimber.zero(); }, s_LeftClimber, s_RightClimber).withName("Zero climbers"));
 
         SmartDashboard.putNumber("Left climber target position", 0.0);
         SmartDashboard.putData(new ClimberPositionCommand(SmartDashboard.getNumber("Left climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_LeftClimber).withName("Set left climber position"));
@@ -225,17 +222,17 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         intakeButton.whileTrue(
-            Commands.sequence(
-                Commands.runOnce(s_Swerve::enableSpeedLimit).withName("Enable speed limit"),
-                Commands.either(
+            LoggedCommands.sequence(
+                LoggedCommands.runOnce(s_Swerve::enableSpeedLimit).withName("Enable speed limit"),
+                LoggedCommands.either(
                     new ShooterIntakeCommand(s_Shooter, s_Index, driver.getHID()),
                     new IntakeCommand(s_Intake, s_Index, driver.getHID()),
                     optShooterIntake),
-                Commands.runOnce(s_Swerve::disableSpeedLimit).withName("Disable speed limit"))
+                LoggedCommands.runOnce(s_Swerve::disableSpeedLimit).withName("Disable speed limit"))
             .handleInterrupt(s_Swerve::disableSpeedLimit)
             .withName("Intake"));
         shooterButton.whileTrue(
-            Commands.either(
+            LoggedCommands.either(
                 new ShootCommand(s_Shooter, s_Index,
                     () -> SmartDashboard.getNumber("Shooter top RPM", 0.0),
                     () -> SmartDashboard.getNumber("Shooter bottom RPM", 0.0)),
@@ -243,19 +240,19 @@ public class RobotContainer {
                 optDirectRPM)
             .withName("Shoot"));
         climberExtendButton.onTrue(
-            Commands.sequence(
-                Commands.runOnce(s_Swerve::enableSpeedLimit).withName("Enable speed limit"),
-                Commands.parallel(
+            LoggedCommands.sequence(
+                LoggedCommands.runOnce(s_Swerve::enableSpeedLimit).withName("Enable speed limit"),
+                LoggedCommands.parallel(
                     new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_LeftClimber).withName("Extend left climber"),
                     new ClimberPositionCommand(Constants.Climber.extendedPosition, LEDSubsystem.TempState.EXTENDING, s_RightClimber).withName("Extend right climber")))
             .withName("Extend Climbers"));
-        SmartDashboard.putData(Commands.runOnce(s_Swerve::disableSpeedLimit).withName("Disable speed limit"));
+        SmartDashboard.putData(LoggedCommands.runOnce(s_Swerve::disableSpeedLimit).withName("Disable speed limit"));
 
         leftClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_LeftClimber).withName("Retract left climber"));
         rightClimberButton.whileTrue(new ClimberPositionCommand(Constants.Climber.retractedPosition, LEDSubsystem.TempState.RETRACTING, s_RightClimber).withName("Retract right climber"));
 
         /* Buttons to set the next shot */
-        ampButton.onTrue(Commands.runOnce(s_Shooter::toggleAmp).withName("Toggle amp shot"));
+        ampButton.onTrue(LoggedCommands.runOnce(s_Shooter::toggleAmp).withName("Toggle amp shot"));
         defaultShotButton.onTrue(setShotCommand(null));
         dumpShotButton.onTrue(setShotCommand(Speed.DUMP));
         slideShotButton.onTrue(setShotCommand(Speed.SLIDE));
@@ -268,9 +265,9 @@ public class RobotContainer {
         SmartDashboard.putData(pathCommand("To Speaker-AmpSide").withName("Speaker Amp-Side align"));
         SmartDashboard.putData(pathCommand("To Speaker-SourceSide").withName("Speaker Source-Side align"));
 
-        SmartDashboard.putData(Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("pose/Align to zero"));
-        SmartDashboard.putData(Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("pose/Align to 90"));
-        SmartDashboard.putData(Commands.runOnce(() -> { PoseSubsystem.setTargetAngle(null); }).withName("pose/Clear target angle"));
+        SmartDashboard.putData(LoggedCommands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d()); }).withName("pose/Align to zero"));
+        SmartDashboard.putData(LoggedCommands.runOnce(() -> { PoseSubsystem.setTargetAngle(new Rotation2d(Math.PI / 2.0)); }).withName("pose/Align to 90"));
+        SmartDashboard.putData(LoggedCommands.runOnce(() -> { PoseSubsystem.setTargetAngle(null); }).withName("pose/Clear target angle"));
     }
 
     /**
@@ -288,9 +285,9 @@ public class RobotContainer {
 
     private void buildAutos(SendableChooser<Command> chooser) {
         addAutoCommand(chooser,
-            Commands.sequence(
+            LoggedCommands.sequence(
                 new PathPlannerAuto("SS Angled Start to H"),
-                Commands.either(
+                LoggedCommands.either(
                     new PathPlannerAuto("H-Shoot-G-Shoot"),
                     new PathPlannerAuto("H-G-Shoot"),
                     s_Index::haveNote
@@ -308,9 +305,9 @@ public class RobotContainer {
         //     ).withName("Smart OTF HG"));
 
         addAutoCommand(chooser,
-            Commands.sequence(
+            LoggedCommands.sequence(
                 new PathPlannerAuto("AS Angled + AD"),
-                Commands.either(
+                LoggedCommands.either(
                     new PathPlannerAuto("DE from close"),
                     new PathPlannerAuto("D-E-Shoot"),
                     s_Index::haveNote
@@ -318,9 +315,9 @@ public class RobotContainer {
             ).withName("Smart ADE from Close"));
 
         addAutoCommand(chooser,
-            Commands.sequence(
+            LoggedCommands.sequence(
                 new PathPlannerAuto("AS Angled + AD"),
-                Commands.either(
+                LoggedCommands.either(
                     new PathPlannerAuto("DE from A"),
                     new PathPlannerAuto("D-E-Shoot"),
                     s_Index::haveNote
@@ -328,9 +325,9 @@ public class RobotContainer {
             ).withName("Smart ADE"));
 
         addAutoCommand(chooser,
-            Commands.sequence(
+            LoggedCommands.sequence(
                 new PathPlannerAuto("BCAD start"),
-                Commands.either(
+                LoggedCommands.either(
                     new PathPlannerAuto("DE from A"),
                     new PathPlannerAuto("D-E-Shoot"),
                     s_Index::haveNote
@@ -338,20 +335,20 @@ public class RobotContainer {
             ).withName("Smart BCAD"));
 
         addAutoCommand(chooser,
-            Commands.sequence(
+            LoggedCommands.sequence(
                 new PathPlannerAuto("BC-direct-AD start"),
-                Commands.either(
+                LoggedCommands.either(
                     new PathPlannerAuto("DE from A"),
                     new PathPlannerAuto("D-E-Shoot"),
                     s_Index::haveNote
                 ),
-                Commands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
+                LoggedCommands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
             ).withName("Smart BC-direct-AD"));
 
         addAutoCommand(chooser,
-            Commands.sequence(
+            LoggedCommands.sequence(
                 new PathPlannerAuto("Amp-side OTF + AD"),
-                Commands.either(
+                LoggedCommands.either(
                     new PathPlannerAuto("DE from A"),
                     new PathPlannerAuto("D-E-Shoot"),
                     s_Index::haveNote
@@ -376,8 +373,8 @@ public class RobotContainer {
     private Command ampPathCommand() {
         PathPlannerPath path = PathPlannerPath.fromPathFile("To Amp");
 
-        return Commands.sequence(
-            Commands.runOnce(s_Vision::enableRotationAmpOverride).withName("Enable rotation amp override"),
+        return LoggedCommands.sequence(
+            LoggedCommands.runOnce(s_Vision::enableRotationAmpOverride).withName("Enable rotation amp override"),
             new FollowPathHolonomic(
                 path,
                 s_Pose::getPose, // Robot pose supplier
@@ -393,7 +390,7 @@ public class RobotContainer {
                 Robot::isRed,
                 s_Swerve // Reference to this subsystem to set requirements
             ).withName("Follow path to amp"),
-            Commands.runOnce(s_Vision::disableRotationAmpOverride).withName("Disable rotation amp override"),
+            LoggedCommands.runOnce(s_Vision::disableRotationAmpOverride).withName("Disable rotation amp override"),
             fixedShotCommand(Speed.AMP)
         ).handleInterrupt(s_Vision::disableRotationAmpOverride)
         .withName("Amp path & shoot");
@@ -402,8 +399,8 @@ public class RobotContainer {
     private Command sourcePathCommand() {
         PathPlannerPath path = PathPlannerPath.fromPathFile("To Source");
 
-        return Commands.sequence(
-            Commands.runOnce(s_Vision::enableRotationSourceOverride).withName("Enable rotation source override"),
+        return LoggedCommands.sequence(
+            LoggedCommands.runOnce(s_Vision::enableRotationSourceOverride).withName("Enable rotation source override"),
             new FollowPathHolonomic(
                 path,
                 s_Pose::getPose, // Robot pose supplier
@@ -419,7 +416,7 @@ public class RobotContainer {
                 Robot::isRed,
                 s_Swerve // Reference to this subsystem to set requirements
             ).withName("Follow path to source"),
-            Commands.runOnce(s_Vision::disableRotationSourceOverride).withName("Disable rotation source override")
+            LoggedCommands.runOnce(s_Vision::disableRotationSourceOverride).withName("Disable rotation source override")
         ).handleInterrupt(s_Vision::disableRotationSourceOverride)
         .withName("Source align");
     }
@@ -427,8 +424,8 @@ public class RobotContainer {
     private Command pathCommand(String pathName) {
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
-        return Commands.sequence(
-            Commands.runOnce(s_Vision::enableRotationTargetOverride).withName("Enable rotation target override"),
+        return LoggedCommands.sequence(
+            LoggedCommands.runOnce(s_Vision::enableRotationTargetOverride).withName("Enable rotation target override"),
             new FollowPathHolonomic(
                 path,
                 s_Pose::getPose, // Robot pose supplier
@@ -444,7 +441,7 @@ public class RobotContainer {
                 Robot::isRed,
                 s_Swerve // Reference to this subsystem to set requirements
             ).withName("Follow path: " + pathName),
-            Commands.runOnce(s_Vision::disableRotationTargetOverride).withName("Disable rotation target override")
+            LoggedCommands.runOnce(s_Vision::disableRotationTargetOverride).withName("Disable rotation target override")
         ).handleInterrupt(s_Vision::disableRotationTargetOverride)
         .withName("Path: " + pathName);
     }
@@ -452,7 +449,7 @@ public class RobotContainer {
     private Command choreoTestCommand() {
         PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory("Choreo-Straight");
 
-        return Commands.sequence(
+        return LoggedCommands.sequence(
             new FollowPathHolonomic(
                 path,
                 s_Pose::getPose, // Robot pose supplier

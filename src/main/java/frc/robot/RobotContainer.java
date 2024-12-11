@@ -100,12 +100,6 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-    // Set the scheduler to log when a command initializes, interrupts, or finishes
-        CommandScheduler scheduler = CommandScheduler.getInstance();
-        scheduler.onCommandInitialize(command -> DogLog.log("Misc/Robot Status", "Initialized: " + command.getName()));
-        scheduler.onCommandInterrupt(command -> DogLog.log("Misc/Robot Status", "Interrupted: " + command.getName()));
-        scheduler.onCommandFinish(command -> DogLog.log("Misc/Robot Status", "Finished: " + command.getName()));
-
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                         s_Swerve,
@@ -195,9 +189,9 @@ public class RobotContainer {
         SmartDashboard.putNumber("Right climber target position", 0.0);
         SmartDashboard.putData(new ClimberPositionCommand(SmartDashboard.getNumber("Right climber target position", 0.0), LEDSubsystem.TempState.RETRACTING, s_RightClimber).withName("Set right climber position"));
 
-        SmartDashboard.putData(s_Swerve.runOnce(s_Swerve::setMotorsToCoast).ignoringDisable(true).withName("autoSetup/SetSwerveCoast"));
-        SmartDashboard.putData(s_Swerve.runOnce(s_Swerve::setMotorsToBrake).ignoringDisable(true).withName("autoSetup/SetSwerveBrake"));
-        SmartDashboard.putData(s_Swerve.run(s_Swerve::alignStraight).ignoringDisable(true).withName("autoSetup/SetSwerveAligned"));
+        SmartDashboard.putData(LoggedCommands.runOnce(s_Swerve::setMotorsToCoast, s_Swerve).ignoringDisable(true).withName("autoSetup/SetSwerveCoast"));
+        SmartDashboard.putData(LoggedCommands.runOnce(s_Swerve::setMotorsToBrake, s_Swerve).ignoringDisable(true).withName("autoSetup/SetSwerveBrake"));
+        SmartDashboard.putData(LoggedCommands.run(s_Swerve::alignStraight, s_Swerve).ignoringDisable(true).withName("autoSetup/SetSwerveAligned"));
 
         DogLog.setOptions(new DogLogOptions(
             Constants.atHQ, //Whether logged values should be published to NetworkTables
@@ -283,76 +277,59 @@ public class RobotContainer {
         chooser.addOption(command.getName(), command);
     }
 
+    private Command noteOption(String pathWithNote, String pathWithoutNote) {
+        return
+            LoggedCommands.either(
+                new PathPlannerAuto(pathWithNote),
+                new PathPlannerAuto(pathWithoutNote),
+                s_Index::haveNote
+            ).withName("Note option: " + pathWithNote + " or " + pathWithoutNote);
+    }
+    
     private void buildAutos(SendableChooser<Command> chooser) {
+        Supplier<Command> smartDE = () -> noteOption("DE from A", "D-E-Shoot");
+        Supplier<Command> smartDEClose = () -> noteOption("DE from close", "D-E-Shoot");
+
         addAutoCommand(chooser,
             LoggedCommands.sequence(
                 new PathPlannerAuto("SS Angled Start to H"),
-                LoggedCommands.either(
-                    new PathPlannerAuto("H-Shoot-G-Shoot"),
-                    new PathPlannerAuto("H-G-Shoot"),
-                    s_Index::haveNote
-                )
+                noteOption("H-Shoot-G-Shoot", "H-G-Shoot")
             ).withName("Smart HG"));
 
         // addAutoCommand(chooser,
-        //     Commands.sequence(
+        //     LoggedCommands.sequence(
         //         new PathPlannerAuto("Source-side OTF to H"),
-        //         Commands.either(
-        //             new PathPlannerAuto("H-Shoot-G-Shoot"),
-        //             new PathPlannerAuto("H-G-Shoot"),
-        //             s_Index::haveNote
-        //         )
+        //         noteOption("H-Shoot-G-Shoot", "H-G-Shoot")
         //     ).withName("Smart OTF HG"));
 
         addAutoCommand(chooser,
             LoggedCommands.sequence(
                 new PathPlannerAuto("AS Angled + AD"),
-                LoggedCommands.either(
-                    new PathPlannerAuto("DE from close"),
-                    new PathPlannerAuto("D-E-Shoot"),
-                    s_Index::haveNote
-                )
+                smartDEClose.get()
             ).withName("Smart ADE from Close"));
 
         addAutoCommand(chooser,
             LoggedCommands.sequence(
                 new PathPlannerAuto("AS Angled + AD"),
-                LoggedCommands.either(
-                    new PathPlannerAuto("DE from A"),
-                    new PathPlannerAuto("D-E-Shoot"),
-                    s_Index::haveNote
-                )
+                smartDE.get()
             ).withName("Smart ADE"));
 
         addAutoCommand(chooser,
             LoggedCommands.sequence(
                 new PathPlannerAuto("BCAD start"),
-                LoggedCommands.either(
-                    new PathPlannerAuto("DE from A"),
-                    new PathPlannerAuto("D-E-Shoot"),
-                    s_Index::haveNote
-                )
+                smartDE.get()
             ).withName("Smart BCAD"));
 
         addAutoCommand(chooser,
             LoggedCommands.sequence(
                 new PathPlannerAuto("BC-direct-AD start"),
-                LoggedCommands.either(
-                    new PathPlannerAuto("DE from A"),
-                    new PathPlannerAuto("D-E-Shoot"),
-                    s_Index::haveNote
-                ),
-                LoggedCommands.runOnce(() -> { DogLog.log("Auto/Status", "Conditional part over");})
+                smartDE.get()
             ).withName("Smart BC-direct-AD"));
 
         addAutoCommand(chooser,
             LoggedCommands.sequence(
                 new PathPlannerAuto("Amp-side OTF + AD"),
-                LoggedCommands.either(
-                    new PathPlannerAuto("DE from A"),
-                    new PathPlannerAuto("D-E-Shoot"),
-                    s_Index::haveNote
-                )
+                smartDE.get()
             ).withName("Smart ADE OTF"));
 
         addAutoCommand(chooser, choreoTestCommand());

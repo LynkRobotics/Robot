@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import dev.doglog.DogLog;
 
 // Wraps a command with logging
 public class LoggedCommandBase extends Command {
@@ -15,11 +14,11 @@ public class LoggedCommandBase extends Command {
 
   @Override
   public void initialize() {
-    DogLog.log("Robot/Status", "Running " + getName());
+    LoggedCommands.logInit(this);
   }
 
   @Override
   public void end(boolean interrupted) {
-    DogLog.log("Robot/Status", "Finished " + getName() + (interrupted ? " (interrupted)" : ""));
+    LoggedCommands.logFinish(this, interrupted);
   }
 }

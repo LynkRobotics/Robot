@@ -18,117 +18,100 @@ import edu.wpi.first.wpilibj2.command.WrapperCommand;
 // Provide a Commands-like interface, but producing LoggedCommands
 public class LoggedCommands {
 
-  // Try a simple method of wrapping a command
-  public static Command wrap1(Command command) {
-    return Commands.sequence(
-      Commands.runOnce(() -> {
-        DogLog.log("Robot/Status", "Running " + command.getName());
-      }),
-      command,
-      Commands.runOnce(() -> {
-        DogLog.log("Robot/Status", "Finished " + command.getName());
-      })
-    );
+  public static void logInit(Command command) {
+    DogLog.log("Robot/Status", "Running " + command.getName());
   }
 
-  // Try another simple method of wrapping a command
-  public static Command wrap2(Command command) {
-    return command.deadlineWith(
-      Commands.startEnd(
-        () -> DogLog.log("Robot/Status", "Running " + command.getName()),
-        () -> DogLog.log("Robot/Status", "Finished " + command.getName())
-      )
-    );
+  public static void logFinish(Command command, boolean interrupted) {
+    DogLog.log("Robot/Status", "Finished " + command.getName() + (interrupted ? " (interrupted)" : ""));
   }
 
-  public static Command wrap3(Command command) {
+  public static Command log(Command command) {
     return new WrapperCommand(command) { 
       @Override
       public void initialize() {
-        DogLog.log("Robot/Status", "Running " + getName());
+        logInit(command);
         super.initialize();
       }
 
       @Override
       public void end(boolean interrupted) {
-        DogLog.log("Robot/Status", "Finished " + getName() + (interrupted ? " (interrupted)" : ""));
+        logFinish(command, interrupted);
         super.end(interrupted);
       }
-    };
+    }.withName(command.getName() + " (Logged)");
   }
 
-  public static Command log(Command command) {
-    return new LoggedCommand(command);
-  }
+  /* The following map to the static utilities from the standard Commands class */
 
   public static Command none() {
-    return new LoggedCommand(Commands.none());
+    return log(Commands.none());
   }
 
   public static Command idle(Subsystem... requirements) {
-    return new LoggedCommand(Commands.idle(requirements));
+    return log(Commands.idle(requirements));
   }
 
   public static Command runOnce(Runnable action, Subsystem... requirements) {
-    return new LoggedCommand(Commands.runOnce(action, requirements));
+    return log(Commands.runOnce(action, requirements));
   }
 
   public static Command run(Runnable action, Subsystem... requirements) {
-    return new LoggedCommand(Commands.run(action, requirements));
+    return log(Commands.run(action, requirements));
   }
 
   public static Command startEnd(Runnable start, Runnable end, Subsystem... requirements) {
-    return new LoggedCommand(Commands.startEnd(start, end, requirements));
+    return log(Commands.startEnd(start, end, requirements));
   }
 
   public static Command runEnd(Runnable run, Runnable end, Subsystem... requirements) {
-    return new LoggedCommand(Commands.runEnd(run, end, requirements));
+    return log(Commands.runEnd(run, end, requirements));
   }
 
   public static Command print(String message) {
-    return new LoggedCommand(Commands.print(message));
+    return log(Commands.print(message));
   }
 
   public static Command waitSeconds(double seconds) {
-    return new LoggedCommand(Commands.waitSeconds(seconds));
+    return log(Commands.waitSeconds(seconds));
   }
 
   public static Command waitUntil(BooleanSupplier condition) {
-    return new LoggedCommand(Commands.waitUntil(condition));
+    return log(Commands.waitUntil(condition));
   }
 
   public static Command either(Command onTrue, Command onFalse, BooleanSupplier selector) {
-    return new LoggedCommand(Commands.either(onTrue, onFalse, selector));
+    return log(Commands.either(onTrue, onFalse, selector));
   }
 
   public static <K> Command select(Map<K, Command> commands, Supplier<? extends K> selector) {
-    return new LoggedCommand(Commands.select(commands, selector));
+    return log(Commands.select(commands, selector));
   }
   public static Command defer(Supplier<Command> supplier, Set<Subsystem> requirements) {
-    return new LoggedCommand(Commands.defer(supplier, requirements));
+    return log(Commands.defer(supplier, requirements));
   }
 
   public static Command deferredProxy(Supplier<Command> supplier) {
-    return new LoggedCommand(Commands.deferredProxy(supplier));
+    return log(Commands.deferredProxy(supplier));
   }
 
   public static Command sequence(Command... commands) {
-    return new LoggedCommand(Commands.sequence(commands));
+    return log(Commands.sequence(commands));
   }
 
   public static Command repeatingSequence(Command... commands) {
-    return new LoggedCommand(Commands.repeatingSequence(commands));
+    return log(Commands.repeatingSequence(commands));
   }
 
   public static Command parallel(Command... commands) {
-    return new LoggedCommand(Commands.parallel(commands));
+    return log(Commands.parallel(commands));
   }
 
   public static Command race(Command... commands) {
-    return new LoggedCommand(Commands.race(commands));
+    return log(Commands.race(commands));
   }
   public static Command deadline(Command deadline, Command... otherCommands) {
-    return new LoggedCommand(Commands.deadline(deadline, otherCommands));
+    return log(Commands.deadline(deadline, otherCommands));
   }
 
   private LoggedCommands() {

@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,12 +34,14 @@ public class PoseSubsystem extends SubsystemBase {
     private static PoseSubsystem instance;
     private final Swerve s_Swerve;
     private final VisionSubsystem s_Vision;
+    private final Notifier odoNotifier;
 
     private final SwerveDrivePoseEstimator poseEstimator;
     private final Field2d field;
     private final Pigeon2 gyro;
     private static Rotation2d targetAngle = null;
     private static Zone zone = Zone.SPEAKER;
+
 
     private static final TunableOption optUpdatePoseWithVisionAuto = new TunableOption("pose/Update with vision in Auto", false);
 
@@ -54,6 +57,9 @@ public class PoseSubsystem extends SubsystemBase {
         
         this.s_Swerve = s_Swerve;
         this.s_Vision = s_Vision;
+
+        odoNotifier = new Notifier(this::odoCallback);
+        odoNotifier.startPeriodic(1.0/250.0);
 
         gyro = new Pigeon2(Pose.pigeonID, Constants.Swerve.swerveCanBus);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
@@ -338,9 +344,12 @@ public class PoseSubsystem extends SubsystemBase {
         return zone;
     }
 
+    private void odoCallback() {
+        poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
+    }
+
     @Override
     public void periodic() {
-        poseEstimator.update(getGyroYaw(), s_Swerve.getModulePositions());
         if (!DriverStation.isAutonomousEnabled() || optUpdatePoseWithVisionAuto.get()) {
             s_Vision.updatePoseEstimate(poseEstimator);
         } else {

@@ -6,6 +6,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +20,7 @@ public class Swerve extends SubsystemBase {
     private boolean speedLimit = false;
 
     public SwerveModule[] mSwerveMods;
+    private final ReentrantLock swerveModLock = new ReentrantLock();
 
     public Swerve() {
         Timer.delay(5); //Delaying the initalization of the swerve module should prevent a race condition with the CANcoders initializing, and causing just general funkiness
@@ -54,39 +57,53 @@ public class Swerve extends SubsystemBase {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(desiredChassisSpeeds); 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
+        swerveModLock.lock();
         for(SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
+        swerveModLock.unlock();
     }
 
     public void alignStraight() {
         SwerveModuleState aligned = new SwerveModuleState(0.0, new Rotation2d());
 
+        swerveModLock.lock();
         for(SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(aligned, false);
         }
+        swerveModLock.unlock();
     }
 
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
+
+        swerveModLock.lock();
         for(SwerveModule mod : mSwerveMods){
             states[mod.moduleNumber] = mod.getState();
         }
+        swerveModLock.unlock();
+
         return states;
     }
 
     public SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
+
+        swerveModLock.lock();
         for(SwerveModule mod : mSwerveMods){
             positions[mod.moduleNumber] = mod.getPosition();
         }
+        swerveModLock.unlock();
+
         return positions;
     }
 
     public void resetModulesToAbsolute() {
+        swerveModLock.lock();
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
+        swerveModLock.unlock();
     }
 
     public void enableSpeedLimit() {
@@ -103,41 +120,51 @@ public class Swerve extends SubsystemBase {
         return speedLimit ? Constants.Swerve.speedLimitRot : 1.0;
     }
 
-    public void setMotorsToCoast(){
-        for(SwerveModule mod : mSwerveMods){
+    public void setMotorsToCoast() {
+        swerveModLock.lock();
+        for(SwerveModule mod : mSwerveMods) {
             mod.setCoastMode();  
         }
+        swerveModLock.unlock();
         DogLog.log("Swerve/Status", "Coasted Swerve Motors");
     }
 
-    public void setDriveMotorsToCoast(){
-        for(SwerveModule mod : mSwerveMods){
+    public void setDriveMotorsToCoast() {
+        swerveModLock.lock();
+        for(SwerveModule mod : mSwerveMods) {
             mod.setCoastMode();  
         }
+        swerveModLock.unlock();
         DogLog.log("Swerve/Status", "Coasted Swerve Drive Motors");
     }
 
-    public void setMotorsToBrake(){
-        for(SwerveModule mod : mSwerveMods){
+    public void setMotorsToBrake() {
+        swerveModLock.lock();
+        for(SwerveModule mod : mSwerveMods) {
             mod.setBrakeMode();  
         }
+        swerveModLock.unlock();
         DogLog.log("Swerve/Status", "Braked Swerve Motors");
     }
 
-    public void setDriveMotorsToBrake(){
-        for(SwerveModule mod : mSwerveMods){
+    public void setDriveMotorsToBrake() {
+        swerveModLock.lock();
+        for(SwerveModule mod : mSwerveMods) {
             mod.setBrakeMode();  
         }
+        swerveModLock.unlock();
         DogLog.log("Swerve/Status", "Braked Swerve Drive Motors");
     }
 
-    public void stopSwerve(){
+    public void stopSwerve() {
         drive(new Translation2d(0, 0), 0, false);
         DogLog.log("Swerve/Status", "Stopped Swerve");
     }
 
     @Override
     public void periodic() {
+
+        swerveModLock.lock();
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             DogLog.log("Swerve/Mod/" + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -146,6 +173,7 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
             DogLog.log("Swerve/Mod/" + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
+        swerveModLock.unlock();
 
         DogLog.log("Swerve/Module States", getModuleStates());        
     }
